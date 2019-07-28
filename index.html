@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="hebrew">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link id="style" rel="stylesheet" type="text/css" href="css/style.css">
+    <title>TextNinja</title>
+  </head>
+  <body>
+    <div id='bar'>
+      <h1>TextNinja</h1>
+    </div>
+    <div id="textInput">
+      <textarea id="textBox" dir=auto cols="30" rows="9" value = " " wrap="SOFT" spellcheck="false">
+      </textarea>
+      <span id="buttons">
+        <img id="speaker" class="button" src="speaker32.png" title="speaker"  onclick = speaker()>
+        <div class="dropdown" style="float:right;">
+          <img id="settings" title = 'settingsoff' onclick ="settings()"  class="button" src="settings32off.png" title="settings">
+          <div id="settings_content" title = 'settingsoff'  class="dropdown-none">
+            <form>
+              <a onclick = markLine() href="#"><label id= "label1" for="markLine">mark line</label>
+              <button onclick = pick() id = "Pick" class="jscolor {valueElement: 'color_value'}">Pick a color</button><input id="markLine" class="largerCheckbox" type="checkbox"></a>
+              <a onclick = syllables() href="#"><label id= "label2" for="syllables">Dissolution of syllables</label><input id="syllables" class="largerCheckbox" type="checkbox" /></a>
+              <a onclick = onOverBold() href="#"><label id= "label3" for="onOverBold">on over a word in Beaulet</label><input id="onOverBold" class="largerCheckbox" type="checkbox" /></a>
+              <a href="#"> Select Font size:
+                <select name="size">
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                </select>
+              </a>
+            </form>
+          </div>
+        </div>
+        <img id="clear" class="button" src="broom32.png" title="clear"  onclick = clearTheinputBox()>
+      </span>
+    </div>
+    <br/>
+    <div id="output" dir=auto onmousemove="showCoords(event)" class=""></div>
+
+    <div id="wordSound" dir=auto>
+      <audio
+        id="sound"
+        src=""
+        autoplay>
+        Your browser does not support the <code>audio</code> element.
+      </audio>
+    </div>
+
+    <div id='bottom'>
+      <h4>TextNinja</h4>
+    </div>
+    <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
+    <script src="js\functionality.js"></script>
+    <script src="js\jscolor.js"></script>
+  </body>
+</html>

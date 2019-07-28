@@ -1,0 +1,317 @@
+*{
+  font-family: arial,helvetica,sans-serif;
+  font-weight: normal;
+}
+input.largerCheckbox {
+      width: 16px;
+      height: 16px;
+  }
+#bar{
+  background-color: #181818;
+  padding: 15px 0.6% 1px;
+  margin-left: -8px;
+  margin-bottom: 3px;
+  margin-top: -8px;
+  width: 100%;
+  box-shadow: 0px 2px 10px 0px black;
+  border-top: 10px solid #01cbc6
+
+}
+h1{
+  font-size: 275%;
+  color:white;
+  letter-spacing: -4px;
+  margin: 0px 0px 3px;
+}
+
+#textInput{
+  border-radius: 0px 0px 15px 15px;
+  border: 1.5px solid #e1e1e1;
+  border-top: 0px;
+  box-shadow: 0.5px 0.5px 0.5px #ccc;
+  width: 90%;
+  margin: 5% auto;
+  margin-top: 5px;
+  margin-bottom: 2px;
+  padding: 5px 10px 5px;
+}
+#textInput:hover{
+  border: 1.5px solid #59beee;
+}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  #textInput{
+    float:none;
+    border-radius: 0px 0px 15px 15px;
+    border: 1.5px solid #e1e1e1;
+    border-top: 0px;
+    box-shadow: 0.5px 0.5px 0.5px #ccc;
+    width: 90%;
+    margin: 5% auto;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px 10px 5px;
+    display: block;
+  }
+  #textInput:hover{
+    border: 1.5px solid #59beee;
+    border-top: 0px;
+    margin: 5% auto;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px 10px 5px;
+    display: block;
+  }
+  #output{
+    margin: 0px 5% 3px 5%;
+    padding: 3px 5px 5px;
+  }
+  #buttons{
+  float: none;
+  display: inline-block;
+  }
+  textarea {
+    width: 100%;
+  }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  #textInput{
+    float:none;
+    border-radius: 0px 0px 15px 15px;
+    border: 1.5px solid #e1e1e1;
+    border-top: 0px;
+    box-shadow: 0.5px 0.5px 0.5px #ccc;
+    width: 90%;
+    margin: 5% auto;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px 10px 5px;
+
+  }
+  #textInput:hover{
+    border: 1.5px solid #59beee;
+    border-top: 0px;
+    margin: 5% auto;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px 10px 5px;
+    display: block;
+  }
+  #output{
+    margin: 0px 5% 3px 5%;
+    padding: 3px 5px 5px;
+
+  }
+  #buttons{
+  float: none;
+  display: inline-block;
+  }
+  textarea {
+    width: 100%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  #textInput{
+    float: left;
+    border-radius: 0px 15px 15px 0px;
+    border: 1.5px solid #e1e1e1;
+    border-left: 0px;
+    width: 49%;
+    height: 600px;
+    margin-left: -5px;
+    margin-top: 18px;
+    padding: 2px 7px 2px;
+    display: inline-block;
+  }
+  #textInput:hover{
+    border: 1.5px solid #59beee;
+    border-left: 0px;
+    margin-left: -5px;
+    margin-top: 18px;
+    padding: 2px 7px 2px;
+    display:  inline-block;
+    overflow: hidden;
+  }
+  #output{
+    float: right;
+    width: 48%;
+    height: 600px;
+    margin: 0px 3px 3px 0%;
+    padding: 3px 0px 3px 3px;
+    display: inline-block;
+  }
+  #buttons{
+  float: right;
+  width: 7.4%;
+  display: inline-block;
+  }
+  textarea {
+    width: 92%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  #textInput{
+    float: left;
+    border-radius: 0px 15px 15px 0px;
+    border: 1.5px solid #e1e1e1;
+    border-left: 0px;
+    width: 49%;
+    height: 600px;
+    margin-left: -5px;
+    margin-top: 18px;
+    padding: 2px 7px 2px;
+    display:  inline-block;
+    overflow: hidden;
+  }
+  #textInput:hover{
+    border: 1.5px solid #59beee;
+    border-left: 0px;
+    margin-left: -5px;
+    margin-top: 18px;
+    padding: 2px 7px 2px;
+    display:  inline-block;
+    overflow: hidden;
+  }
+  #output{
+    float: right;
+    width: 48%;
+    height: 600px;
+    margin: 0px 3px 3px 0%;
+    padding: 3px 0px 3px 3px;
+    display: inline-block;
+  }
+  #buttons{
+  float: right;
+  width: 32px;
+  display: inline-block;
+  }
+  textarea {
+    width: 92%;
+  }
+}
+textarea {
+  font-size: 112%;
+  letter-spacing: 1px;
+  padding: 1px;
+  line-height: 1.5;
+  border: 0px solid #f7f7f7;
+  box-shadow: 0.0px 0.0px 0.0px #ccc;
+  resize: none;
+  outline: none;
+  display: inline-block;
+
+}
+b{
+  font-size: 112%;
+}
+.invisible{
+  font-size: 00px;
+}
+.visible{
+  font-size: 112%;
+  letter-spacing: 2.3px;
+  line-height: 22px;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+.syllables_bold{
+  font-size: 118%;
+  font-weight: bold;
+  line-height: 20px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+.syllables_visible{
+  font-size: 112%;
+  letter-spacing: 0.9px;
+  line-height: 22px;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+.bold:active{
+  color: #59beee;
+}
+.bold{
+  font-size: 118%;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 22px;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+#bottom{
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  position: fixed;
+  color: white;
+  width: 100%;
+  margin: 0px;
+  font-size: 90%;
+  box-shadow: 0px -1px 5px 0px black;
+  background-color: #181818;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+h4{
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+img.button{
+  margin: 3px 0px 3px 0px;
+  display: inline;
+}
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-none {
+  display: none;
+}
+.dropdown-content {
+  display: block;
+  position: absolute;
+  right: 0;
+  background-color: #f9f9f9;
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}
+.markLine{
+  background-repeat: no-repeat;
+  background-size: 100% 23px;
+  background-position: 0px 0px;
+  background-image: radial-gradient(GhostWhite , GhostWhite );
+}
