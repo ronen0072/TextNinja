@@ -315,12 +315,12 @@ function speaker(){
   console.log(speaker.attr('title'));
   if(speaker.attr('title') == 'speaker'){
     speaker.attr('title', 'mute');
-    speaker.attr('src', 'mute32.png');
+    speaker.attr('src', 'icon/mute32.png');
     $('#sound').prop("muted", true);
   }
   else{
     speaker.attr('title', 'speaker');
-    speaker.attr('src', 'speaker32.png');
+    speaker.attr('src', 'icon/speaker32.png');
     $('#sound').prop("muted", false);
   }
 }
@@ -330,10 +330,10 @@ function clearTheInputBox(){
   output.innerHTML ='';
   console.log('clear');
   sessionStorage.removeItem('textBox');
-  $('#clear').attr('src', 'broomClear32.png');
+  $('#clear').attr('src', 'icon/broomClear32.png');
   setTimeout(function(){
     console.log('clear');
-    $('#clear').attr('src', 'broom32.png');}, 300);
+    $('#clear').attr('src', 'icon/broom32.png');}, 300);
 }
 
 function highlighting() {
@@ -397,14 +397,14 @@ function settingsOn(){
   var settings = $('#settings');
   console.log('settingsOn');
   settings.attr('title', 'settingsOn');
-  settings.attr('src', 'settings32on.png');
+  settings.attr('src', 'icon/settings32on.png');
   document.getElementById('settings_content').className='dropdown-content';
 }
 function settingsOff(){
   var settings = $('#settings');
   console.log('settingsoff');
   settings.attr('title', 'settingsoff');
-  settings.attr('src', 'settings32off.png');
+  settings.attr('src', 'icon/settings32off.png');
   document.getElementById('settings_content').className='dropdown-none';
   updeteSettings();
 }
