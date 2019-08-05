@@ -65,6 +65,7 @@ h1{
   #output{
     margin: 0px 5% 3px 5%;
     padding: 3px 5px 5px;
+
   }
   #buttons{
   float: none;
@@ -72,6 +73,9 @@ h1{
   }
   textarea {
     width: 100%;
+  }
+  .dropdown-content {
+    right: 30;
   }
 }
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -101,7 +105,6 @@ h1{
   #output{
     margin: 0px 5% 3px 5%;
     padding: 3px 5px 5px;
-
   }
   #buttons{
   float: none;
@@ -110,8 +113,10 @@ h1{
   textarea {
     width: 100%;
   }
+  .dropdown-content {
+    right: 30;
+  }
 }
-
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   #textInput{
@@ -151,8 +156,10 @@ h1{
   textarea {
     width: 92%;
   }
+  .dropdown-content {
+    right: 0;
+  }
 }
-
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
   #textInput{
@@ -193,7 +200,11 @@ h1{
   textarea {
     width: 92%;
   }
+  .dropdown-content {
+    right: 0;
+  }
 }
+
 textarea {
   font-size: 112%;
   letter-spacing: 1px;
@@ -208,29 +219,35 @@ textarea {
 }
 b{
   font-size: 112%;
-}
-.invisible{
-  font-size: 00px;
-}
-.visible{
-  font-size: 112%;
-  letter-spacing: 2.3px;
-  line-height: 22px;
   margin-left: 1px;
   margin-right: 1px;
 }
-.syllables_bold{
+
+.spacing{
+  font-size: 112%;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+.wor{
+  font-size: 112%;
+  letter-spacing: 2.3px;
+  line-height: 22px;
+  margin-left: 0px;
+  margin-right: 1px;
+}
+.unSyssables{
+  font-size: 118%;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 22px;
+  margin-left: 0px;
+  margin-right: 1px;
+}
+.syll{
   font-size: 118%;
   font-weight: bold;
   line-height: 20px;
   margin-left: 0px;
-  margin-right: 0px;
-}
-.syllables_visible{
-  font-size: 112%;
-  letter-spacing: 0.9px;
-  line-height: 22px;
-  margin-left: 1px;
   margin-right: 1px;
 }
 .bold:active{
@@ -257,11 +274,12 @@ b{
   background-color: #181818;
   text-align: center;
   text-decoration: none;
-  text-transform: uppercase;
+  //text-transform: uppercase;
 }
 h4{
-  margin-top: 7px;
-  margin-bottom: 7px;
+  color:white;
+  letter-spacing: -0.4px;
+  margin: 0px 0px 3px;
 }
 img.button{
   margin: 3px 0px 3px 0px;
@@ -287,7 +305,6 @@ img.button{
 .dropdown-content {
   display: block;
   position: absolute;
-  right: 0;
   background-color: #f9f9f9;
   min-width: 250px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);

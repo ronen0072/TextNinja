@@ -75,19 +75,18 @@ class Word {
   }
   getHTML(index){
     var htmlTag = 'b';
-    var res = "<"+htmlTag+" name= '" + this.getName() + "'class='invisible' onclick =clickWord('"+this.getName()+"') onmouseout = outOfWord('word"+index+"') id='syllables_word"+index+"'>";
+    var res = "<"+htmlTag+" title= '" + this.getName() + "'class='wor' id='word"+index+"'>";
     res += this.getName();
     res += "</"+htmlTag+">";
 
-    res += "<"+htmlTag+" name= '" + this.getName() + "'class='visible' onmouseover = overWord('"+ this.getName() +"','word"+index+"')  id='word"+index+"'>";
+    res += "<"+htmlTag+" title= '" + this.getName() + "'class='syll' id='syllables_word"+index+"'>";
     res += this.getName();
-    res += "</"+htmlTag+"><"+htmlTag+"> </"+htmlTag+">";
+    res += "</"+htmlTag+"><"+htmlTag+"> </"+htmlTag+"><"+htmlTag+" class='spacing'> </"+htmlTag+">";
     return res;
   }
   wordFactory(){
     if(this.getSoundURL() == ""){
       //console.log('wordFactory:'+this.getName());
-      //console.log('wordFactory');
       //this = getElement(word);
       //console.log('word:'+this.getName());
       var apiKey = "bafe5fa3-9e6b-4e41-b296-04945d3f912d";
@@ -110,7 +109,7 @@ class Word {
             }
           }
           else {//(word.getSyllables().length <= word.getClearName().length)
-            var ending = word.getClearName().slice(word.getSyllables().length, word.getClearName().length);
+            var ending = word.getClearName().slice(word.getSyllables().length, word.getClearName().length); // TODO Improve it, not good enough
             console.log('ending:'+word.getSyllables().length+','+ word.getClearName().length +','+ending);
             var newPath ="https://www.dictionaryapi.com/api/v1/references/collegiate/xml/"+ word.getSyllables() +"?key="+apiKey;
             getXMLFile(newPath, function(xmlDoc){
@@ -133,94 +132,20 @@ class Word {
     }
   }
 }
-var textBox = document.getElementById('textBox');
-var output = document.getElementById("output");
-autosize(document.getElementById("textBox"));
-var defaultValue = "Insert text";
 var text = new Words();
-var numOfWords = 0;
-var backgroundColor = 0;
-var dissolutionOfSyllables = true;
-document.getElementById("syllables").checked = true;
-var bold = true;
-document.getElementById("onOverBold").checked = true;
-textBox.value = defaultValue;
-textBox.innerHTML = defaultValue;
-textBox.onfocus = function() {
-  if(textBox.value ==  defaultValue ){
-    textBox.innerHTML = "";
-  }
-  output.innerHTML = textBox.value;
-};
-textBox.onfocus = function() {
-  if(textBox.value.search(defaultValue) == -1){
-    output.innerHTML = sentenceToWords(textBox.value);
-  }
-  else {
-    textBox.value = "";
-  }
-  console.log('onfocus');
-};
-textBox.onblur = function() {
-  if(textBox.value == ""){
-    textBox.value = defaultValue;
-    output.innerHTML = "";
-  }
-  else{
-    if(textBox.value.search(defaultValue) == -1){
-      output.innerHTML = sentenceToWords(textBox.value);
+var getXMLFile = function(pathXML, callback){
+  var request = new XMLHttpRequest();
+  request.open("GET", pathXML, true);
+  request.overrideMimeType('application/xml');
+//   request.setRequestHeader("Content-Type", "text/xml");
+  request.onreadystatechange = function() {
+    if (request.readyState == 4 && request.status == 200) {
+      callback(request.responseXML);
     }
-  }
+  };
+  request.send();
 };
-
-
-function showCoords(event) {
-
-  var y = event.clientY - 15;
-  var x = event.clientX;
-  var checked = document.getElementById("markLine").checked;
-  if(checked){
-    console.log(backgroundColor);
-    var background = "background-repeat: no-repeat; background-size: 100% 23px; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-100 -(y % 21.7)+15) +"px;"
-    console.log(background);
-    document.getElementById("output").style = background;
-  }
-}
-
-function markLine() {
-  var checked = document.getElementById("markLine").checked;
-  //document.getElementById("markLine").checked = !checked;
-  backgroundColor = document.getElementById('Pick').style.backgroundColor;
-
-  console.log(backgroundColor);
-  if(checked){
-    document.getElementById("label1").style = "background-color:"+backgroundColor+";";
-    //document.getElementById("markLine").style = "color:"+backgroundColor+";";
-  }
-  else {
-    document.getElementById("output").style ="";
-  }
-}
-
-function pick() {
-  document.getElementById("label1").style = "";
-  document.getElementById("markLine").checked = false;
-  document.getElementById("output").style ="";
-}
-
-function syllables(){
-  console.log("syllables:"+dissolutionOfSyllables);
-  //document.getElementById("syllables").checked = !document.getElementById("syllables").checked;
-  dissolutionOfSyllables = document.getElementById("syllables").checked;
-}
-
-function onOverBold(){
-  console.log("bold:"+bold);
-  //document.getElementById("onOverBold").checked = !document.getElementById("onOverBold").checked;
-  bold = document.getElementById("onOverBold").checked;
-}
-
-function sentenceToWords(sentence){
+function textToWords(sentence){
   sentence = sentence.replace(/\r?\n/g, ' \n ');
   //console.log();
   var numOfSpace = sentence.length - sentence.replace(/ /g, "").length;
@@ -244,64 +169,146 @@ function sentenceToWords(sentence){
   return res;
   //.replace(/\r?\n/g, '<br/>')
 }
-function clickWord(word){
-  console.log(word);
-  document.getElementById('sound').src = text.findSoundURL(word);
+
+var defaultValue = "Insert text";
+var textBox = document.getElementById('textBox');
+autosize(document.getElementById("textBox"));
+$(document).ready(function(){
+  initialSettings();
+  if((!sessionStorage.textBox) || (sessionStorage.textBox == defaultValue) || (sessionStorage.textBox == '')){
+    textBox.value = defaultValue;
+  }
+  else {
+    console.log(textBox.value);
+    textBox.value = sessionStorage.textBox;
+  }
+  updete();
+  //tools
+  $('#speaker').click(function(){
+    speaker();
+  });
+  $('#settings').click(function(){
+    settings();
+  });
+  $('#clear').click(function(){
+    clearTheInputBox();
+  });
+  $('#output').mousemove(function(){showCoords(event);});
+});
+var output = document.getElementById("output");
+$('#textBox').focus(function(){
+  if(textBox.value ==  defaultValue ){
+    textBox.value = "";
+  }
+});
+$('#textBox').keyup(function(){updete();});
+$('#textBox').blur(function() {
+  if(textBox.value == ""){
+    console.log('empty');
+    updete();
+    textBox.value = defaultValue;
+  }
+  else {
+    updete();
+  }
+});
+function updete() {
+  if((textBox.value != defaultValue) && (textBox.value != '')){
+    sessionStorage.setItem('textBox', textBox.value);
+    output.innerHTML = textToWords(textBox.value);
+  }
+  else {
+    if(textBox.value == ''){
+      sessionStorage.setItem('textBox', textBox.value);
+      output.innerHTML = textToWords(textBox.value);
+    }
+  }
+  $('.wor').show();
+  $('.syll').hide();
+  $('.spacing').hover(function(){
+    $('.wor').show();
+    $('.syll').hide();
+  });
+  $('.wor').hover(function(){
+    toSyllables = document.getElementById("syllables").checked;
+    console.log("syllables: "+toSyllables);
+    overWord(this.title, this.id)
+      if(toSyllables){
+      $(this).hide();
+      $('#syllables_'+this.id).show();
+      console.log('#syllables_'+this.id);
+    }
+    else {
+      if(document.getElementById("bold").checked)
+
+        $(this).animate({
+          fontSize: '118%', fontWeight: '600', letterSpacing: '1px',
+          lineHeight: '22px', marginLeft: '0px', marginRight: '1px'
+        }, 'fast');
+        //$(this).attr('class', 'unSyssables');
+    }
+  },
+  function(){
+    $(this).animate({
+      fontSize: '118%', fontWeight: '500', letterSpacing: '50px;',
+      lineHeight: '22px', marginLeft: '0px', marginRight: '1px'
+    }, 'fast');
+    //$(this).attr('class', 'wor');
+  });
+  $('.syll').hover(function(){
+    $('.syll').hide();
+    $('.wor').show();
+    $('#'+this.id.substring(10,this.id.length)).hide();
+    $(this).show();
+  }, function(){
+    $(this).hide();
+    $('.wor').show();
+    $('#'+this.id.substring(10,this.id.length)).show();
+    console.log(this.id.substring(10,this.id.length));
+  });
+  $('#output').mouseout( function(){
+    $('.syll').hide();
+    $('.wor').show();
+    //console.log('out of #output');
+  });
+  $('.syll').click(function(){
+    clickWord(this.title);
+  });
+  $('.wor').click(function(){
+    clickWord(this.title);
+  });
+  toBold();
 }
 function overWord(word, wordId){
+  console.log('overWord');
+  console.log('word:'+word);
+  console.log('wordId:'+wordId);
   var element = text.getWord(word);
+  console.log('element:'+element);
   element.wordFactory();
   var tims = 0;
-  var className = 'visible';
-  if(bold)
-    className = 'bold';
-  if(dissolutionOfSyllables){
-    className = 'syllables_'+className;
-  }
-  console.log("syllables:"+dissolutionOfSyllables);
-  console.log("bold:"+bold);
-  if(dissolutionOfSyllables){
-  document.getElementById('syllables_'+wordId).className=className;
-  document.getElementById(wordId).className='invisible';
 
   document.getElementById('syllables_'+wordId).innerHTML= element.getSyllables();
   var timer = setInterval(function(){
-  tims +=400;
-    console.log(tims + 'overWord');
-    if ((element.dataFile != "") || (tims>=1200)){
-      document.getElementById('syllables_'+wordId).innerHTML= element.getSyllables();
-      clearInterval(timer);
-    }
-  }, 400);
-  }
-  else {
-    document.getElementById(wordId).className=className;
-  }
+    tims +=400;
+      console.log(tims + 'overWord');
+      if ((element.dataFile != "") || (tims>=1200)){
+        document.getElementById('syllables_'+wordId).innerHTML= element.getSyllables();
+        clearInterval(timer);
+      }
+    }, 400);
 
-  setTimeout(function(){
-    console.log('setTimeout');
-    outOfWord(wordId);}, 2500);
+  // setTimeout(function(){
+  //   console.log('setTimeout');
+  //   outOfWord(wordId);}, 2500);
 
 }
-
 function outOfWord(wordId){
-  console.log('outOfWord');
-  document.getElementById('syllables_'+wordId).className='invisible';
-  document.getElementById(wordId).className='visible';
+  console.log('outOfWord: '+ wordId);
+  $('#syllables_'+wordId).hide();
+  console.log('#'+wordId);
+  $('#'+wordId).show();
 }
-
-var getXMLFile = function(pathXML, callback){
-  var request = new XMLHttpRequest();
-  request.open("GET", pathXML, true);
-  request.overrideMimeType('application/xml');
-//   request.setRequestHeader("Content-Type", "text/xml");
-  request.onreadystatechange = function() {
-    if (request.readyState == 4 && request.status == 200) {
-      callback(request.responseXML);
-    }
-  };
-  request.send();
-};
 
 function speaker(){
   var speaker = document.getElementById('speaker');
@@ -317,6 +324,73 @@ function speaker(){
     document.getElementById('sound').muted = false;
   }
 }
+
+function clearTheInputBox(){
+  var clear = document.getElementById('clear');
+  textBox.value = defaultValue;
+  output.innerHTML ='';
+  console.log('clear');
+  sessionStorage.removeItem('textBox');
+  clear.src = 'broomClear32.png';
+  setTimeout(function(){
+    console.log('clear');
+    clear.src = 'broom32.png';}, 300);
+}
+
+function highlighting() {
+  var checked = document.getElementById("highlighting").checked;
+  if(!checked){
+    document.getElementById("output").style ="";
+  }
+}
+
+function pick() {
+  // document.getElementById("label1").style = "";
+  // document.getElementById("highlighting").checked = false;
+  // document.getElementById("output").style ="";
+  setTimeout(function(){
+    backgroundColor = document.getElementById('Pick').style.backgroundColor;
+  }, 200);
+}
+
+function showCoords(event) {
+  var checked = document.getElementById("highlighting").checked;
+  if(checked){
+    var y = event.clientY - 15;
+    var x = event.clientX;
+
+    var shift = window.innerWidth > 768 ? 100 : 400;
+    backgroundColor = document.getElementById('Pick').style.backgroundColor;
+    var background = "background-repeat: no-repeat; background-size: 100% 23px; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-shift -(y % 21.7)+15) +"px;"
+    console.log(background);
+    document.getElementById("output").style = background;
+  }
+}
+
+function toBold(){
+  console.log("bold:"+bold);
+  //document.getElementById("bold").checked = !document.getElementById("bold").checked;
+  bold = document.getElementById("bold").checked;
+  if(bold){
+    console.log("bold:"+bold);
+    $('.syll').css('font-weight', 'bold')
+  }
+  else {
+    console.log("NOT bold:"+bold);
+    $('.syll').css('font-size', '112%');
+    $('.syll').css('font-weight', 'normal');
+    $('.syll').css('letter-spacing','1px');
+  }
+
+}
+
+function clickWord(word){
+  console.log(word);
+  document.getElementById('sound').src = text.findSoundURL(word);
+}
+
+
+
 function settings(){
   var settings = document.getElementById('settings');
   if(settings.title == 'settingsOn')
@@ -337,21 +411,53 @@ function settingsOff(){
   settings.title = 'settingsoff';
   settings.src = 'settings32off.png';
   document.getElementById('settings_content').className='dropdown-none';
+  updeteSettings();
 }
-function clearTheinputBox(){
-  var clear = document.getElementById('clear');
-  textBox.value = defaultValue;
-  output.innerHTML ='';
-  console.log('clear');
-  clear.src = 'broomClear32.png';
-  setTimeout(function(){
-    console.log('clear');
-    clear.src = 'broom32.png';}, 300);
-}
-function clearTheWord(w){
-  var clearWord = w.replace(/\,|\.|\:|\'|\"/g, "");
+function initialSettings(){
 
-  clearWord = clearWord.replace(/\!|\?|\%|\$|\(|\)/g, "");
-  console.log(clearWord);
-  return clearWord;
+  if((sessionStorage.highlighting == 'true')){
+    document.getElementById('highlighting').checked = true;
+  }
+  if(sessionStorage.backgroundColor){
+    document.getElementById('Pick').style.backgroundColor = sessionStorage.backgroundColor;
+  }
+  if((sessionStorage.syllables == 'true') || (sessionStorage.syllables == undefined)){
+    document.getElementById("syllables").checked = true;
+  }
+  else{
+    document.getElementById("syllables").checked = false;
+  }
+  if((sessionStorage.bold == 'true') || (sessionStorage.bold == undefined)){
+    document.getElementById("bold").checked = true;
+  }
+  else{
+    document.getElementById("bold").checked = false;
+  }
+  if(sessionStorage.font_size != undefined){
+    document.getElementById("font_size").value = sessionStorage.font_size;
+  }
+  else{
+     document.getElementById("font_size").value = 12;
+  }
+  console.log('---------initialSettings-----------');
+  console.log('highlighting: '+  document.getElementById('highlighting').checked);
+  console.log('backgroundColor: ', document.getElementById('Pick').style.backgroundColor );
+  console.log('syllables: '+  document.getElementById('syllables').checked);
+  console.log('bold: '+  document.getElementById("bold").checked);
+  console.log('font_size: '+  document.getElementById("font_size").value);
+
+}
+function updeteSettings(){
+  sessionStorage.setItem('highlighting', document.getElementById('highlighting').checked);
+  sessionStorage.setItem('backgroundColor', document.getElementById('Pick').style.backgroundColor );
+  sessionStorage.setItem('syllables', document.getElementById('syllables').checked);
+  sessionStorage.setItem('bold', document.getElementById("bold").checked);
+  sessionStorage.setItem('font_size', document.getElementById("font_size").value);
+  console.log('---------updeteSettings-----------');
+  console.log('highlighting: '+  sessionStorage.highlighting);
+  console.log('backgroundColor: '+  sessionStorage.backgroundColor);
+  console.log('syllables: '+  sessionStorage.syllables);
+  console.log('bold: '+  sessionStorage.bold);
+  console.log('font_size: '+  sessionStorage.font_size);
+
 }
