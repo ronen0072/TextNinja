@@ -171,16 +171,16 @@ function textToWords(sentence){
 }
 
 var defaultValue = "Insert text";
-var textBox = document.getElementById('textBox');
+var textBox = $('#textBox');
 autosize(document.getElementById("textBox"));
 $(document).ready(function(){
   initialSettings();
   if((!sessionStorage.textBox) || (sessionStorage.textBox == defaultValue) || (sessionStorage.textBox == '')){
-    textBox.value = defaultValue;
+    textBox.val(defaultValue);
   }
   else {
     console.log(textBox.value);
-    textBox.value = sessionStorage.textBox;
+    textBox.val(sessionStorage.textBox);
   }
   updete();
   //tools
@@ -196,31 +196,31 @@ $(document).ready(function(){
   $('#output').mousemove(function(){showCoords(event);});
 });
 var output = document.getElementById("output");
-$('#textBox').focus(function(){
+textBox.focus(function(){
   if(textBox.value ==  defaultValue ){
-    textBox.value = "";
+    textBox.val('');
   }
 });
-$('#textBox').keyup(function(){updete();});
-$('#textBox').blur(function() {
-  if(textBox.value == ""){
+textBox.keyup(function(){updete();});
+textBox.blur(function() {
+  if(textBox.val() == ""){
     console.log('empty');
     updete();
-    textBox.value = defaultValue;
+    textBox.val(defaultValue);
   }
   else {
     updete();
   }
 });
 function updete() {
-  if((textBox.value != defaultValue) && (textBox.value != '')){
-    sessionStorage.setItem('textBox', textBox.value);
-    output.innerHTML = textToWords(textBox.value);
+  if((textBox.val() != defaultValue) && (textBox.val() != '')){
+    sessionStorage.setItem('textBox', textBox.val());
+    output.innerHTML = textToWords(textBox.val());
   }
   else {
-    if(textBox.value == ''){
-      sessionStorage.setItem('textBox', textBox.value);
-      output.innerHTML = textToWords(textBox.value);
+    if(textBox.val() == ''){
+      sessionStorage.setItem('textBox', textBox.val());
+      output.innerHTML = textToWords(textBox.val());
     }
   }
   $('.wor').show();
@@ -311,43 +311,39 @@ function outOfWord(wordId){
 }
 
 function speaker(){
-  var speaker = document.getElementById('speaker');
-  if(speaker.title == 'speaker'){
-    console.log(speaker.title);
-    speaker.title = 'mute';
-    speaker.src = 'mute32.png';
-    document.getElementById('sound').muted = true;
+  var speaker = $('#speaker');
+  console.log(speaker.attr('title'));
+  if(speaker.attr('title') == 'speaker'){
+    speaker.attr('title', 'mute');
+    speaker.attr('src', 'mute32.png');
+    $('#sound').prop("muted", true);
   }
   else{
-    speaker.title = 'speaker';
-    speaker.src = 'speaker32.png';
-    document.getElementById('sound').muted = false;
+    speaker.attr('title', 'speaker');
+    speaker.attr('src', 'speaker32.png');
+    $('#sound').prop("muted", false);
   }
 }
 
 function clearTheInputBox(){
-  var clear = document.getElementById('clear');
-  textBox.value = defaultValue;
+  textBox.val(defaultValue);
   output.innerHTML ='';
   console.log('clear');
   sessionStorage.removeItem('textBox');
-  clear.src = 'broomClear32.png';
+  $('#clear').attr('src', 'broomClear32.png');
   setTimeout(function(){
     console.log('clear');
-    clear.src = 'broom32.png';}, 300);
+    $('#clear').attr('src', 'broom32.png');}, 300);
 }
 
 function highlighting() {
-  var checked = document.getElementById("highlighting").checked;
-  if(!checked){
-    document.getElementById("output").style ="";
+  if(!$('#highlighting').prop('checked')){
+    console.log('not highlighting');
+    $("#output").attr('style', '');
   }
 }
 
 function pick() {
-  // document.getElementById("label1").style = "";
-  // document.getElementById("highlighting").checked = false;
-  // document.getElementById("output").style ="";
   setTimeout(function(){
     backgroundColor = document.getElementById('Pick').style.backgroundColor;
   }, 200);
@@ -363,7 +359,7 @@ function showCoords(event) {
     backgroundColor = document.getElementById('Pick').style.backgroundColor;
     var background = "background-repeat: no-repeat; background-size: 100% 23px; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-shift -(y % 21.7)+15) +"px;"
     console.log(background);
-    document.getElementById("output").style = background;
+    $('#output').attr('style', background);
   }
 }
 
@@ -392,24 +388,23 @@ function clickWord(word){
 
 
 function settings(){
-  var settings = document.getElementById('settings');
-  if(settings.title == 'settingsOn')
+  if($('#settings').attr('title') == 'settingsOn')
     settingsOff();
   else
     settingsOn();
 }
 function settingsOn(){
-  var settings = document.getElementById('settings');
+  var settings = $('#settings');
   console.log('settingsOn');
-  settings.title = 'settingsOn';
-  settings.src = 'settings32on.png';
+  settings.attr('title', 'settingsOn');
+  settings.attr('src', 'settings32on.png');
   document.getElementById('settings_content').className='dropdown-content';
 }
 function settingsOff(){
-  var settings = document.getElementById('settings');
+  var settings = $('#settings');
   console.log('settingsoff');
-  settings.title = 'settingsoff';
-  settings.src = 'settings32off.png';
+  settings.attr('title', 'settingsoff');
+  settings.attr('src', 'settings32off.png');
   document.getElementById('settings_content').className='dropdown-none';
   updeteSettings();
 }
