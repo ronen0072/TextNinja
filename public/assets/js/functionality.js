@@ -137,7 +137,6 @@ var getXMLFile = function(pathXML, callback){
   var request = new XMLHttpRequest();
   request.open("GET", pathXML, true);
   request.overrideMimeType('application/xml');
-//   request.setRequestHeader("Content-Type", "text/xml");
   request.onreadystatechange = function() {
     if (request.readyState == 4 && request.status == 200) {
       callback(request.responseXML);
@@ -176,7 +175,7 @@ autosize(document.getElementById("textBox"));
 $(document).ready(function(){
   initialSettings();
   if((!sessionStorage.textBox) || (sessionStorage.textBox == defaultValue) || (sessionStorage.textBox == '')){
-    textBox.val(defaultValue);
+    //textBox.val(defaultValue);
   }
   else {
     console.log(textBox.value);
@@ -197,16 +196,16 @@ $(document).ready(function(){
 });
 var output = document.getElementById("output");
 textBox.focus(function(){
-  if(textBox.value ==  defaultValue ){
-    textBox.val('');
-  }
+  // if(textBox.value ==  defaultValue ){
+  //   textBox.val('');
+  // }
 });
 textBox.keyup(function(){updete();});
 textBox.blur(function() {
   if(textBox.val() == ""){
     console.log('empty');
     updete();
-    textBox.val(defaultValue);
+    //textBox.val(defaultValue);
   }
   else {
     updete();
@@ -315,25 +314,26 @@ function speaker(){
   console.log(speaker.attr('title'));
   if(speaker.attr('title') == 'speaker'){
     speaker.attr('title', 'mute');
-    speaker.attr('src', 'icon/mute32.png');
+    speaker.attr('src', '/assets/icon/mute32.png');
     $('#sound').prop("muted", true);
   }
   else{
     speaker.attr('title', 'speaker');
-    speaker.attr('src', 'icon/speaker32.png');
+    speaker.attr('src', '/assets/icon/speaker32.png');
     $('#sound').prop("muted", false);
   }
 }
 
 function clearTheInputBox(){
-  textBox.val(defaultValue);
+  //textBox.val(defaultValue);
+  textBox.val('');
   output.innerHTML ='';
   console.log('clear');
   sessionStorage.removeItem('textBox');
-  $('#clear').attr('src', 'icon/broomClear32.png');
+  $('#clear').attr('src', '/assets/icon/broomClear32.png');
   setTimeout(function(){
     console.log('clear');
-    $('#clear').attr('src', 'icon/broom32.png');}, 300);
+    $('#clear').attr('src', '/assets/icon/broom32.png');}, 300);
 }
 
 function highlighting() {
@@ -397,14 +397,14 @@ function settingsOn(){
   var settings = $('#settings');
   console.log('settingsOn');
   settings.attr('title', 'settingsOn');
-  settings.attr('src', 'icon/settings32on.png');
+  settings.attr('src', '/assets/icon/settings32on.png');
   document.getElementById('settings_content').className='dropdown-content';
 }
 function settingsOff(){
   var settings = $('#settings');
   console.log('settingsoff');
   settings.attr('title', 'settingsoff');
-  settings.attr('src', 'icon/settings32off.png');
+  settings.attr('src', '/assets/icon/settings32off.png');
   document.getElementById('settings_content').className='dropdown-none';
   updeteSettings();
 }

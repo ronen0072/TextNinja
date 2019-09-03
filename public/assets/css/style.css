@@ -1,0 +1,659 @@
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+.container {
+  height: 100%;
+  background: #f0e68c;
+}
+:root {
+  --dark: #181818;
+  --blue: #59beee;
+  --gray: #6c757d;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+}
+
+*{
+  font-family: arial,helvetica,sans-serif;
+  font-weight: normal;
+}
+input.largerCheckbox {
+      width: 16px;
+      height: 16px;
+  }
+#bar{
+  background-color: var(--dark);
+  padding: 15px 0.6% 1px;
+  margin-left: 0px;
+  margin-bottom: 3px;
+  margin-top: -8px;
+  width: 100%;
+  box-shadow: 0px 2px 10px 0px black;
+  border-top: 10px solid #01cbc6
+
+}
+h1{
+  font-size: 275%;
+  color:white;
+  letter-spacing: -4px;
+  margin: 0px 0px 3px;
+  padding-right: 30px;
+}
+h2 {
+  font-size: 200%;
+  color:var(--dark);
+  letter-spacing: -2px;
+  margin: 0px 0px 3px;
+ }
+h3 {
+  font-size: 200%;
+  color:var(--white);
+  letter-spacing: -2px;
+  margin: 20px -3% 15px;
+  padding: 10px 5% 5px;
+}
+h4 {
+  font-size: 160%;
+  color:var(--dark);
+  letter-spacing: -1.5px;
+  margin: 0px 0px 3px;
+  display: inline-block;
+}
+html, body {
+  height: 100%;
+}
+intro{
+  height: 100%;
+}
+.content, #textInput{
+  border-radius: 0px 0px 15px 15px;
+  border: 1.5px solid #e1e1e1;
+  border-top: 0px;
+  box-shadow: 0.5px 0.5px 0.5px #ccc;
+  width: 90%;
+  margin: 5% auto;
+  margin-top: 5px;
+  margin-bottom: 2px;
+  padding: 5px 15px 5px;
+}
+.content{
+  height: 100%;
+  padding: 5px 0px 5px;
+  margin-bottom: 30px;
+}
+.inner-content{
+  padding: 5px 5% 5px;
+}
+.title{
+  background-color: var(--gray);
+}
+#textInput:hover{
+  border: 1.5px solid var(--blue);
+}
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  #textInput{
+    float:none;
+    border-radius: 0px 0px 15px 15px;
+    border: 1.5px solid #e1e1e1;
+    border-top: 0px;
+    box-shadow: 0.5px 0.5px 0.5px #ccc;
+    width: 90%;
+    margin: 5% auto;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px 10px 5px;
+    display: block;
+  }
+  #textInput:hover{
+    border: 1.5px solid var(--blue);
+    border-top: 0px;
+    margin: 5% auto;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px 10px 5px;
+    display: block;
+  }
+  #output{
+    margin: 0px 5% 3px 5%;
+    padding: 3px 5px 5px;
+
+  }
+  #buttons{
+  float: none;
+  display: inline-block;
+  }
+  textarea {
+    width: 100%;
+  }
+  .dropdown-content {
+    right: 30px;
+  }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  #textInput{
+    float:none;
+    border-radius: 0px 0px 15px 15px;
+    border: 1.5px solid #e1e1e1;
+    border-top: 0px;
+    box-shadow: 0.5px 0.5px 0.5px #ccc;
+    width: 90%;
+    margin: 5% auto;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px 10px 5px;
+
+  }
+  #textInput:hover{
+    border: 1.5px solid var(--blue);
+    border-top: 0px;
+    margin: 5% auto;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px 10px 5px;
+    display: block;
+  }
+  #output{
+    margin: 0px 5% 3px 5%;
+    padding: 3px 5px 5px;
+  }
+  #buttons{
+  float: none;
+  display: inline-block;
+  }
+  img.button{
+    margin: 3px 0px 3px 0px;
+    display: inline;
+  }
+  textarea {
+    width: 100%;
+  }
+  .dropdown-content {
+    right: 30px;
+  }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  #textInput{
+    float: left;
+    border-radius: 0px 15px 15px 0px;
+    border: 1.5px solid #e1e1e1;
+    border-left: 0px;
+    width: 49%;
+    height: 530px;
+    margin-left: -5px;
+    margin-top: 18px;
+    padding: 2px 7px 2px;
+    display: inline-block;
+  }
+  #textInput:hover{
+    border: 1.5px solid var(--blue);
+    border-left: 0px;
+    margin-left: -5px;
+    margin-top: 18px;
+    padding: 2px 7px 2px;
+    display:  inline-block;
+    overflow: hidden;
+  }
+  #output{
+    float: right;
+    width: 48%;
+    height: 530px;
+    margin: 0px 3px 3px 0%;
+    padding: 3px 0px 3px 3px;
+    display: inline-block;
+  }
+  #buttons{
+    position: fixed;
+    top: 110px;
+    float: right;
+    display: initial;
+  }
+  img.button{
+    margin: 3px 0px 3px 0px;
+    display: block;
+  }
+  textarea {
+    width: 92%;
+  }
+  .dropdown-content {
+    right: 0px;
+  }
+}
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  #textInput{
+    float: left;
+    border-radius: 0px 15px 15px 0px;
+    border: 1.5px solid #e1e1e1;
+    border-left: 0px;
+    width: 49%;
+    height: 530px;
+    margin-left: -5px;
+    margin-top: 18px;
+    padding: 2px 7px 2px;
+    display:  inline-block;
+    overflow: hidden;
+  }
+  #textInput:hover{
+    border: 1.5px solid var(--blue);
+    border-left: 0px;
+    margin-left: -5px;
+    margin-top: 18px;
+    padding: 2px 7px 2px;
+    display:  inline-block;
+    overflow: hidden;
+  }
+  #output{
+    float: right;
+    width: 48%;
+    height: 530px;
+    margin: 0px 3px 3px 0%;
+    padding: 3px 0px 3px 3px;
+    display: inline-block;
+  }
+  #buttons{
+    position: fixed;
+    top: 110px;
+    float: right;
+    display: initial;
+  }
+  img.button{
+    margin: 3px 0px 3px 0px;
+    display: block;
+  }
+  textarea {
+    width: 92%;
+  }
+  .dropdown-content {
+    right: 0px;
+  }
+}
+
+textarea {
+  position:relative;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  font-size: 112%;
+  letter-spacing: 1px;
+  padding: 1px;
+  line-height: 1.5;
+  border: 0px solid #f7f7f7;
+  box-shadow: 0.0px 0.0px 0.0px #ccc;
+  resize: none;
+  outline: none;
+  display: inline-block;
+}
+
+b{
+  font-size: 112%;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.spacing{
+  font-size: 112%;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+.wor{
+  font-size: 112%;
+  letter-spacing: 2.3px;
+  line-height: 22px;
+  margin-left: 0px;
+  margin-right: 1px;
+}
+.unSyssables{
+  font-size: 118%;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 22px;
+  margin-left: 0px;
+  margin-right: 1px;
+}
+.syll{
+  font-size: 118%;
+  font-weight: bold;
+  line-height: 20px;
+  margin-left: 0px;
+  margin-right: 1px;
+}
+.bold:active{
+  color: var(--blue);
+}
+.bold{
+  font-size: 118%;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 22px;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+#bottom{
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  position: fixed;
+  color: white;
+  width: 100%;
+  margin: 0px;
+  font-size: 90%;
+  box-shadow: 0px -1px 5px 0px black;
+  background-color: #181818;
+  text-align: center;
+  text-decoration: none;
+  //text-transform: uppercase;
+}
+#smallLogo{
+  color:white;
+
+  letter-spacing: -0.4px;
+  margin: 0px 0px 3px;
+}
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-none {
+  display: none;
+}
+.dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}
+.markLine{
+  background-repeat: no-repeat;
+  background-size: 100% 23px;
+  background-position: 0px 0px;
+  background-image: radial-gradient(GhostWhite , GhostWhite );
+}
+
+/*------------------------------log in --------------------------*/
+.popBox {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content */
+.popBox-content {
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: auto;
+  border: 1px solid #888;
+
+  background-color: var(--white);
+}
+
+/* The Close Button */
+.close {
+  display: inline;
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+#signUp-box, #login-box {
+  position: relative;
+  width: 600px;
+  height: 400px;
+  margin: auto;
+}
+
+.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  padding: 40px;
+  width: 300px;
+  height: 400px;
+  background-color: var(--dark);
+}
+
+
+input[type="text"],
+input[type="password"] {
+  display: block;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+  padding: 4px;
+  width: 220px;
+  height: 32px;
+  border: none;
+  border-bottom: 1px solid #AAA;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-bottom: 2px solid #16a085;
+  color: #16a085;
+  transition: 0.2s ease;
+}
+
+input[type="submit"] {
+  margin-top: 28px;
+  width: 120px;
+  height: 32px;
+  background: #16a085;
+  border: none;
+  border-radius: 2px;
+  color: #FFF;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: 0.1s ease;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover,
+input[type="submit"]:focus {
+  opacity: 0.8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: 0.1s ease;
+}
+
+input[type="submit"]:active {
+  opacity: 1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: 0.1s ease;
+}
+.link{
+  color: var(--white);
+  font-size: 12px;
+}
+.link:hover,
+.link:focus {
+  color: var(--blue);
+}
+.or {
+  position: absolute;
+  top: 180px;
+  left: 280px;
+  width: 40px;
+  height: 40px;
+  background: #DDD;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  line-height: 40px;
+  text-align: center;
+}
+
+.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  padding: 40px;
+  width: 300px;
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0 2px 2px 0;
+}
+
+.right .loginwith {
+  display: block;
+  margin-bottom: 40px;
+  font-size: 28px;
+  color: var(--dark);
+  text-align: center;
+}
+
+button.social-signin {
+  margin-bottom: 20px;
+  width: 220px;
+  height: 36px;
+  border: none;
+  border-radius: 2px;
+  color: #FFF;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+button.social-signin:hover,
+button.social-signin:focus {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: 0.2s ease;
+}
+
+button.social-signin:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: 0.2s ease;
+}
+
+button.social-signin.facebook {
+  background: #32508E;
+}
+
+button.social-signin.twitter {
+  background: #55ACEE;
+}
+
+button.social-signin.google {
+  background: #DD4B39;
+}
+
+/*------------------------------ contact --------------------------*/
+.wrap-input100, .wrap-inputR , .wrap-inputL {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 2px;
+  margin-bottom: 30px;
+}
+.wrap-inputR , .wrap-inputL{
+  width: calc((100% - 5%)  / 2);
+  display: inline-block;
+
+}
+.content-message, .inputR, .inputL {
+  background: transparent;
+  color: #333333;
+  line-height: 1.2;
+}
+.wrap-inputR{
+  float: right;
+}
+
+input.inputR, input.inputL{
+  height: 30px;
+  width:100%;
+  padding: 0px 20px 0px;
+  border-bottom: 0px;
+  font-size: 15px;
+}
+
+.content-message {
+  min-height: 100%;
+  padding: 15px;
+  font-size: 15px;
+}
+
+.contact100-form-symbol {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #e7e7e7;
+  border-radius: 50%;
+  background: #fff;
+  bottom: 80px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+.contact100-form-symbol img {
+  max-width: 49px;
+}
