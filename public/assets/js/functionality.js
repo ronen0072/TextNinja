@@ -4,7 +4,7 @@ class Words {
   }
   getIndex(word){
     var index = this.words.findIndex(function(value){
-      return value.getName() == word;
+      return value.getWordID() == word;
     });
     return index;
   }
@@ -43,13 +43,11 @@ class Words {
 }
 class Word {
   constructor(word) {
-    this.name = word;
-    this.clearName = '';
+    this.WordID = word;
+    this.clearWord = '';
     this.syllables = word;
-    this.dataFile = '';
-    this.dataDir = '';
     this.soundURL = '';
-    this.clearName =  this.clearTheWord();
+    this.clearWord =  this.clearTheWord();
   }
   setSyllables(_syllables){
     this.syllables = _syllables;
@@ -57,11 +55,11 @@ class Word {
   setSoundURL(_soundURL){
     this.soundURL = _soundURL;
   }
-  getName(){
-    return this.name;
+  getWordID(){
+    return this.WordID;
   }
-  getClearName(){
-    return this.clearName;
+  getClearWord(){
+    return this.clearWord;
   }
   getSyllables(){
     return this.syllables;
@@ -70,80 +68,44 @@ class Word {
     return this.soundURL;
   }
   clearTheWord(){
-    var clearWord = this.name.replace(/\,|\.|\:|\'|\"|\!|\?|\%|\$|\(|\)/g, "");
+    var clearWord = this.WordID.replace(/\,|\.|\:|\'|\"|\!|\?|\%|\$|\(|\)/g, "");
     return clearWord.toLowerCase();
   }
   getHTML(index){
     var htmlTag = 'b';
-    var res = "<"+htmlTag+" title= '" + this.getName() + "'class='wor' id='word"+index+"'>";
-    res += this.getName();
+    var res = "<"+htmlTag+" title= '" + this.getWordID() + "'class='wor' id='word"+index+"'>";
+    res += this.getWordID();
     res += "</"+htmlTag+">";
 
-    res += "<"+htmlTag+" title= '" + this.getName() + "'class='syll' id='syllables_word"+index+"'>";
-    res += this.getName();
+    res += "<"+htmlTag+" title= '" + this.getWordID() + "'class='syll' id='syllables_word"+index+"'>";
+    res += this.getWordID();
     res += "</"+htmlTag+"><"+htmlTag+"> </"+htmlTag+"><"+htmlTag+" class='spacing'> </"+htmlTag+">";
     return res;
   }
+
   wordFactory(){
-    if(this.getSoundURL() == ""){
-      //console.log('wordFactory:'+this.getName());
-      //this = getElement(word);
-      //console.log('word:'+this.getName());
-      var apiKey = "bafe5fa3-9e6b-4e41-b296-04945d3f912d";
-      //exmpele path: https://www.dictionaryapi.com/api/v1/references/collegiate/xml/word?key=bafe5fa3-9e6b-4e41-b296-04945d3f912d
-      var path ="https://www.dictionaryapi.com/api/v1/references/collegiate/xml/"+ this.getClearName() +"?key="+apiKey;
       var word = this;
-      getXMLFile(path, function(xmlDoc){
-        //console.log('xmlDoc:'+xmlDoc.getElementsByTagName('hw')[0].innerHTML);
-        if(xmlDoc.getElementsByTagName('hw').length != 0){
-          word.setSyllables(xmlDoc.getElementsByTagName('hw')[0].innerHTML);
-          if(word.getClearName().length <= word.getSyllables().length){
-            console.log('1');
-            if(xmlDoc.getElementsByTagName('sound').length != 0){
-              var sound = xmlDoc.getElementsByTagName('sound')[0].firstChild.innerHTML;
-              word.dataFile = sound.slice(0, (sound.lastIndexOf('.mp3')-3));
-              word.dataDir= word.dataFile.slice(0, 1);
-              if(word.dataDir == word.getClearName().slice(0, 1)){
-                word.setSoundURL("https://media.merriam-webster.com/audio/prons/en/us/mp3/"+word.dataDir+"/"+word.dataFile+".mp3");
+      return new Promise(resolve => {
+          $.ajax({
+              type: "GET",
+              url: "http://127.0.0.1:3000/api/words/"+word.getClearWord(),
+              success: function(data){
+                  var syllables = '';
+                  for(var i = 0; i<data.syllables.count-1; i++)
+                      syllables+=data.syllables.list[i]+"*";
+                  syllables+=data.syllables.list[data.syllables.count-1];
+                  word.setSyllables(syllables);
+                  word.setSoundURL(data.soundURL);
+              },
+              error: function(jqXHR, textStatus, error){
+                  word.setSyllables(word.getWordId());
+                  console.log(error);
               }
-            }
-          }
-          else {//(word.getSyllables().length <= word.getClearName().length)
-            var ending = word.getClearName().slice(word.getSyllables().length, word.getClearName().length); // TODO Improve it, not good enough
-            console.log('ending:'+word.getSyllables().length+','+ word.getClearName().length +','+ending);
-            var newPath ="https://www.dictionaryapi.com/api/v1/references/collegiate/xml/"+ word.getSyllables() +"?key="+apiKey;
-            getXMLFile(newPath, function(xmlDoc){
-              if(xmlDoc.getElementsByTagName('hw').length != 0){
-                word.setSyllables(xmlDoc.getElementsByTagName('hw')[0].innerHTML+ending);
-                //console.log(word.getSyllables());
-                if(xmlDoc.getElementsByTagName('sound').length != 0){
-                  var sound = xmlDoc.getElementsByTagName('sound')[0].firstChild.innerHTML;
-                  word.dataFile = sound.slice(0, (sound.lastIndexOf('.mp3')-3));
-                  word.dataDir= word.dataFile.slice(0, 1);
-                  if(word.dataDir == word.getName().slice(0, 1)){
-                    word.setSoundURL("https://media.merriam-webster.com/audio/prons/en/us/mp3/"+word.dataDir+"/"+word.dataFile+".mp3");
-                  }
-                }
-              }
-            });
-          }
-        }
+          }).done(resolve);
       });
-    }
   }
 }
 var text = new Words();
-var getXMLFile = function(pathXML, callback){
-  var request = new XMLHttpRequest();
-  request.open("GET", pathXML, true);
-  request.overrideMimeType('application/xml');
-  request.onreadystatechange = function() {
-    if (request.readyState == 4 && request.status == 200) {
-      callback(request.responseXML);
-    }
-  };
-  request.send();
-};
 function textToWords(sentence){
   sentence = sentence.replace(/\r?\n/g, ' \n ');
   //console.log();
@@ -279,28 +241,15 @@ function updete() {
   toBold();
 }
 function overWord(word, wordId){
-  console.log('overWord');
-  console.log('word:'+word);
-  console.log('wordId:'+wordId);
+  // console.log('overWord');
+  // console.log('word:'+word);
+  // console.log('wordId:'+wordId);
   var element = text.getWord(word);
-  console.log('element:'+element);
-  element.wordFactory();
-  var tims = 0;
-
-  document.getElementById('syllables_'+wordId).innerHTML= element.getSyllables();
-  var timer = setInterval(function(){
-    tims +=400;
-      console.log(tims + 'overWord');
-      if ((element.dataFile != "") || (tims>=1200)){
+  if (element.getSoundURL() === ""){
+    element.wordFactory().then(()=> {
         document.getElementById('syllables_'+wordId).innerHTML= element.getSyllables();
-        clearInterval(timer);
-      }
-    }, 400);
-
-  // setTimeout(function(){
-  //   console.log('setTimeout');
-  //   outOfWord(wordId);}, 2500);
-
+    });
+  }
 }
 function outOfWord(wordId){
   console.log('outOfWord: '+ wordId);

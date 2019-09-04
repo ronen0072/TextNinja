@@ -69,6 +69,7 @@ class Word {
 
 }
 function getSoundURLformOxford(wordID){
+    getSoundURLformDictionaryAPI(wordID);
     // app_id and app_key
     const app_id = '5cd4ffdd'; // insert your APP Id
     const app_key = '9bc0c41cf7772885df9f9084e720fc0a'; // insert your APP Key
@@ -76,9 +77,16 @@ function getSoundURLformOxford(wordID){
 
     return oxforddictionaries.entries({word_id: wordID}).then((data)=> {
         return new Promise(resolve => {
-            this.soundURL = data.results[0].lexicalEntries[0].pronunciations[0].audioFile;
-            resolve(this.soundURL);
+            var soundURL = data.results[0].lexicalEntries[0].pronunciations[0].audioFile;
+            //console.log(soundURL);
+            resolve(soundURL);
         });
+    })
+    .catch(function (err) {
+        return new Promise(resolve => {
+            resolve(getSoundURLformDictionaryAPI(wordID));
+        });
+
     });
 }
 function getSyllablesFormWordsAPI(wordID){
@@ -93,12 +101,17 @@ function getSyllablesFormWordsAPI(wordID){
     };
     return requestPromise(options).then(function (body) {
         return new Promise(resolve => {
-            var jOb = JSON.parse(body);
-            resolve(jOb.syllables);
+            var jOb = JSON.parse(body).syllables;
+            if(JSON.stringify(jOb) === "{}"){
+                resolve(getSyllablesFormDictionaryAPI(wordID));
+            }
+            resolve(jOb);
         });
     })
     .catch(function (err) {
-        console.log(err);
+        return new Promise(resolve => {
+            resolve(getSyllablesFormDictionaryAPI(wordID));
+        });
     });
 }
 function getSyllablesFormDictionaryAPI(wordID){
@@ -112,23 +125,39 @@ function getSyllablesFormDictionaryAPI(wordID){
         return new Promise(resolve => {
             var obj = parse(xmlDoc);
             //console.log(obj.root.children[0].children[3]);
-            var string = JSON.stringify(obj.root.children[0].children[2].content);
-            var string2 = JSON.stringify(obj.root.children[0].children[2].content).replace(/\*/g, "");
-            var count = 1+string.length-string2.length;
-            console.log(count);
-            string3 = JSON.stringify(obj.root.children[0].children[2].content).replace(/\*/g, ",");
-            console.log({
+            var string = (obj.root.children[0].children[2].content.replace(/\*/g, ","));
+            var syllables = string.split(',');
+            var count = syllables.length;
+
+
+            resolve({
                 "count": count,
-                "list": [
-                    string3
-                ]
-            })
-           /* var jOb = JSON.parse(body);
-            resolve(jOb.syllables);*/
+                "list": syllables
+            });
         });
     })
     .catch(function (err) {
         console.log(err);
     });
+};
+function getSoundURLformDictionaryAPI(wordID){
+    //https://www.dictionaryapi.com/api/v1/references/collegiate/xml/word?key=bafe5fa3-9e6b-4e41-b296-04945d3f912d
+    var apiKey = "bafe5fa3-9e6b-4e41-b296-04945d3f912d";
+    var options = {
+        method: 'GET',
+        url: 'https://www.dictionaryapi.com/api/v1/references/collegiate/xml/'+wordID+'?key='+apiKey
+    };
+    return requestPromise(options).then(function (xmlDoc) {
+        return new Promise(resolve => {
+            var obj = parse(xmlDoc);
+            var sound = obj.root.children[0].children[3].children[0].content
+            var fileName = sound.slice(0, (sound.length     -4));
+            var dirName= fileName.slice(0, 1)
+            resolve("https://media.merriam-webster.com/audio/prons/en/us/mp3/"+dirName+"/"+fileName+".mp3");
+        });
+    })
+        .catch(function (err) {
+            console.log(err);
+        });
 };
 module.exports = Word;
