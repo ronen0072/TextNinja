@@ -1,145 +1,8 @@
-class Words {
-  constructor() {
-    this.words = [];
-  }
-  getIndex(word){
-    var index = this.words.findIndex(function(value){
-      return value.getWordID() == word;
-    });
-    return index;
-  }
-  isExists(word){
-    var index = this.getIndex(word);
-    return index != -1;
-  }
-  getWord(word){
-    var index = this.getIndex(word);
-    return this.words[index];
-  }
-  findSyllables(word){
-    return (this.getWord(word)).getSyllables();
-  }
-  updateSyllables(word, _syllables){
-    (this.getWord(word)).setSyllables(_syllables);
-  }
-  findSoundURL(word){
-    return (this.getWord(word)).getSoundURL();
-  }
-  updateSoundURL(word, _soundURL){
-    (this.getWord(word)).setSoundURL(_soundURL);
-  }
-  addWord(word){
-    var index = this.getIndex(word);
-    if (index == -1){
-      var newWord = new Word(word);
-      this.words.push(newWord);
-      return newWord;
-    }
-    else {
-      return this.words[index];
-    }
-
-  }
-}
-class Word {
-  constructor(word) {
-    this.WordID = word;
-    this.clearWord = '';
-    this.syllables = word;
-    this.soundURL = '';
-    this.clearWord =  this.clearTheWord();
-  }
-  setSyllables(_syllables){
-    this.syllables = _syllables;
-  }
-  setSoundURL(_soundURL){
-    this.soundURL = _soundURL;
-  }
-  getWordID(){
-    return this.WordID;
-  }
-  getClearWord(){
-    return this.clearWord;
-  }
-  getSyllables(){
-    return this.syllables;
-  }
-  getSoundURL(){
-    return this.soundURL;
-  }
-  clearTheWord(){
-    var clearWord = this.WordID.replace(/\,|\.|\:|\'|\"|\!|\?|\%|\$|\(|\)/g, "");
-    return clearWord.toLowerCase();
-  }
-  getHTML(index){
-    var htmlTag = 'b';
-    var res = "<"+htmlTag+" title= '" + this.getWordID() + "'class='wor' id='word"+index+"'>";
-    res += this.getWordID();
-    res += "</"+htmlTag+">";
-
-    res += "<"+htmlTag+" title= '" + this.getWordID() + "'class='syll' id='syllables_word"+index+"'>";
-    res += this.getWordID();
-    res += "</"+htmlTag+"><"+htmlTag+"> </"+htmlTag+"><"+htmlTag+" class='spacing'> </"+htmlTag+">";
-    return res;
-  }
-
-  wordFactory(){
-      var word = this;
-      return new Promise(resolve => {
-          $.ajax({
-              type: "GET",
-              url: "http://127.0.0.1:3000/api/words/"+word.getClearWord(),
-              success: function(data){
-                  var syllables = '';
-                  for(var i = 0; i<data.syllables.count-1; i++)
-                      syllables+=data.syllables.list[i]+"*";
-                  syllables+=data.syllables.list[data.syllables.count-1];
-                  word.setSyllables(syllables);
-                  word.setSoundURL(data.soundURL);
-              },
-              error: function(jqXHR, textStatus, error){
-                  word.setSyllables(word.getWordId());
-                  console.log(error);
-              }
-          }).done(resolve);
-      });
-  }
-}
-var text = new Words();
-function textToWords(sentence){
-  sentence = sentence.replace(/\r?\n/g, ' \n ');
-  //console.log();
-  var numOfSpace = sentence.length - sentence.replace(/ /g, "").length;
-  numOfWords = numOfSpace + 1;
-  var res = "";
-  var left = sentence+' ';
-  for(i = 1; i <= numOfWords; i++){
-    var temp = left.substring(0,left.indexOf(" "));
-    if (temp != '' && temp !='\n'){
-      var currWord = text.addWord(temp);
-      res += currWord.getHTML(i);
-    }
-    else {
-      if(temp =='\n'){
-        res += '<br/>';
-      }
-    }
-    left = left.substring(left.indexOf(" ")+1);
-  }
-
-  return res;
-  //.replace(/\r?\n/g, '<br/>')
-}
-
-var defaultValue = "Insert text";
 var textBox = $('#textBox');
 autosize(document.getElementById("textBox"));
 $(document).ready(function(){
   initialSettings();
-  if((!sessionStorage.textBox) || (sessionStorage.textBox == defaultValue) || (sessionStorage.textBox == '')){
-    //textBox.val(defaultValue);
-  }
-  else {
+  if(sessionStorage.textBox){
     console.log(textBox.value);
     textBox.val(sessionStorage.textBox);
   }
@@ -156,34 +19,25 @@ $(document).ready(function(){
   });
   $('#output').mousemove(function(){showCoords(event);});
 });
-var output = document.getElementById("output");
-textBox.focus(function(){
-  // if(textBox.value ==  defaultValue ){
-  //   textBox.val('');
-  // }
-});
+var output = $("#output");
 textBox.keyup(function(){updete();});
 textBox.blur(function() {
   if(textBox.val() == ""){
     console.log('empty');
     updete();
-    //textBox.val(defaultValue);
   }
   else {
     updete();
   }
 });
 function updete() {
-  if((textBox.val() != defaultValue) && (textBox.val() != '')){
+  if(textBox.val() != ''){
     sessionStorage.setItem('textBox', textBox.val());
-    output.innerHTML = textToWords(textBox.val());
   }
   else {
-    if(textBox.val() == ''){
-      sessionStorage.setItem('textBox', textBox.val());
-      output.innerHTML = textToWords(textBox.val());
-    }
+    sessionStorage.setItem('textBox', textBox.val());
   }
+  output.html(text.addWords(textBox.val()));
   $('.wor').show();
   $('.syll').hide();
   $('.spacing').hover(function(){
@@ -238,6 +92,15 @@ function updete() {
   $('.wor').click(function(){
     clickWord(this.title);
   });
+  $('.syll' ).contextmenu(function(e) {
+    $('#menu').attr('title',this.title)
+    e.preventDefault();
+    const origin = {
+      left: e.pageX,
+      top: e.pageY
+    };
+    setPosition(origin);
+  });
   toBold();
 }
 function overWord(word, wordId){
@@ -247,8 +110,11 @@ function overWord(word, wordId){
   var element = text.getWord(word);
   if (element.getSoundURL() === ""){
     element.wordFactory().then(()=> {
-        document.getElementById('syllables_'+wordId).innerHTML= element.getSyllables();
+        $('#syllables_'+wordId).text(element.getSyllables());
     });
+  }
+  else{
+    $('#syllables_'+wordId).text(element.getSyllables());
   }
 }
 function outOfWord(wordId){
@@ -274,9 +140,8 @@ function speaker(){
 }
 
 function clearTheInputBox(){
-  //textBox.val(defaultValue);
   textBox.val('');
-  output.innerHTML ='';
+  output.text('');
   console.log('clear');
   sessionStorage.removeItem('textBox');
   $('#clear').attr('src', '/assets/icon/broomClear32.png');
@@ -333,7 +198,6 @@ function clickWord(word){
   console.log(word);
   document.getElementById('sound').src = text.findSoundURL(word);
 }
-
 
 
 function settings(){
@@ -405,3 +269,14 @@ function updeteSettings(){
   console.log('font_size: '+  sessionStorage.font_size);
 
 }
+
+
+
+/*window.onclick=function(event) {
+ /!* console.log(event.target.id);
+  if (event.target.id == menu.attr('id')){*!/
+  var display = "display: none;";
+  console.log(close);
+  menu.attr('style', display);
+  //}
+}*/

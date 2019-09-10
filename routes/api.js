@@ -7,27 +7,32 @@ const http = require("https");
 router.get('/words/:word', function  (req,res) {
     const wordID = req.params.word;
     var wordObj = new Word(wordID);
-    Word_db.findOne({wordID: wordObj.getClearWord()}).then((result)=>{
+    Word_db.findOne({wordID: wordObj.getWordID()}).then((result)=>{
         //if the word is not exists
         //console.log(result);
         if(result === null) {
             //console.log('the word is not exists');
             wordObj.initialization().then(function(){
-                Word_db.create({wordID: wordObj.getClearWord(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL()});
-                res.send({type: 'GET', wordID: wordObj.getClearWord(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL()});
+                Word_db.create({wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL()});
+                res.send({type: 'GET', wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL()});
             });
         }
         else {
             //console.log('the word is already exists');
-            res.send({type: 'GET', wordID: wordObj.getClearWord(), syllables: result.syllables, soundURL: result.soundURL});
+            res.send({type: 'GET', wordID: wordObj.getWordID(), syllables: result.syllables, soundURL: result.soundURL});
         }
     });
 });
 
-router.post('/words/', function(req,res){
+router.put('/words/syllables', function(req,res){
     var req_word = req.body;
     //var wordO = new Word(req_word);
-    console.log(req_word);
-    res.send({type:'POST' , word:req_word});
+    res.send({type:'PUT' , word:req_word});
+    Word_db.findOneAndUpdate({wordID: req_word.wordID},{syllables:req_word.syllables}).then((result)=>{
+        //console.log('the word is already exists');
+        res.send({type: 'GET', wordID: result.wordID, syllables: result.syllables, soundURL: result.soundURL});
+
+    });
+
 });
 module.exports = router;

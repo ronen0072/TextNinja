@@ -1,8 +1,14 @@
-// Get the log In Box
-var logInBox = $('#logInBox');
+const noneDisplay = "display: none;";
+const display = "display: block;";
 
 // Get the log In Box
-var signUpBox = $('#signUpBox');
+var popBox = $('#popBox');
+
+// Get the log In Box
+var logInBox = $('#login-box');
+
+// Get the sign Up Box
+var signUpBox = $('#signUp-box');
 
 // Get the button that opens the log In
 var logIn = $('#log_In');
@@ -21,45 +27,49 @@ var closeSignUpBox = $('#closeSignUpBox');
 
 // When the user clicks the button, open the modal
 logIn.click( function() {
-    var display = "display: block;";
+    console.log(display);
+    popBox.attr('style', display);
     console.log(display);
     logInBox.attr('style', display);
 });
 
 goToSignUp.click( function() {
-    var display = "display: none;";
     console.log(close);
-    logInBox.attr('style', display);
-    var display = "display: block;";
+    logInBox.attr('style', noneDisplay);
     console.log(display);
     signUpBox.attr('style', display);
 });
 
 goToLogIn.click( function() {
-    var display = "display: none;";
     console.log(close);
-    signUpBox.attr('style', display);
-    var display = "display: block;";
+    signUpBox.attr('style', noneDisplay);
     console.log(display);
     logInBox.attr('style', display);
 });
 
 closeLogInBox.click(function() {
-    var display = "display: none;";
     console.log(close);
-    logInBox.attr('style', display);
+    logInBox.attr('style', noneDisplay);
+    popBox.attr('style', noneDisplay);
 });
 closeSignUpBox.click(function() {
-    var display = "display: none;";
     console.log(close);
-    signUpBox.attr('style', display);
+
+    signUpBox.attr('style', noneDisplay);
+    popBox.attr('style', noneDisplay);
 });
 // When the user clicks anywhere outside of the Log In Box, close it
 window.onclick=function(event) {
-    if (event.target.id == logInBox.attr('id')){
-        var display = "display: none;";
+    if (event.target.id == popBox.attr('id')){
         console.log(close);
-        logInBox.attr('style', display);
+        logInBox.attr('style', noneDisplay);
+        signUpBox.attr('style', noneDisplay);
+        popBox.attr('style', noneDisplay);
+    }
+    var menu  = $('#menu');
+    if (event.target.id != menu.attr('id')) {
+        console.log(close);
+        menu.attr('style', noneDisplay);
     }
 }
 

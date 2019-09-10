@@ -42,6 +42,7 @@ h1{
   letter-spacing: -4px;
   margin: 0px 0px 3px;
   padding-right: 30px;
+  display: inline-block;
 }
 h2 {
   font-size: 200%;
@@ -325,7 +326,7 @@ b{
   margin-left: 0px;
   margin-right: 1px;
 }
-.bold:active{
+/*.bold:active{
   color: var(--blue);
 }
 .bold{
@@ -335,7 +336,7 @@ b{
   line-height: 22px;
   margin-left: 1px;
   margin-right: 1px;
-}
+}*/
 #bottom{
   bottom: 0px;
   right: 0px;
@@ -406,21 +407,29 @@ b{
 }
 
 /*------------------------------log in --------------------------*/
-.popBox {
+
+.popBox, #menu{
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
+  overflow: auto; /* Enable scroll if needed */
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+.popBox {
   padding-top: 100px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  border-radius: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
+#menu{
+  width: 120px;
+  height: auto;
+}
+
 
 /* Modal Content */
 .popBox-content {
@@ -449,7 +458,8 @@ b{
   text-decoration: none;
   cursor: pointer;
 }
-#signUp-box, #login-box {
+#signUp-box, #login-box, #fixSyll-box {
+  display: none; /* Hidden by default */
   position: relative;
   width: 600px;
   height: 400px;
@@ -467,9 +477,20 @@ b{
   background-color: var(--dark);
 }
 
-
+.center {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 40px;
+  width: 100%;
+  height: 100%;
+  color: var(--white);
+  background-color: var(--dark);
+}
+b.center{
+  font-size: 120%;
+}
 input[type="text"],
-input[type="password"] {
+input[type="password"]{
   display: block;
   box-sizing: border-box;
   margin-bottom: 5px;
@@ -483,9 +504,17 @@ input[type="password"] {
   font-size: 15px;
   transition: 0.2s ease;
 }
-
+select{
+  width: auto;
+  display: initial;
+  overflow: hidden;
+}
+.inputSyllable{
+  width: 70px;
+  display: inline-block;
+}
 input[type="text"]:focus,
-input[type="password"]:focus {
+input[type="password"]:focus{
   border-bottom: 2px solid #16a085;
   color: #16a085;
   transition: 0.2s ease;
@@ -657,3 +686,26 @@ input.inputR, input.inputL{
 .contact100-form-symbol img {
   max-width: 49px;
 }
+#menu{
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  width: 120px;
+  overflow: auto; /* Enable scroll if needed */
+  border-radius: 2px;
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+}
+
+.menu-options {
+  list-style: none;
+  padding: 10px 0;
+}
+.menu-option {
+  font-weight: 500;
+  font-size: 14px;
+  padding: 10px 40px 10px 20px;
+  cursor: pointer;
+}
+.menu-option:hover {
+   background: rgba(0, 0, 0, 0.2);
+ }

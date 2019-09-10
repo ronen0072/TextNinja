@@ -10,19 +10,30 @@
     <title>TextNinja</title>
 </head>
 <body>
-<% include partials/logIn.ejs%>
-<% include partials/signUp.ejs%>
-<% include partials/navbar.ejs%>
-<div class="intro" id="main"><% include partials/main.ejs%></div>
-<div class="intro" id="about"><% include partials/about.ejs%></div>
-<div class="intro" id="contact"><% include partials/contact.ejs%></div>
-<% include partials/bott.ejs %>
-<script src="/assets/js/jscolor.js"></script>
-<script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
-<script src="/assets/js/functionality.js"></script>
-<script src="/assets/js/bootstrap.js"></script>
-<script src="/assets/js/logIn.js"></script>
-<script src="/assets/js/navbar.js"></script>
+
+    <% include partials/popBox.ejs%>
+    <% include partials/navbar.ejs%>
+    <div id="menu">
+        <ul class="menu-options">
+            <li id='fixSyll' class="menu-option">Fix The syllables</li>
+            <li class="menu-option">Reload</li>
+            <li class="menu-option">Save</li>
+            <li class="menu-option">Save As</li>
+            <li class="menu-option">Inspect</li>
+        </ul>
+    </div>
+    <div class="intro" id="main"><% include partials/main.ejs%></div>
+    <div class="intro" id="about"><% include partials/about.ejs%></div>
+    <div class="intro" id="contact"><% include partials/contact.ejs%></div>
+    <% include partials/bott.ejs %>
+    <script src="/assets/js/jscolor.js"></script>
+    <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
+    <script src="/assets/js/words.js"></script>
+    <script src="/assets/js/functionality.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/logIn.js"></script>
+    <script src="/assets/js/menu.js"></script>
+    <script src="/assets/js/navbar.js"></script>
 </body>
 </html>
