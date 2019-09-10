@@ -1,3 +1,4 @@
 keys.js
 .idea*
 .idea/*
+/config/keys.js
