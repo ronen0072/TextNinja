@@ -37,6 +37,7 @@ fixSyll.click( function() {
 
 closeFixSyllBox.click(function() {
     console.log(close);
+    fixSyllBox.attr('style', noneDisplay);
     popBox.attr('style', noneDisplay);
 });
 

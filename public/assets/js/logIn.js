@@ -64,7 +64,6 @@ closeSignUpBox.click(function() {
 /*google.click(function(){
 
 });*/
-
 // When the user clicks anywhere outside of the Log In Box, close it
 window.onclick=function(event) {
     if (event.target.id == popBox.attr('id')){
@@ -72,6 +71,7 @@ window.onclick=function(event) {
         logInBox.attr('style', noneDisplay);
         signUpBox.attr('style', noneDisplay);
         popBox.attr('style', noneDisplay);
+        $('#fixSyll-box').attr('style', noneDisplay);
     }
     var menu  = $('#menu');
     if (event.target.id != menu.attr('id')) {
