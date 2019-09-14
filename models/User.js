@@ -3,19 +3,16 @@ const Schema =  mongoose.Schema;
 
 //create word Schema & model
 const UserSchema = new Schema({
+    username: String,
     local:{
-        username: String,
         password: String,
-        email: String,
-    },
-    facebook:{
-
+        email: String
     },
 
-    google:{
+    facebookID: String,
+    googleID: String
 
-    }
 });
 
-const User = mongoose.model('user', WordSchema);
+const User = mongoose.model('user', UserSchema);
 module.exports = User;
