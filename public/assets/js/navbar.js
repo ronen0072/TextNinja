@@ -14,9 +14,16 @@ linkHome.click( function(){
 });
 linkAbout.click( function(){
     displyFrame('about');
+    updete($('#aboutInfo').text(), $('#aboutInfo'), false);
+    $('.inner-content').mousemove(function(){showCoords(event, '.inner-content')});
 });
 linkContact.click( function(){
+    upDetailse();
     displyFrame('contact');
+});
+$('#simple_practice').click( function(){
+    displyFrame('practice');
+    getWords();
 });
 
 function displyFrame(page){

@@ -5,16 +5,17 @@ body {
   display: flex;
   flex-direction: column;
 }
-.container {
-  height: 100%;
-  background: #f0e68c;
-}
 :root {
+  --black: #000000;
   --dark: #181818;
   --blue: #59beee;
   --gray: #6c757d;
   --purple: #6f42c1;
   --pink: #e83e8c;
+  --red: #f30014;
+  --light-red: #ffa2a3;
+  --yes: #1c7430;
+  --light-gray: #d9dad6;
 }
 
 *{
@@ -24,7 +25,18 @@ body {
 input.largerCheckbox {
       width: 16px;
       height: 16px;
+      margin: 5px;
   }
+input.deleteCheckbox {
+  width: 14px;
+  height: 14px;
+  margin: 5px;
+}
+input.deleteCheckbox:hover {
+  background-color: var(--red);
+}
+
+
 #bar{
   background-color: var(--dark);
   padding: 15px 0.6% 1px;
@@ -58,6 +70,7 @@ h3 {
   padding: 10px 5% 5px;
 }
 h4 {
+  padding-right: 10px;
   font-size: 160%;
   color:var(--dark);
   letter-spacing: -1.5px;
@@ -85,8 +98,9 @@ intro{
   height: 100%;
   padding: 5px 0px 5px;
   margin-bottom: 30px;
+  background-color: var(--white);
 }
-.inner-content{
+.inner-content, .wrapper{
   padding: 5px 5% 5px;
 }
 .title{
@@ -426,18 +440,18 @@ b{
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 #menu{
-  width: 120px;
   height: auto;
+  background-color: var(--gray-dark);
+  color: white;
+  font-size: 16px;
 }
 
 
 /* Modal Content */
 .popBox-content {
-  width: -moz-fit-content;
   width: fit-content;
   margin: auto;
   border: 1px solid #888;
-
   background-color: var(--white);
 }
 
@@ -449,21 +463,29 @@ b{
   font-size: 28px;
   font-weight: bold;
   text-align: center;
-  padding: 15px;
+  padding: 8px;
+  padding-top: 4px;
 }
-
+#closeWikipedia {
+  padding-top: 20px;
+}
 .close:hover,
 .close:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
 }
-#signUp-box, #login-box, #fixSyll-box {
+
+#wikipedia-box, #signUp-box, #login-box, #fixSyll-box {
   display: none; /* Hidden by default */
   position: relative;
+  margin: auto;
+
+}
+
+#signUp-box, #login-box, #fixSyll-box {
   width: 600px;
   height: 400px;
-  margin: auto;
 }
 
 .left {
@@ -686,26 +708,199 @@ input.inputR, input.inputL{
 .contact100-form-symbol img {
   max-width: 49px;
 }
-#menu{
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  width: 120px;
-  overflow: auto; /* Enable scroll if needed */
-  border-radius: 2px;
-  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
-}
 
 .menu-options {
   list-style: none;
-  padding: 10px 0;
+  padding: 0px;
+  margin: 0px;
 }
 .menu-option {
   font-weight: 500;
   font-size: 14px;
-  padding: 10px 40px 10px 20px;
+  padding: 10px;
   cursor: pointer;
 }
 .menu-option:hover {
-   background: rgba(0, 0, 0, 0.2);
+  background: var(--white); /*todo to change to light gray*/
+  color: var(--dark);
  }
+#seeWikipedia{
+  display: none;
+}
+
+#wikipedia-box{
+  width: 95vw;
+  background-color: rgba(0,0,0,0);
+}
+/* The container */
+.container {
+  display: inline;
+  position: relative;
+  margin-bottom: 20px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.container2 {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+/* Hide the browser's default checkbox */
+.container2 input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkDelete {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+/* Create a custom checkbox */
+.checkmark {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  margin-right: 10px;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkDelete {
+  background-color:  var(--light-red);
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkDelete {
+  background-color: var(--red);
+}
+/* On mouse-over, add a grey background color */
+.container2:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container2 input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+/* Create the checkDelete/indicator (hidden when not checked) */
+.checkDelete:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Show the checkDelete when checked */
+.container input:checked ~ .checkDelete:after {
+  display: block;
+}
+.container2 input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the.checkmark checkDelete/indicator */
+.container  .checkDelete:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+/* Style the.checkmark checkDelete/indicator */
+.container2  .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+#delete{
+/*  cursor: pointer;
+  font-weight: bold;*/
+  padding-left: 25px;
+  padding-right: 25px;
+  margin-top: 20px;
+  float: bottom;
+}
+#delete:hover{
+  background-color: var(--red);
+}
+#checkIfSafe{
+  font-weight: bold;
+  margin-top: 10px;
+  display: none;
+  height: 20px;
+}
+.choose{
+  cursor: pointer;
+  font-weight: bold;
+  padding: 10px;
+/*  padding-top: 4px;*/
+  border-radius: 25px;
+  display: inline-block;
+  background-color: var(--light-gray);;
+
+}
+.choose:hover {
+  color: var(--white);
+}
+#yes{
+  padding-left: 9px;
+  padding-right: 9px;
+  color: var(--yes);
+}
+#yes:hover{
+  background-color: var(--yes);
+  color: var(--white);
+}
+#no:hover{
+  background-color: var(--red);
+  color: var(--white);
+}
+#no{
+  padding-left: 12px;
+  padding-right: 12px;
+  color: var(--red);
+}

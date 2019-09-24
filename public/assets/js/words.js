@@ -33,13 +33,12 @@ class Word {
 
     getHTML(index){
         var htmlTag = 'b';
-        var res = "<"+htmlTag+" title= '" + this.getWordID() + "'class='wor' id='word"+index+"'>";
-        res += this.getWordID();
-        res += "</"+htmlTag+">";
+        var res = `<${htmlTag} title= '${this.getWordID()}' class='wor' id='word${index}' syllables='${this.getWordID()}'>${this.getWordID()}</${htmlTag}><${htmlTag}> </${htmlTag}>`;
 
-        res += "<"+htmlTag+" title= '" + this.getWordID() + "'class='syll' id='syllables_word"+index+"'>";
+
+/*       res += `<${htmlTag} title= '${this.getWordID()}' class='syll' id='syllables_word${index}'>`;
         res += this.getWordID();
-        res += "</"+htmlTag+"><"+htmlTag+"> </"+htmlTag+"><"+htmlTag+" class='spacing'> </"+htmlTag+">";
+        res += `</${htmlTag}><${htmlTag}> </${htmlTag}><${htmlTag} class='spacing'> </${htmlTag}><${htmlTag}> </${htmlTag}>`;*/
         return res;
     }
     clearTheWord(){
@@ -68,7 +67,7 @@ class Word {
         return new Promise(resolve => {
             $.ajax({
                 type: "GET",
-                url: "http://127.0.0.1:3000/api/words/"+word.getClearWord(),
+                url: "../../../api/words/"+word.getClearWord(),
                 success: function(data){
                     var syllables = '';
                     if(!(data.syllables === undefined)) {
@@ -92,6 +91,7 @@ class Word {
 class Words {
     constructor() {
         this.words = [];
+        this.count = 0;
     }
     getIndex(word){
         var index = this.words.findIndex(function(value){
@@ -138,7 +138,7 @@ class Words {
         var numOfWords = numOfSpace + 1;
         var res = "";
         var left = sentence+' ';
-        for(i = 1; i <= numOfWords; i++){
+        for(var i = this.count; i <= this.count+numOfWords; i++){
             var temp = left.substring(0,left.indexOf(" "));
             if (temp != '' && temp !='\n'){
                 var currWord = text.addWord(temp);
@@ -151,7 +151,7 @@ class Words {
             }
             left = left.substring(left.indexOf(" ")+1);
         }
-
+        this.count+=numOfWords;
         return res;
         //.replace(/\r?\n/g, '<br/>')
     }

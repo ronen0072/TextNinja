@@ -1,12 +1,15 @@
+<% include messages.ejs%>
 <div id="signUp-box">
     <div class="left">
         <h1>Sign up</h1><br/>
-        <input type="text" name="username" placeholder="Username" />
-        <input type="text" name="email" placeholder="E-mail" />
-        <input type="password" name="password" placeholder="Password" />
-        <input type="password" name="password2" placeholder="Retype password" />
+        <form action="/auth/signUp" method="POST">
+            <input type="text" name="username" placeholder="Username" value="<%= typeof username != 'undefined'? username :'' %>"/>
+            <input type="text" name="email" placeholder="E-mail" value="<%= typeof email != 'undefined'? email : '' %>"/>
+            <input type="password" name="password" placeholder="Password" />
+            <input type="password" name="password2" placeholder="Retype password" />
 
-        <input type="submit" name="signup_submit" value="Sign up" /><br/>
+            <input  id='submitSignUp' type="submit" name="signup_submit" value="Sign up" /><br/>
+        </form>
         <a id="goToLogIn" class="link" href="#">Already have an account?<b> Log In</b></a>
     </div>
     <div class="right">

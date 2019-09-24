@@ -90,7 +90,7 @@ function getSyllablesFormWordsAPI(wordID){
             if(JSON.stringify(jOb) === "{}"){
                 resolve(getSyllablesFormDictionaryAPI(wordID));
             }
-            console.log(jOb);
+            //console.log(jOb);
             resolve(jOb);
         });
     })
@@ -103,12 +103,13 @@ function getSyllablesFormWordsAPI(wordID){
 function getSyllablesFormDictionaryAPI(wordID){
     var options = {
         method: 'GET',
-        url: 'https://www.dictionaryapi.com/api/v1/references/collegiate/xml/'+wordID+'?key='+keys.DictionaryAPI
+        url: 'https://dictionaryapi.com/api/v3/references/collegiate/json/'+wordID+'?key='+keys.DictionaryAPI.apiKey
     };
-    return requestPromise(options).then(function (xmlDoc) {
+    return requestPromise(options).then(function (body) {
         return new Promise(resolve => {
-            var obj = parse(xmlDoc);
-            var string = (obj.root.children[0].children[2].content);
+            var obj = JSON.parse(body);
+            //console.log(obj[0].hwi.hw);
+            var string = obj[0].hwi.hw;
             if(string === ''){
                 string = wordID;
             }
@@ -127,14 +128,15 @@ function getSyllablesFormDictionaryAPI(wordID){
 function getSoundURLformDictionaryAPI(wordID){
     var options = {
         method: 'GET',
-        url: 'https://www.dictionaryapi.com/api/v1/references/collegiate/xml/'+wordID+'?key='+keys.DictionaryAPI
+        url: 'https://dictionaryapi.com/api/v3/references/collegiate/json/'+wordID+'?key='+keys.DictionaryAPI.apiKey
     };
-    return requestPromise(options).then(function (xmlDoc) {
+    return requestPromise(options).then(function (body) {
         return new Promise(resolve => {
-            var obj = parse(xmlDoc);
-            var sound = obj.root.children[0].children[3].children[0].content
-            var fileName = sound.slice(0, (sound.length     -4));
-            var dirName= fileName.slice(0, 1)
+            var obj = JSON.parse(body);
+            //(obj[0].hwi.prs[0].sound.audio);
+            var sound = obj[0].hwi.prs[0].sound.audio;
+            var fileName = sound;//.slice(0, (sound.length     -4));
+            var dirName= fileName.slice(0, 1);
             resolve("https://media.merriam-webster.com/audio/prons/en/us/mp3/"+dirName+"/"+fileName+".mp3");
         });
     })

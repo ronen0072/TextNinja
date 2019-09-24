@@ -1,12 +1,12 @@
 var textBox = $('#textBox');
-autosize(document.getElementById("textBox"));
+//autosize(document.getElementById("textBox"));
 $(document).ready(function(){
   initialSettings();
   if(sessionStorage.textBox){
     console.log(textBox.value);
     textBox.val(sessionStorage.textBox);
   }
-  updete();
+  updete(textBox.val(), output, true);
   //tools
   $('#speaker').click(function(){
     speaker();
@@ -17,83 +17,100 @@ $(document).ready(function(){
   $('#clear').click(function(){
     clearTheInputBox();
   });
-  $('#output').mousemove(function(){showCoords(event);});
+  $('#output').mousemove(function(){showCoords(event, '#output')});
 });
+
 var output = $("#output");
-textBox.keyup(function(){updete();});
+textBox.keyup(function(){updete(textBox.val(), output, true);});
 textBox.blur(function() {
   if(textBox.val() == ""){
     console.log('empty');
-    updete();
+    updete(textBox.val(), output, true);
   }
   else {
-    updete();
+    updete(textBox.val(), output, true);
   }
 });
-function updete() {
-  if(textBox.val() != ''){
-    sessionStorage.setItem('textBox', textBox.val());
-  }
-  else {
-    sessionStorage.setItem('textBox', textBox.val());
-  }
-  output.html(text.addWords(textBox.val()));
-  $('.wor').show();
-  $('.syll').hide();
-  $('.spacing').hover(function(){
-    $('.wor').show();
-    $('.syll').hide();
-  });
-  $('.wor').hover(function(){
-    toSyllables = document.getElementById("syllables").checked;
-    console.log("syllables: "+toSyllables);
-    overWord(this.title, this.id)
-      if(toSyllables){
-      $(this).hide();
-      $('#syllables_'+this.id).show();
-      console.log('#syllables_'+this.id);
+function updete(input, output, update) {
+  console.log('updete');
+  if(update) {
+    if (textBox.val() != '') {
+      sessionStorage.setItem('textBox', input);
+    } else {
+      sessionStorage.setItem('textBox', input);
     }
-    else {
-      if(document.getElementById("bold").checked)
+  }
+  output.html(text.addWords(input));
+  updatefunOfWord(update);
 
-        $(this).animate({
-          fontSize: '118%', fontWeight: '600', letterSpacing: '1px',
-          lineHeight: '22px', marginLeft: '0px', marginRight: '1px'
-        }, 'fast');
-        //$(this).attr('class', 'unSyssables');
+}
+function updateWord(word, wordId){
+  // console.log('overWord');
+  // console.log('word:'+word);
+  // console.log('wordId:'+wordId);
+  var element = text.getWord(word);
+  if (element.getSoundURL() === ""){
+    element.wordFactory().then(()=> {
+      if(toSyllables) {
+        var syllables = element.getSyllables();
+        $("#" + wordId).attr('syllables', syllables);
+        $("#" + wordId).text(syllables);
+        $('#syllables_' + wordId).text(element.getSyllables());
+        console.log(syllables);
+      }
+    });
+  }
+  else{
+    if(toSyllables) {
+      var syllables = element.getSyllables();
+      $("#" + wordId).attr('syllables', syllables);
+      $("#" + wordId).text(syllables);
+      $('#syllables_' + wordId).text(element.getSyllables());
+      console.log(syllables);
     }
-  },
-  function(){
-    $(this).animate({
-      fontSize: '118%', fontWeight: '500', letterSpacing: '50px;',
-      lineHeight: '22px', marginLeft: '0px', marginRight: '1px'
-    }, 'fast');
-    //$(this).attr('class', 'wor');
-  });
-  $('.syll').hover(function(){
-    $('.syll').hide();
-    $('.wor').show();
-    $('#'+this.id.substring(10,this.id.length)).hide();
-    $(this).show();
-  }, function(){
-    $(this).hide();
-    $('.wor').show();
-    $('#'+this.id.substring(10,this.id.length)).show();
-    console.log(this.id.substring(10,this.id.length));
-  });
-  $('#output').mouseout( function(){
-    $('.syll').hide();
-    $('.wor').show();
-    //console.log('out of #output');
-  });
-  $('.syll').click(function(){
-    clickWord(this.title);
-  });
+  }
+}
+
+function updatefunOfWord(update){
+  $('.wor').hover(function() {
+        toSyllables = document.getElementById("syllables").checked;
+        bold = document.getElementById("bold").checked;
+        console.log("syllables: " + toSyllables);
+        updateWord(this.title, this.id);
+        if(bold&&!toSyllables){
+          $(this).animate({
+            fontSize: '118%', fontWeight: 'bold', letterSspacing: '1px',
+            lineHeight: '20px', marginLeft: '0px', marginRight: '1px'
+          }, 'fast');
+        }
+        if(bold&&toSyllables){
+          $(this).animate({
+            fontSize: '118%', fontWeight: 'bold',
+            lineHeight: '20px', marginLeft: '0px', marginRight: '1px'
+          }, 'fast');
+        }
+      },
+      function(){
+        if(toSyllables){
+          $(this).text($(this).attr('title'));
+        }
+        if(bold) {
+          $(this).animate({
+            fontSize: '112%',
+            letterSpacing: '2.3px',
+            lineHeight: '22px',
+            marginLeft: '0px',
+            marginRight: '1px'
+          }, 'fast');
+        }
+      });
   $('.wor').click(function(){
     clickWord(this.title);
   });
-  $('.syll' ).contextmenu(function(e) {
-    $('#menu').attr('title',this.title)
+  $('.wor' ).contextmenu(function(e) {
+    $('#menu').attr('title',this.title);
+    console.log($('#menu').attr('title'));
+    checkWikipedia(update);
     e.preventDefault();
     const origin = {
       left: e.pageX,
@@ -101,27 +118,6 @@ function updete() {
     };
     setPosition(origin);
   });
-  toBold();
-}
-function overWord(word, wordId){
-  // console.log('overWord');
-  // console.log('word:'+word);
-  // console.log('wordId:'+wordId);
-  var element = text.getWord(word);
-  if (element.getSoundURL() === ""){
-    element.wordFactory().then(()=> {
-        $('#syllables_'+wordId).text(element.getSyllables());
-    });
-  }
-  else{
-    $('#syllables_'+wordId).text(element.getSyllables());
-  }
-}
-function outOfWord(wordId){
-  console.log('outOfWord: '+ wordId);
-  $('#syllables_'+wordId).hide();
-  console.log('#'+wordId);
-  $('#'+wordId).show();
 }
 
 function speaker(){
@@ -161,42 +157,49 @@ function pick() {
   setTimeout(function(){
     backgroundColor = document.getElementById('Pick').style.backgroundColor;
   }, 200);
+  document.getElementById('highlighting').checked = true;
 }
 
-function showCoords(event) {
+function showCoords(event, outputBackground) {
   var checked = document.getElementById("highlighting").checked;
   if(checked){
-    var y = event.clientY - 15;
+    var y = event.clientY - 30;
     var x = event.clientX;
-
-    var shift = window.innerWidth > 768 ? 100 : 400;
+    var shift = 0;
+    if(outputBackground === '#output') {
+      shift = window.innerWidth > 768 ? 100 : 400;
+    }
+    if(outputBackground === '.inner-content') {
+      shift = 176;
+    }
+    if(outputBackground === '#wikiInfo') {
+      shift = 184;
+    }
     backgroundColor = document.getElementById('Pick').style.backgroundColor;
-    var background = "background-repeat: no-repeat; background-size: 100% 23px; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-shift -(y % 21.7)+15) +"px;"
-    console.log(background);
-    $('#output').attr('style', background);
+    var whidth = '27px';
+    var background = "background-repeat: no-repeat; background-size: 100% "+whidth+"; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-shift -(y % 27)+20) +"px;";
+    //console.log(background);
+    $(outputBackground).attr('style', background);
   }
-}
-
-function toBold(){
-  console.log("bold:"+bold);
-  //document.getElementById("bold").checked = !document.getElementById("bold").checked;
-  bold = document.getElementById("bold").checked;
-  if(bold){
-    console.log("bold:"+bold);
-    $('.syll').css('font-weight', 'bold')
-  }
-  else {
-    console.log("NOT bold:"+bold);
-    $('.syll').css('font-size', '112%');
-    $('.syll').css('font-weight', 'normal');
-    $('.syll').css('letter-spacing','1px');
-  }
-
 }
 
 function clickWord(word){
   console.log(word);
   document.getElementById('sound').src = text.findSoundURL(word);
+  var data = "";
+  console.log("../../../api/user/words/"+word);
+  return new Promise(resolve => {
+    $.ajax({
+      type: 'PUT',
+      url: "../../../api/user/words/"+word,
+      success: function () {
+        console.log("success");
+      },
+      failure: function (errMsg) {
+        console.log("errMsg");
+      }
+    }).done(resolve);
+  });
 }
 
 
@@ -219,7 +222,7 @@ function settingsOff(){
   settings.attr('title', 'settingsoff');
   settings.attr('src', '/assets/icon/settings32off.png');
   document.getElementById('settings_content').className='dropdown-none';
-  updeteSettings();
+  updateSettings();
 }
 function initialSettings(){
 
@@ -255,13 +258,13 @@ function initialSettings(){
   console.log('font_size: '+  document.getElementById("font_size").value);
 
 }
-function updeteSettings(){
+function updateSettings(){
   sessionStorage.setItem('highlighting', document.getElementById('highlighting').checked);
   sessionStorage.setItem('backgroundColor', document.getElementById('Pick').style.backgroundColor );
   sessionStorage.setItem('syllables', document.getElementById('syllables').checked);
   sessionStorage.setItem('bold', document.getElementById("bold").checked);
   sessionStorage.setItem('font_size', document.getElementById("font_size").value);
-  console.log('---------updeteSettings-----------');
+  console.log('---------updateSettings-----------');
   console.log('highlighting: '+  sessionStorage.highlighting);
   console.log('backgroundColor: '+  sessionStorage.backgroundColor);
   console.log('syllables: '+  sessionStorage.syllables);

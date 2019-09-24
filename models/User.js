@@ -2,16 +2,22 @@ const mongoose = require('mongoose');
 const Schema =  mongoose.Schema;
 
 //create word Schema & model
+const PracticeWord = new Schema({
+    wID: String,
+    word: String
+});
+
+//create word Schema & model
 const UserSchema = new Schema({
     username: String,
+    email: String,
     local:{
-        password: String,
-        email: String
+        password: String
     },
 
     facebookID: String,
-    googleID: String
-
+    googleID: String,
+    words:[PracticeWord]
 });
 
 const User = mongoose.model('user', UserSchema);

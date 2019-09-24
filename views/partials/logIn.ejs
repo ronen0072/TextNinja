@@ -1,17 +1,19 @@
 <div id="login-box">
     <div class="left">
         <br/><h1>Log In</h1><br/>
-        <input type="text" name="username" placeholder="Username" />
-        <input type="password" name="password" placeholder="Password" />
+        <form action="/auth/login" method="POST">
+            <input type="text" name="username" placeholder="Username" />
+            <input type="password" name="password" placeholder="Password" />
 
-        <input id="logIn" type="submit" name="logIn_submit" value="Log In" /><br/>
+            <input id="logIn" type="submit" name="logIn_submit" value="Log In" /><br/>
+        </form>
         <a id="goToSignUp" class="link" href="#">Don't have an account?<b> sign up</b></a>
     </div>
 
     <div class="right">
         <span class="loginwith">Log in with<br />social network</span>
 
-        <button class="social-signin facebook">Log in with facebook</button>
+        <a  href="../../../auth/facebook" ><button id="facebook" class="social-signin facebook">Log in with facebook</button></a>
         <button class="social-signin twitter">Log in with Twitter</button>
         <a  href="../../../auth/google" ><button id="google" class="social-signin google">Log in with Google+</button></a>
 

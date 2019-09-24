@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="hebrew">
+<script src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,22 +11,24 @@
     <title>TextNinja</title>
 </head>
 <body>
-
     <% include partials/popBox.ejs%>
     <% include partials/navbar.ejs%>
     <% include partials/menu.ejs%>
-    <div class="intro" id="main"><% include partials/main.ejs%></div>
+    <div class="intro" id="main"><% include partials/index.ejs %></div>
     <div class="intro" id="about"><% include partials/about.ejs%></div>
     <div class="intro" id="contact"><% include partials/contact.ejs%></div>
+    <div class="intro" id="practice"><% include partials/practice.ejs%></div>
     <% include partials/bott.ejs %>
     <script src="/assets/js/jscolor.js"></script>
     <script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.0.js"   integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="   crossorigin="anonymous"></script>
     <script src="/assets/js/words.js"></script>
     <script src="/assets/js/functionality.js"></script>
     <script src="/assets/js/bootstrap.js"></script>
     <script src="/assets/js/logIn.js"></script>
     <script src="/assets/js/menu.js"></script>
     <script src="/assets/js/navbar.js"></script>
+    <script src="/assets/js/wikipedia.js"></script>
+    <script src="/assets/js/contact.js"></script>
+    <script src="/assets/js/practice.js"></script>
 </body>
 </html>

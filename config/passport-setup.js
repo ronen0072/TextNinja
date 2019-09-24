@@ -1,5 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const User = require('../models/User');
 const keys = require('./keys');
 
@@ -22,14 +23,31 @@ passport.use(
         callbackURL: '/auth/google/redirect'
     }, (accessToken, refreshToken, profile, done) => {
         console.log(profile);
-        User.findOne({googleID:profile.id}).then((user)=>{
-            if(user){
+        User.findOneAndUpdate(
+            {googleID:profile.id},
+            {username:profile.displayName, email:profile.emails[0].value, googleID:profile.id},
+            {upsert: true, new: true, runValidators: true}, // options
+        ).then((user)=>{
                 console.log('User: '+user)
-            }
-            else{
-                User.create({username:profile.displayName, googleID:profile.id}).then((newUser)=>console.log('new User: '+newUser));
-            }
-        });
-
+                done(null, user);
+            });
+    })
+);
+passport.use(
+    new FacebookStrategy({
+        // options for facebook strategy
+        clientID: keys.facebook.clientID,
+        clientSecret: keys.facebook.clientSecret,
+        callbackURL: '/auth/facebook/redirect'
+    }, (accessToken, refreshToken, profile, done) => {
+        console.log(profile);
+/*        User.findOneAndUpdate(
+            {facebookID:profile.id},
+            {username:profile.displayName, email:profile.emails[0].value, facebook:profile.id},
+            {upsert: true, new: true, runValidators: true}, // options
+        ).then((user)=>{
+            console.log('User: '+user)
+            done(null, user);
+        });*/
     })
 );

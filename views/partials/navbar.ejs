@@ -15,29 +15,35 @@
                 <li class="nav-item">
                     <a id="linkContact" class="nav-link" href="#">Contact Us</a>
                 </li>
-
-                <!--<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                <% if(typeof user != 'undefined'){ %>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Practice</a>
                     <div class="dropdown-menu  bg-dark" aria-labelledby="dropdown04">
                         <ul>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Action</a>
+                                <a id="simple_practice" href="#" class="nav-link" href="#">Simple practice</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Another action</a>
+                                <a class="nav-link" href="#">Game 1</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Something else here</a>
+                                <a class="nav-link" href="#">Game 2</a>
                             </li>
                         </ul>
                     </div>
                 </li>
-                -->
+                <% } %>
             </ul>
             <ul class="navbar-nav float-left">
-                <li class="nav-item">
-                    <a id="log_In" class="nav-link" href="#">Log In</a>
-                </li>
+                <% if(typeof user != 'undefined'){ %>
+                    <li class="nav-item">
+                        <a id="log_Out" href="/auth/logout" class="nav-link" href="#">Log Out</a>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a id="log_In" class="nav-link" href="#">Log In</a>
+                    </li>
+                <% } %>
             </ul>
         </div>
     </nav>

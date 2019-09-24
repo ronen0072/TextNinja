@@ -4,7 +4,6 @@ const toggleMenu = command => {
     menu.css('block', `none`);
 };
 const setPosition = ({ top, left }) => {
-    console.log(menu.style);
     console.log(`${top}px`);
     menu.css('left', `${left}px`);
     menu.css('top', `${top}px`);
@@ -27,7 +26,7 @@ var closeFixSyllBox = $('#closeFixSyll');
 
 // When the user clicks the button, open the modal
 fixSyll.click( function() {
-    console.log($(this))
+    console.log($(this));
     $('#toFix').html($('#menu').attr('title'));
     console.log("fixSyll");
     console.log("display fix the syllables");
@@ -52,17 +51,36 @@ syllCount.html(options);
 
 var inputSyllablse = $('#inputSyllablses');
 initialInput();
-
-syllCount.change( function() {
-    $('#alertErrorTooMany').remove()
+function checkNunOFSyllables(){
     var wordToFix = $('#menu').attr('title');
     var alertErrorTooMany = "<p id='alertErrorTooMany' class='alert-danger'>ERROR: Too many syllables, can't be more syllables then letters </p>";
-    if(wordToFix.length < syllCount.val())
+    if(wordToFix.length < syllCount.val()) {
         syllCount.prev().before(alertErrorTooMany);
-    else{
+        return false;
+    }else{
+        return true;
+    }
+}
+function checkTheSyllables(){
+    var alertErrorIncorrect = "<p id='alertError' class='alert-danger'>ERROR: The Syllables is incorrect please fix it...</p>";
+    var stringToCheck = "";
+    var wordToFix = $('#menu').attr('title');
+    inputSyllable.each(function(index, element){
+        stringToCheck += element.value;
+    });
+    if(!(wordToFix === stringToCheck)) {
+        syllCount.prev().before(alertErrorIncorrect);
+        console.log('not a syll');
+        return false;
+    }else{
+        return true;
+    }
+}
+syllCount.change( function() {
+    $('#alertErrorTooMany').remove();
+    if(checkNunOFSyllables()){
         initialInput();
     }
-
 });
 function initialInput(){
     var newSyll = [];
@@ -85,58 +103,47 @@ function initialInput(){
     }
     inputSyllablse.html(input);
 }
-
 submitFixSyll = $('#submitFixSyll');
 submitFixSyll.click( function() {
-    $('#alertError').remove()
+    $('#alertError').remove();
     inputSyllable = $('.inputSyllable');
     var wordToFix = $('#menu').attr('title');
-    var alertErrorIncorrect = "<p id='alertError' class='alert-danger'>ERROR: The Syllables is incorrect please fix it...</p>";
-    var stringToCheck = "";
-    inputSyllable.each(function(index, element){
-        stringToCheck += element.value;
-    });
-    if(wordToFix.length >= syllCount.val()){
-        if(!(wordToFix === stringToCheck)) {
-            syllCount.prev().before(alertErrorIncorrect);
-            console.log('not a syll');
-        }
-        else{
-            console.log('submit Syllables');
-            var newSyllables = "\"";
-            var syll = "";
-            inputSyllable.each(function(index, element){
-                if(index < syllCount.val()-1) {
-                    newSyllables += element.value + "\",\"";
-                    syll += element.value +"*";
-                }
-                else{
-                    newSyllables+= element.value+"\"";
-                    syll += element.value;
-                }
 
-            });
-            text.getWord(wordToFix).setSyllables(syll);
-            console.log(inputSyllable);
-            var message = `{"wordID":"${wordToFix}","syllables":{"count":"${syllCount.val()}","list":[${newSyllables}]}}`
-            console.log('message: '+message);
-            var data = JSON.parse(message);
-            console.log(data);
-            $.ajax({
-                type: 'PUT',
-                url: "http://127.0.0.1:3000/api/words/syllables",
-                // The key needs to match your method's input parameter (case-sensitive).
-                data: JSON.stringify(data),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function() {
-                    console.log(close);
-                    popBox.attr('style', noneDisplay);
-                },
-                failure: function(errMsg) {
-                    console.log(errMsg);
-                }
-            });
-        }
-    }else console.log($('#alertErrorTooMany'));
+    if(checkNunOFSyllables() && checkTheSyllables()) {
+        console.log('submit Syllables');
+        var newSyllables = "\"";
+        var syll = "";
+        inputSyllable.each(function (index, element) {
+            if (index < syllCount.val() - 1) {
+                newSyllables += element.value + "\",\"";
+                syll += element.value + "*";
+            } else {
+                newSyllables += element.value + "\"";
+                syll += element.value;
+            }
+
+        });
+        text.getWord(wordToFix).setSyllables(syll);
+        console.log(inputSyllable);
+        var message = `{"wordID":"${wordToFix}","syllables":{"count":"${syllCount.val()}","list":[${newSyllables}]}}`
+        console.log('message: ' + message);
+        var data = JSON.parse(message);
+        console.log(data);
+        $.ajax({
+            type: 'PUT',
+            url: "/api/words/syllables",
+            // The key needs to match your method's input parameter (case-sensitive).
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function () {
+                console.log(close);
+                popBox.attr('style', noneDisplay);
+            },
+            failure: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
 });
+

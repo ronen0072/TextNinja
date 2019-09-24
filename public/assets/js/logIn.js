@@ -1,6 +1,6 @@
 const noneDisplay = "display: none;";
 const display = "display: block;";
-
+const displayInlineBlock = "display: inline-block;";
 // Get the log In Box
 var popBox = $('#popBox');
 
@@ -51,31 +51,33 @@ goToLogIn.click( function() {
 });
 
 closeLogInBox.click(function() {
-    console.log(close);
-    logInBox.attr('style', noneDisplay);
-    popBox.attr('style', noneDisplay);
+    closeAll();
 });
 closeSignUpBox.click(function() {
-    console.log(close);
-
-    signUpBox.attr('style', noneDisplay);
-    popBox.attr('style', noneDisplay);
+    closeAll();
 });
-/*google.click(function(){
 
+/*$('#submitSignUp').click(function () {
+    
 });*/
+
 // When the user clicks anywhere outside of the Log In Box, close it
 window.onclick=function(event) {
-    if (event.target.id == popBox.attr('id')){
-        console.log(close);
-        logInBox.attr('style', noneDisplay);
-        signUpBox.attr('style', noneDisplay);
-        popBox.attr('style', noneDisplay);
-        $('#fixSyll-box').attr('style', noneDisplay);
+    if (event.target.id === popBox.attr('id')||event.target.id === wikipediaBox.attr('id')){
+        closeAll();
     }
     var menu  = $('#menu');
     if (event.target.id != menu.attr('id')) {
         console.log(close);
         menu.attr('style', noneDisplay);
     }
+};
+function closeAll(){
+ console.log(close);
+ logInBox.attr('style', noneDisplay);
+ signUpBox.attr('style', noneDisplay);
+ $('#fixSyll-box').attr('style', noneDisplay);
+ $('#wikipedia-box').attr('style', noneDisplay);
+ popBox.attr('style', noneDisplay);
+
 }
