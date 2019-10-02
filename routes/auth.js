@@ -3,13 +3,24 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+var session = require('express-session');
+const {updateCurrentPageName} = require('../config/redirectBack');
+
 
 router.get('/logOut', (req, res) => {
     req.logout();
     res.redirect('/');
 });
 
-router.post('/signUp', (req, res) => {
+router.get('/login', (req, res) => {
+    req.pageID = 0;
+    res.redirect('/');
+
+});
+
+
+router.post('/signUp/', (req, res) => {
+    const pageName = req.session.pageName;
     const {username, email, password, password2} = req.body;
     let errors = [];
     if(!username || !email || !password || !password2){
@@ -26,13 +37,15 @@ router.post('/signUp', (req, res) => {
         User.findOne({email:email})
             .then(function (user) {
                 if(user){
+                    let signUp = true;
                     errors.push({msg:'this: '+email+' is already sign up'});
-                    res.render('index',{
+                    res.render('pages/'+pageName,{
                         errors,
                         username,
                         email,
                         password,
-                        password2
+                        password2,
+                        signUp
                     });
                 }
                 else{
@@ -46,14 +59,14 @@ router.post('/signUp', (req, res) => {
                                 email: email,
                                 local:{password: cryptPassword}
                             })
-                                .then(
-                                    res.render('index',{
-                                    errors,
-                                    username,
-                                    email,
-                                    password,
-                                    password2
-                                }))
+                                .then(function (){
+                                    let login = true;
+                                    res.render('pages/'+pageName,{
+                                        errors,
+                                        email,
+                                        login
+                                    });
+                                })
                                 .catch(err => console.log(err));
                         }));
 
@@ -66,18 +79,21 @@ router.post('/signUp', (req, res) => {
     }
     else{
         console.log('not pass');
-        res.render('index',{
+        let signUp = true;
+        res.render('pages/'+pageName,{
             errors,
             username,
-            email
+            email,
+            signUp
         });
     }
 
 });
 router.post('/login', (req, res) => {
-    const {username, email, password, password2} = req.body;
+    const pageName = req.session.pageName;
+    const {email, password} = req.body;
     let errors = [];
-    if(!username || !password){
+    if(!email || !password){
         errors.push({msg: 'Please fill in all the fields'});
     }
     console.log(errors);
@@ -86,9 +102,9 @@ router.post('/login', (req, res) => {
     }
     else{
         console.log('not pass');
-        res.render('index',{
+        res.render('pages/'+pageName,{
             errors,
-            username
+            email
         })
     }
 
@@ -100,15 +116,17 @@ router.get('/google', passport.authenticate('google', {
 
 // callback route for google to redirect to
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
+    /*console.log('redirect: '+req.session.pageID);*/
     res.redirect('/');
 });
 
-router.get('/facebook', passport.authenticate('facebook'/*, {
+router.get('/facebook',  passport.authenticate('facebook'/*, {
     scope: ['profile', 'email']
 }*/));
 
 // callback route for facebook to redirect to
 router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
-    res.redirect('/');
+    /*console.log('redirect pageID: '+req.session.pageID);*/
+    res.render('layout',{ pageID: req.session.pageID });
 });
 module.exports = router;

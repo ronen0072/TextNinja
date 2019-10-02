@@ -1,12 +1,15 @@
+$(document).ready(function(){
+    getWords();
+});
+
 function getWords(){
-    console.log('getWords');
     $.ajax({
         type: "GET",
         url: "/api/user/words",
         success: function(data){
             //console.log(data);
             var res = "";
-            var htmlTag = 'b';
+            const htmlTag = 'b';
             console.log(data.words);
             var index = 0;
             data.words.forEach(function(word) {
@@ -16,7 +19,7 @@ function getWords(){
                 index++;
             });
             $('#wordsToPractice').html(res);
-            updatefunOfWord(true);
+            updateFunOfWord(true);
 
         }
     });

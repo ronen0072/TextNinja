@@ -1,6 +1,4 @@
-const noneDisplay = "display: none;";
-const display = "display: block;";
-const displayInlineBlock = "display: inline-block;";
+
 // Get the log In Box
 var popBox = $('#popBox');
 
@@ -30,54 +28,48 @@ var google = $('#google');
 
 // When the user clicks the button, open the modal
 logIn.click( function() {
-    console.log(display);
-    popBox.attr('style', display);
-    console.log(display);
-    logInBox.attr('style', display);
+    console.log(blockDisplay);
+    $('#loginSignUpBox').attr('style', blockDisplay);
+    console.log(blockDisplay);
+    logInBox.attr('style', blockDisplay);
 });
 
 goToSignUp.click( function() {
     console.log(close);
     logInBox.attr('style', noneDisplay);
-    console.log(display);
-    signUpBox.attr('style', display);
+    console.log(blockDisplay);
+    signUpBox.attr('style', blockDisplay);
 });
 
 goToLogIn.click( function() {
     console.log(close);
     signUpBox.attr('style', noneDisplay);
-    console.log(display);
-    logInBox.attr('style', display);
+    console.log(blockDisplay);
+    logInBox.attr('style', blockDisplay);
 });
 
 closeLogInBox.click(function() {
+    console.log(close);
     closeAll();
 });
 closeSignUpBox.click(function() {
+    console.log(close);
     closeAll();
 });
 
-/*$('#submitSignUp').click(function () {
-    
-});*/
-
-// When the user clicks anywhere outside of the Log In Box, close it
-window.onclick=function(event) {
-    if (event.target.id === popBox.attr('id')||event.target.id === wikipediaBox.attr('id')){
-        closeAll();
-    }
-    var menu  = $('#menu');
-    if (event.target.id != menu.attr('id')) {
-        console.log(close);
-        menu.attr('style', noneDisplay);
-    }
-};
-function closeAll(){
- console.log(close);
- logInBox.attr('style', noneDisplay);
- signUpBox.attr('style', noneDisplay);
- $('#fixSyll-box').attr('style', noneDisplay);
- $('#wikipedia-box').attr('style', noneDisplay);
- popBox.attr('style', noneDisplay);
-
-}
+$('#submitSignUp').click(function () {
+    console.log(submitSignUp);
+    $.ajax({
+        type: "POST",
+        url: "../../../auth/signUp",
+        data: JSON.stringify({
+            username: $('#singUpUserName').val,
+            email:$('#singUpEmail').val,
+            password: $('#singUpPassword').val,
+            password2: $('#singUpPassword2').val
+        }) ,
+        success: function (data) {
+            $('#render-div').html(data);
+        }
+    });
+});

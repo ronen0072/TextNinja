@@ -1,3 +1,4 @@
+<% include ../partials/popBox.ejs%>
 <div class="content">
     <h3 class="title">Contact Us</h3><br/>
     <div class="wrapper">
@@ -9,12 +10,12 @@
                 <form class="contact100-form validate-form flex-sb flex-w">
 
                     <div class="wrap-inputL" data-validate = "Name is required">
-                        <input id="contactUserName" class="inputL" type="text" name="name" placeholder="Name">
+                        <input id="contactUserName" class="inputL" type="text" name="name" placeholder="Name" value="<%= typeof user !== 'undefined'? user.username : '' %>">
                         <span class="focus-input100"></span>
                     </div>
 
                     <div  class="wrap-inputR" data-validate = "Email is required: e@a.z">
-                        <input id="contactEmail" class="inputR" type="text" name="email" placeholder="Email Address">
+                        <input id="contactEmail" class="inputR" type="text" name="email" placeholder="Email Address" value="<%= typeof user !== 'undefined'? user.email : '' %>">
                         <span class="focus-input100"></span>
                     </div>
 

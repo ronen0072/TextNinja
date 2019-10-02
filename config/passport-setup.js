@@ -22,13 +22,13 @@ passport.use(
         clientSecret: keys.google.clientSecret,
         callbackURL: '/auth/google/redirect'
     }, (accessToken, refreshToken, profile, done) => {
-        console.log(profile);
+        /*console.log(profile);*/
         User.findOneAndUpdate(
             {googleID:profile.id},
             {username:profile.displayName, email:profile.emails[0].value, googleID:profile.id},
             {upsert: true, new: true, runValidators: true}, // options
         ).then((user)=>{
-                console.log('User: '+user)
+                /*console.log('User: '+user);*/
                 done(null, user);
             });
     })

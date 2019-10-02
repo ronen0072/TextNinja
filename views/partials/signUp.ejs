@@ -1,12 +1,12 @@
 <% include messages.ejs%>
-<div id="signUp-box">
+<div id="signUp-box"   style=<%= ((typeof signUp !== 'undefined')&&(signUp === 'true')) ? 'display:block' : 'display:none' %>>
     <div class="left">
         <h1>Sign up</h1><br/>
-        <form action="/auth/signUp" method="POST">
-            <input type="text" name="username" placeholder="Username" value="<%= typeof username != 'undefined'? username :'' %>"/>
-            <input type="text" name="email" placeholder="E-mail" value="<%= typeof email != 'undefined'? email : '' %>"/>
-            <input type="password" name="password" placeholder="Password" />
-            <input type="password" name="password2" placeholder="Retype password" />
+        <form>
+            <input id="singUpUserName" type="text" name="username" placeholder="Username" value="<%= typeof username != 'undefined'? username :'' %>"/>
+            <input id="singUpEmail" type="text" name="email" placeholder="E-mail" value="<%= typeof email != 'undefined'? email : '' %>"/>
+            <input id="singUpPassword" type="password" name="password" placeholder="Password" />
+            <input id="singUpPassword2" type="password" name="password2" placeholder="Retype password" />
 
             <input  id='submitSignUp' type="submit" name="signup_submit" value="Sign up" /><br/>
         </form>

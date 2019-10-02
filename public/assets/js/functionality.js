@@ -1,38 +1,8 @@
-var textBox = $('#textBox');
-//autosize(document.getElementById("textBox"));
-$(document).ready(function(){
-  initialSettings();
-  if(sessionStorage.textBox){
-    console.log(textBox.value);
-    textBox.val(sessionStorage.textBox);
-  }
-  updete(textBox.val(), output, true);
-  //tools
-  $('#speaker').click(function(){
-    speaker();
-  });
-  $('#settings').click(function(){
-    settings();
-  });
-  $('#clear').click(function(){
-    clearTheInputBox();
-  });
-  $('#output').mousemove(function(){showCoords(event, '#output')});
-});
-
-var output = $("#output");
-textBox.keyup(function(){updete(textBox.val(), output, true);});
-textBox.blur(function() {
-  if(textBox.val() == ""){
-    console.log('empty');
-    updete(textBox.val(), output, true);
-  }
-  else {
-    updete(textBox.val(), output, true);
-  }
-});
-function updete(input, output, update) {
-  console.log('updete');
+const noneDisplay = "display: none;";
+const blockDisplay = "display: block;";
+const displayInlineBlock = "display: inline-block;";
+function update(input, output, update) {
+  console.log('update');
   if(update) {
     if (textBox.val() != '') {
       sessionStorage.setItem('textBox', input);
@@ -41,49 +11,24 @@ function updete(input, output, update) {
     }
   }
   output.html(text.addWords(input));
-  updatefunOfWord(update);
+  updateFunOfWord(update);
 
 }
-function updateWord(word, wordId){
-  // console.log('overWord');
-  // console.log('word:'+word);
-  // console.log('wordId:'+wordId);
-  var element = text.getWord(word);
-  if (element.getSoundURL() === ""){
-    element.wordFactory().then(()=> {
-      if(toSyllables) {
-        var syllables = element.getSyllables();
-        $("#" + wordId).attr('syllables', syllables);
-        $("#" + wordId).text(syllables);
-        $('#syllables_' + wordId).text(element.getSyllables());
-        console.log(syllables);
-      }
-    });
-  }
-  else{
-    if(toSyllables) {
-      var syllables = element.getSyllables();
-      $("#" + wordId).attr('syllables', syllables);
-      $("#" + wordId).text(syllables);
-      $('#syllables_' + wordId).text(element.getSyllables());
-      console.log(syllables);
-    }
-  }
-}
-
-function updatefunOfWord(update){
+function updateFunOfWord(update){
   $('.wor').hover(function() {
-        toSyllables = document.getElementById("syllables").checked;
-        bold = document.getElementById("bold").checked;
+        toSyllables = sessionStorage.syllables;
+        bold = sessionStorage.bold;
         console.log("syllables: " + toSyllables);
         updateWord(this.title, this.id);
-        if(bold&&!toSyllables){
+        if((bold === 'true')&&(toSyllables === 'false')){
+          console.log('B');
           $(this).animate({
             fontSize: '118%', fontWeight: 'bold', letterSspacing: '1px',
             lineHeight: '20px', marginLeft: '0px', marginRight: '1px'
           }, 'fast');
         }
-        if(bold&&toSyllables){
+        if((bold === 'true')&&(toSyllables === 'true')){
+          console.log('S&B');
           $(this).animate({
             fontSize: '118%', fontWeight: 'bold',
             lineHeight: '20px', marginLeft: '0px', marginRight: '1px'
@@ -91,7 +36,7 @@ function updatefunOfWord(update){
         }
       },
       function(){
-        if(toSyllables){
+        if(toSyllables === 'true'){
           $(this).text($(this).attr('title'));
         }
         if(bold) {
@@ -119,74 +64,38 @@ function updatefunOfWord(update){
     setPosition(origin);
   });
 }
-
-function speaker(){
-  var speaker = $('#speaker');
-  console.log(speaker.attr('title'));
-  if(speaker.attr('title') == 'speaker'){
-    speaker.attr('title', 'mute');
-    speaker.attr('src', '/assets/icon/mute32.png');
-    $('#sound').prop("muted", true);
+function updateWord(word, wordId){
+  // console.log('overWord');
+  // console.log('word:'+word);
+  // console.log('wordId:'+wordId);
+  var element = text.getWord(word);
+  if (element.getSoundURL() === ""){
+    element.wordFactory().then(()=> {
+      if(toSyllables === 'true') {
+        var syllables = element.getSyllables();
+        $("#" + wordId).attr('syllables', syllables);
+        $("#" + wordId).text(syllables);
+        $('#syllables_' + wordId).text(element.getSyllables());
+        console.log(syllables);
+      }
+    });
   }
   else{
-    speaker.attr('title', 'speaker');
-    speaker.attr('src', '/assets/icon/speaker32.png');
-    $('#sound').prop("muted", false);
+    if(toSyllables === 'true') {
+      var syllables = element.getSyllables();
+      $("#" + wordId).attr('syllables', syllables);
+      $("#" + wordId).text(syllables);
+      $('#syllables_' + wordId).text(element.getSyllables());
+      console.log(syllables);
+    }
   }
 }
-
-function clearTheInputBox(){
-  textBox.val('');
-  output.text('');
-  console.log('clear');
-  sessionStorage.removeItem('textBox');
-  $('#clear').attr('src', '/assets/icon/broomClear32.png');
-  setTimeout(function(){
-    console.log('clear');
-    $('#clear').attr('src', '/assets/icon/broom32.png');}, 300);
-}
-
-function highlighting() {
-  if(!$('#highlighting').prop('checked')){
-    console.log('not highlighting');
-    $("#output").attr('style', '');
-  }
-}
-
-function pick() {
-  setTimeout(function(){
-    backgroundColor = document.getElementById('Pick').style.backgroundColor;
-  }, 200);
-  document.getElementById('highlighting').checked = true;
-}
-
-function showCoords(event, outputBackground) {
-  var checked = document.getElementById("highlighting").checked;
-  if(checked){
-    var y = event.clientY - 30;
-    var x = event.clientX;
-    var shift = 0;
-    if(outputBackground === '#output') {
-      shift = window.innerWidth > 768 ? 100 : 400;
-    }
-    if(outputBackground === '.inner-content') {
-      shift = 176;
-    }
-    if(outputBackground === '#wikiInfo') {
-      shift = 184;
-    }
-    backgroundColor = document.getElementById('Pick').style.backgroundColor;
-    var whidth = '27px';
-    var background = "background-repeat: no-repeat; background-size: 100% "+whidth+"; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-shift -(y % 27)+20) +"px;";
-    //console.log(background);
-    $(outputBackground).attr('style', background);
-  }
-}
-
 function clickWord(word){
   console.log(word);
-  document.getElementById('sound').src = text.findSoundURL(word);
-  var data = "";
+  let wordObj = text.getWord(word);;
+  if(wordObj.getSoundURL !== undefined) {
+    document.getElementById('sound').src = text.findSoundURL(word);
+  }
   console.log("../../../api/user/words/"+word);
   return new Promise(resolve => {
     $.ajax({
@@ -201,85 +110,47 @@ function clickWord(word){
     }).done(resolve);
   });
 }
-
-
-function settings(){
-  if($('#settings').attr('title') == 'settingsOn')
-    settingsOff();
-  else
-    settingsOn();
-}
-function settingsOn(){
-  var settings = $('#settings');
-  console.log('settingsOn');
-  settings.attr('title', 'settingsOn');
-  settings.attr('src', '/assets/icon/settings32on.png');
-  document.getElementById('settings_content').className='dropdown-content';
-}
-function settingsOff(){
-  var settings = $('#settings');
-  console.log('settingsoff');
-  settings.attr('title', 'settingsoff');
-  settings.attr('src', '/assets/icon/settings32off.png');
-  document.getElementById('settings_content').className='dropdown-none';
-  updateSettings();
-}
-function initialSettings(){
-
-  if((sessionStorage.highlighting == 'true')){
-    document.getElementById('highlighting').checked = true;
+function showCoords(event, outputBackground) {
+  /*    console.log(document.getElementById('highlighting').checked);
+      console.log(sessionStorage.highlighting );*/
+  var checked = sessionStorage.highlighting;
+  if(checked === 'true'){
+    var y = event.clientY - 30;
+    var x = event.clientX;
+    var shift = 0;
+    if(outputBackground === '#output') {
+      shift = window.innerWidth > 768 ? 100 : 400;
+    }
+    if(outputBackground === '.inner-content') {
+      shift = 176;
+    }
+    if(outputBackground === '#wikiInfo') {
+      shift = 184;
+    }
+    backgroundColor = sessionStorage.backgroundColor;
+    var whidth = '27px';
+    var background = "background-repeat: no-repeat; background-size: 100% "+whidth+"; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-shift -(y % 27)+20) +"px;";
+    //console.log(background);
+    $(outputBackground).attr('style', background);
   }
-  if(sessionStorage.backgroundColor){
-    document.getElementById('Pick').style.backgroundColor = sessionStorage.backgroundColor;
-  }
-  if((sessionStorage.syllables == 'true') || (sessionStorage.syllables == undefined)){
-    document.getElementById("syllables").checked = true;
-  }
-  else{
-    document.getElementById("syllables").checked = false;
-  }
-  if((sessionStorage.bold == 'true') || (sessionStorage.bold == undefined)){
-    document.getElementById("bold").checked = true;
-  }
-  else{
-    document.getElementById("bold").checked = false;
-  }
-  if(sessionStorage.font_size != undefined){
-    document.getElementById("font_size").value = sessionStorage.font_size;
-  }
-  else{
-     document.getElementById("font_size").value = 12;
-  }
-  console.log('---------initialSettings-----------');
-  console.log('highlighting: '+  document.getElementById('highlighting').checked);
-  console.log('backgroundColor: ', document.getElementById('Pick').style.backgroundColor );
-  console.log('syllables: '+  document.getElementById('syllables').checked);
-  console.log('bold: '+  document.getElementById("bold").checked);
-  console.log('font_size: '+  document.getElementById("font_size").value);
-
-}
-function updateSettings(){
-  sessionStorage.setItem('highlighting', document.getElementById('highlighting').checked);
-  sessionStorage.setItem('backgroundColor', document.getElementById('Pick').style.backgroundColor );
-  sessionStorage.setItem('syllables', document.getElementById('syllables').checked);
-  sessionStorage.setItem('bold', document.getElementById("bold").checked);
-  sessionStorage.setItem('font_size', document.getElementById("font_size").value);
-  console.log('---------updateSettings-----------');
-  console.log('highlighting: '+  sessionStorage.highlighting);
-  console.log('backgroundColor: '+  sessionStorage.backgroundColor);
-  console.log('syllables: '+  sessionStorage.syllables);
-  console.log('bold: '+  sessionStorage.bold);
-  console.log('font_size: '+  sessionStorage.font_size);
-
 }
 
 
-
-/*window.onclick=function(event) {
- /!* console.log(event.target.id);
-  if (event.target.id == menu.attr('id')){*!/
-  var display = "display: none;";
+// When the user clicks anywhere outside of the pop Box, close it
+window.onclick=function(event) {
+  if ((event.target.id !== '')&&($('#'+event.target.id).attr('class')=== popBox.attr('class')||event.target.id === wikipediaBox.attr('id'))){
+    closeAll();
+  }
+  if (event.target.id != menu.attr('id')) {
+    console.log(close);
+    $('#menu').attr('style', noneDisplay);
+  }
+};
+function closeAll(){
   console.log(close);
-  menu.attr('style', display);
-  //}
-}*/
+  $('#login-box').attr('style', noneDisplay);
+  $('#signUp-box').attr('style', noneDisplay);
+  $('#fixSyll-box').attr('style', noneDisplay);
+  $('#wikipedia-box').attr('style', noneDisplay);
+  $('.popBox').attr('style', noneDisplay);
+}

@@ -21,17 +21,19 @@ closeWikipediaBox.click(function() {
     closeAll();
 });
 function checkWikipedia(toUpdate){
+    let wordToSearch = $('#menu').attr('title')
+    console.log("checkWikipedia: "+wordToSearch);
     seeWikipedeia.attr('style', noneDisplay);
     $.ajax({
         type: "GET",
-        url: "/api/word/wiki/"+$('#menu').attr('title'),
+        url: "/api/word/wiki/"+wordToSearch,
         success: function(data){
             console.log(data);
             if(!(data.wiki === 'not-exists')){
                 seeWikipedeia.attr('style', display);
                 if(toUpdate) {
                     $('#wiki-title').html(data.wiki.title);
-                    updete(data.wiki.info, $('#wikiInfo'), false);
+                    update(data.wiki.info, $('#wikiInfo'), false);
                 }
             }
         }

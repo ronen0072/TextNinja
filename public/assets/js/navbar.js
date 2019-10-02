@@ -1,37 +1,42 @@
-var linkHome = $('#linkHome');
-var linkAbout = $('#linkAbout');
-var linkContact = $('#linkContact');
+var homelink = $('.home');
+var aboutLink = $('.about');
+var contactLink = $('.contact');
 var main = $('#main');
-var about = $('#about');
-var contact = $('#contact')
-
+var page = {
+    index: 0,
+    about: 1,
+    contact: 2,
+    practice: 3
+};
 $(document).ready(function(){
-    displyFrame('main');
+    //displyFrame('main');
 });
 
-linkHome.click( function(){
-    displyFrame('main');
+homelink.click( function(){
+    navTo('home');
 });
-linkAbout.click( function(){
-    displyFrame('about');
-    updete($('#aboutInfo').text(), $('#aboutInfo'), false);
-    $('.inner-content').mousemove(function(){showCoords(event, '.inner-content')});
+aboutLink.click( function(){
+    navTo('about');
 });
-linkContact.click( function(){
-    upDetailse();
-    displyFrame('contact');
+contactLink.click( function(){
+    navTo('contact');
 });
 $('#simple_practice').click( function(){
-    displyFrame('practice');
-    getWords();
+    navTo('practice');
 });
-
+function navTo(pageName){
+    $.ajax({
+        type: "GET",
+        url: "../../../"+pageName,
+        success: function (data) {
+            $('#render-div').html(data);
+        }
+    });
+}
 function displyFrame(page){
-    var nonedisplay = "display: none;";
-    var blockDisplay = "display: block;";
     var frames = $('div').filter(".intro");
     for(var i = 0; i<frames.length; i++){
-        $(frames[i]).attr('style', nonedisplay);
+        $(frames[i]).attr('style', noneDisplay);
     }
     $('#'+page).attr('style', blockDisplay);
 

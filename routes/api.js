@@ -6,6 +6,7 @@ const Word = require('../Word');
 const http = require("https");
 const requestPromise = require('request-promise');
 var ObjectId = require('mongodb').ObjectID;
+const isLogin = require('../config/redirectBack').isLogin;
 
 router.get('/words/:word', function  (req,res) {
     const wordID = req.params.word;
@@ -38,32 +39,25 @@ router.put('/words/syllables', function(req,res){
     res.send({type:'PUT' , word:req_word});
 
 });
-router.get('/user/details', function(req,res){
+router.get('/user/details',  isLogin, function(req,res){
     var user = req.user;
-    if(user !== undefined){
-        res.send({type: 'GET', username: user.username, email: user.email});
-    }
-    res.send({type: 'GET', message: 'User is not connected'});
+    res.send({type: 'GET', username: user.username, email: user.email});
 });
 
-router.put('/user/words/:word', function(req,res){
+router.put('/user/words/:word', isLogin, function(req,res){
     var word = req.params.word;
     var user = req.user;
-    //var wordO = new Word(req_word);
-/*    console.log(word);
-    console.log(user);*/
-    Word_db.findOne({wordID: word}).then((result)=>{
-        User.findById(user.id).then((record)=>{
-
+    Word_db.findOne({wordID: word}).then((result) => {
+        User.findById(user.id).then((record) => {
             var words = record.words;
             var exist = false;
-            words.forEach(function(element) {
-                if(element.wID === result.id){
+            words.forEach(function (element) {
+                if (element.wID === result.id) {
                     exist = true;
                 }
             });
             //console.log(exist);
-            if(!exist){
+            if (!exist) {
                 record.words.push({wID: result.id, word: result.wordID});
                 record.save().then(() => {
                     res.send({type: 'PUT', username: record.username, wordID: result.id, word: result.wordID});
@@ -72,20 +66,20 @@ router.put('/user/words/:word', function(req,res){
         });
     });
 });
-router.get('/user/words', function(req,res){
+router.get('/user/words', isLogin, function(req,res){
     var user = req.user;
-    User.findById(user.id).then((record)=>{
+    User.findById(user.id).then((record) => {
         var words = [];
         record.words.forEach(function (word) {
             words.push(word.wID);
         });
-        Word_db.find({ _id: { $in: words }}).then((items)=>{
+        Word_db.find({_id: {$in: words}}).then((items) => {
             //console.log(items);
             res.send({type: 'GET', username: record.username, words: items});
         });
     });
 });
-router.delete('/user/words/:words', function(req,res){
+router.delete('/user/words/:words', isLogin, function(req,res){
     var user = req.user;
     var idOfWordsToDelete = req.params.words.split(',');
     var wordsToDelete = [];
@@ -95,9 +89,9 @@ router.delete('/user/words/:words', function(req,res){
         //console.log(id);
     });
     User.update(
-        { _id: user.id },
-        { $pull: { words: { wID: {$in: wordsToDelete }}} }
-    ).then((items)=>{
+        {_id: user.id},
+        {$pull: {words: {wID: {$in: wordsToDelete}}}}
+    ).then((items) => {
         console.log("items: ");
         console.log(items);
         res.send({type: 'DELETE', username: req.user.username, words: items});
