@@ -1,11 +1,29 @@
-<div id="login-box" style=<%= ((typeof login !=='undefined')&&(login === true)) ? 'display:block' : 'display:none' %>>
+<div id="login-box" style=<%= ((typeof login !=='undefined')&&(login === true)) ? 'display:block' : 'display:none' %> isDisplay=<%= ((typeof login !=='undefined')&&(login === true))%>>
     <div class="left">
-        <br/><h1>Log In</h1><br/>
-        <form action="/auth/login" method="POST">
-            <input type="text" name="email" placeholder="E-mail" value="<%= typeof email != 'undefined'? email : '' %>"/>
-            <input type="password" name="password" placeholder="Password" />
-
-            <input id="logIn" type="submit" name="logIn_submit" value="Log In" /><br/>
+        <h1>Log In</h1><br/>
+        <form>
+            <input
+                    id="loginEmail"
+                    type="text"
+                    name="email"
+                    placeholder="Enter Email"
+                    value="<%= typeof email != 'undefined'? email : '' %>"
+            />
+            <input
+                    id="loginPassword"
+                    type="password"
+                    name="password"
+                    placeholder="Enter Password"
+            />
+            <br/>
+            <button type="button"
+                    class="submitButton"
+                    id="submitLogIn"
+                    name="submit logIn"
+                    value="Log In"
+            >
+                Log In
+            </button><br/>
         </form>
         <a id="goToSignUp" class="link" href="#">Don't have an account?<b> sign up</b></a>
     </div>

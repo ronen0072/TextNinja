@@ -19,9 +19,11 @@ router.get('/login', (req, res) => {
 });
 
 
-router.post('/signUp/', (req, res) => {
-    const pageName = req.session.pageName;
+router.post('/signup', (req, res) => {
+    const pageName = (req.session.pageName !== undefined)? req.session.pageName : 'home';
     const {username, email, password, password2} = req.body;
+    let signUp = true, login = true;
+    console.log('username: '+username);
     let errors = [];
     if(!username || !email || !password || !password2){
         errors.push({msg: 'Please fill in all the fields'});
@@ -33,11 +35,13 @@ router.post('/signUp/', (req, res) => {
     if((!password || password.length < 6)) {
         errors.push({ msg: 'Password must be at least 6 characters' });
     }
-    if(errors.length < 0) {
+    if(errors.length === 0) {
+        console.log('errors.length === 0');
         User.findOne({email:email})
             .then(function (user) {
                 if(user){
-                    let signUp = true;
+                    console.log('this: '+email+' is already sign up');
+
                     errors.push({msg:'this: '+email+' is already sign up'});
                     res.render('pages/'+pageName,{
                         errors,
@@ -54,13 +58,13 @@ router.post('/signUp/', (req, res) => {
                         bcrypt.hash(password,salt,(err,hash) => {
                             if(err) throw err;
                             cryptPassword = hash;
+                            console.log('create new user');
                             User.create({
                                 username: username,
                                 email: email,
                                 local:{password: cryptPassword}
                             })
                                 .then(function (){
-                                    let login = true;
                                     res.render('pages/'+pageName,{
                                         errors,
                                         email,
@@ -79,7 +83,6 @@ router.post('/signUp/', (req, res) => {
     }
     else{
         console.log('not pass');
-        let signUp = true;
         res.render('pages/'+pageName,{
             errors,
             username,
@@ -89,23 +92,45 @@ router.post('/signUp/', (req, res) => {
     }
 
 });
-router.post('/login', (req, res) => {
-    const pageName = req.session.pageName;
+router.post('/login', (req, res, next) => {
+    const pageName = (req.session.pageName !== undefined)? req.session.pageName : 'home';
     const {email, password} = req.body;
+    let login = true;
     let errors = [];
     if(!email || !password){
         errors.push({msg: 'Please fill in all the fields'});
     }
     console.log(errors);
-    if(errors.length < 0) {
-        console.log('pass');
+    if(errors.length === 0) {
+        passport.authenticate('local', function (err, user, errors) {
+            if (err) { return next(err); }
+            if (!user) {
+                return res.render(
+                    'pages/'+pageName,{
+                        login,
+                        errors,
+                        email
+                    });
+            }
+            req.logIn(user, function (err) {
+                if (err) { return next(err); }
+                return res.send({type: 'POST', login: true});
+            });
+        })(req, res, next);
+        /* {
+            successRedirect: '/about',
+            failureRedirect: '/',
+            failureFlash: false
+        })(req, res, next);*/
     }
     else{
+        console.log(errors);
         console.log('not pass');
         res.render('pages/'+pageName,{
+            login,
             errors,
             email
-        })
+        });
     }
 
 });

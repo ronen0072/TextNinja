@@ -1,14 +1,40 @@
-<% include messages.ejs%>
-<div id="signUp-box"   style=<%= ((typeof signUp !== 'undefined')&&(signUp === 'true')) ? 'display:block' : 'display:none' %>>
+
+<div id="signUp-box"   style=<%= ((typeof signUp !== 'undefined')&&(signUp === true)) ? 'display:block' : 'display:none' %>>
     <div class="left">
         <h1>Sign up</h1><br/>
         <form>
-            <input id="singUpUserName" type="text" name="username" placeholder="Username" value="<%= typeof username != 'undefined'? username :'' %>"/>
-            <input id="singUpEmail" type="text" name="email" placeholder="E-mail" value="<%= typeof email != 'undefined'? email : '' %>"/>
-            <input id="singUpPassword" type="password" name="password" placeholder="Password" />
-            <input id="singUpPassword2" type="password" name="password2" placeholder="Retype password" />
+            <input
+                    id="singUpUserName"
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value="<%= typeof username != 'undefined'? username :'' %>"/>
+            <input
+                    id="singUpEmail"
+                    type="text"
+                    name="email"
+                    placeholder="E-mail"
+                    value="<%= typeof email != 'undefined'? email : '' %>"/>
+            <input
+                    id="singUpPassword"
+                    type="password"
+                    name="password"
+                    placeholder="Password" />
+            <input
 
-            <input  id='submitSignUp' type="submit" name="signup_submit" value="Sign up" /><br/>
+                    id="singUpPassword2"
+                    type="password"
+                    name="password2"
+                    placeholder="Retype password" />
+
+            <button type="button"
+                    class="submitButton"
+                    id="submitSignUp"
+                    name="submit sign up"
+                    value="Sign up"
+            >
+                Sign up
+            </button><br/>
         </form>
         <a id="goToLogIn" class="link" href="#">Already have an account?<b> Log In</b></a>
     </div>

@@ -1,7 +1,7 @@
 const hashSet = require('hashset');
 var forUserOnly = new hashSet('practice');
 var page = {
-    index: 0,
+    home: 0,
     about: 1,
     contact: 2,
     practice: 3
@@ -9,8 +9,8 @@ var page = {
 
 function getPageID(pageName) {
     switch(pageName) {
-        case 'index':
-            return page.index;
+        case 'home':
+            return page.home;
             break;
         case 'about':
             return page.about;
@@ -22,13 +22,21 @@ function getPageID(pageName) {
             return page.practice;
             break;
         default:
-            return page.index;
+            return page.home;
     }
 }
 
 module.exports = {
     updateCurrentPageName: function(req, res, next) {
-        req.session.pageName = req.params.pageName;
+        console.log(req.session.pageName);
+        if(req.params.pageName !== undefined){
+             req.session.pageName = req.params.pageName;
+        }else{
+            if(req.session.pageName === undefined){
+                req.session.pageName = 'home';
+            }
+        }
+        console.log(req.session.pageName);
         next();
     },
     isLogin: function (req, res, next) {

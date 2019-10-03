@@ -17,8 +17,8 @@ fixSyll.click( function() {
     $('#toFix').html($('#menu').attr('title'));
     console.log("fixSyll");
     console.log("display fix the syllables");
-    popBox.attr('style', display);
-    fixSyllBox.attr('style', display);
+    popBox.attr('style', blockDisplay);
+    fixSyllBox.attr('style', blockDisplay);
 });
 
 closeFixSyllBox.click(function() {
@@ -112,7 +112,7 @@ submitFixSyll.click( function() {
         });
         text.getWord(wordToFix).setSyllables(syll);
         console.log(inputSyllable);
-        var message = `{"wordID":"${wordToFix}","syllables":{"count":"${syllCount.val()}","list":[${newSyllables}]}}`
+        var message = `{"wordID":"${wordToFix}","syllables":{"count":"${syllCount.val()}","list":[${newSyllables}]}}`;
         console.log('message: ' + message);
         var data = JSON.parse(message);
         console.log(data);

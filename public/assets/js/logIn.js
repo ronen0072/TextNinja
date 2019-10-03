@@ -58,18 +58,38 @@ closeSignUpBox.click(function() {
 });
 
 $('#submitSignUp').click(function () {
-    console.log(submitSignUp);
+    console.log('submitSignUp');
+    let post = `{"username":"${$('#singUpUserName').val()}", "email":"${$('#singUpEmail').val()}", "password":"${$('#singUpPassword').val()}", "password2":"${$('#singUpPassword2').val()}"}`;
+    console.log('post: '+post);
     $.ajax({
         type: "POST",
-        url: "../../../auth/signUp",
-        data: JSON.stringify({
-            username: $('#singUpUserName').val,
-            email:$('#singUpEmail').val,
-            password: $('#singUpPassword').val,
-            password2: $('#singUpPassword2').val
-        }) ,
+        url: "/auth/signup",
+        data:post,
+        contentType: "application/json; charset=utf-8",
         success: function (data) {
             $('#render-div').html(data);
+        }
+    });
+});
+$('#submitLogIn').click(function () {
+    console.log('submitLogin');
+    let post = `{"email":"${$('#loginEmail').val()}", "password":"${$('#loginPassword').val()}"}`;
+    console.log('post: '+post);
+    $.ajax({
+        type: "POST",
+        url: "/auth/login",
+        data:post,
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            console.log(data);
+            if(data.login === true){
+                console.log(data);
+                location.reload();
+            }
+            else{
+                $('#render-div').html(data);
+            }
+
         }
     });
 });

@@ -1,7 +1,9 @@
-<div id="loginSignUpBox" class="popBox" style=<%= (((typeof login !=='undefined')&&(login === true))||((typeof signUp !== 'undefined')&&(signUp === 'true'))) ? 'display:block' : 'display:none' %> >
+<div id="loginSignUpBox" class="popBox" style=<%= (((typeof login !=='undefined')&&(login === true))||((typeof signUp !== 'undefined')&&(signUp === true))) ? 'display:block' : 'display:none' %> >
     <div class="popBox-content">
+
         <% include logIn.ejs%>
         <% include signUp.ejs%>
+        <% include messages.ejs%>
     </div>
 </div>
 <script src="/assets/js/logIn.js"></script>

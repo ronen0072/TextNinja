@@ -17,6 +17,7 @@ const UserSchema = new Schema({
 
     facebookID: String,
     googleID: String,
+    twitterID: String,
     words:[PracticeWord]
 });
 

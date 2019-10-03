@@ -6,7 +6,7 @@ const isLogin = require('../config/redirectBack').isLogin;
 const {getPageNameByID, getPageID} = require('./pages');
 
 // Welcome Page
-router.get('/',isLogin, (req, res) => {
+router.get('/', updateCurrentPageName, isLogin, (req, res) => {
 /*    console.log('needToLogin: '+ req.session.needToLogin);
     console.log('user: '+ req.user);*/
     const needToLogin = req.session.needToLogin;
