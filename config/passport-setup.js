@@ -83,13 +83,13 @@ passport.use(
         callbackURL: '/auth/facebook/redirect'
     }, (accessToken, refreshToken, profile, done) => {
         console.log(profile);
-/*        User.findOneAndUpdate(
+        User.findOneAndUpdate(
             {facebookID:profile.id},
-            {username:profile.displayName, email:profile.emails[0].value, facebook:profile.id},
+            {username:profile.displayName/*, email:profile.emails[0].value*/, facebookID:profile.id},
             {upsert: true, new: true, runValidators: true}, // options
         ).then((user)=>{
             console.log('User: '+user)
             done(null, user);
-        });*/
+        });
     })
 );

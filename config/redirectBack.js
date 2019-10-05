@@ -28,15 +28,17 @@ function getPageID(pageName) {
 
 module.exports = {
     updateCurrentPageName: function(req, res, next) {
-        console.log(req.session.pageName);
-        if(req.params.pageName !== undefined){
-             req.session.pageName = req.params.pageName;
-        }else{
-            if(req.session.pageName === undefined){
-                req.session.pageName = 'home';
+        if(req.params.pageName !== 'favicon.ico') {
+            console.log('from: '+req.session.pageName);
+            if (req.params.pageName !== undefined) {
+                req.session.pageName = req.params.pageName;
+            } else {
+                if (req.session.pageName === undefined) {
+                    req.session.pageName = 'home';
+                }
             }
+            console.log('to: '+req.session.pageName);
         }
-        console.log(req.session.pageName);
         next();
     },
     isLogin: function (req, res, next) {

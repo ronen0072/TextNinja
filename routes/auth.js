@@ -152,6 +152,6 @@ router.get('/facebook',  passport.authenticate('facebook'/*, {
 // callback route for facebook to redirect to
 router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
     /*console.log('redirect pageID: '+req.session.pageID);*/
-    res.render('layout',{ pageID: req.session.pageID });
+    res.redirect('/');
 });
 module.exports = router;
