@@ -80,12 +80,13 @@ passport.use(
         // options for facebook strategy
         clientID: keys.facebook.clientID,
         clientSecret: keys.facebook.clientSecret,
-        callbackURL: '/auth/facebook/redirect'
+        callbackURL: '/auth/facebook/redirect',
+        profileFields: ['emails']
     }, (accessToken, refreshToken, profile, done) => {
         console.log(profile);
         User.findOneAndUpdate(
             {facebookID:profile.id},
-            {username:profile.displayName/*, email:profile.emails[0].value*/, facebookID:profile.id},
+            {username:profile.displayName, email:profile.emails[0].value, facebookID:profile.id},
             {upsert: true, new: true, runValidators: true}, // options
         ).then((user)=>{
             console.log('User: '+user)

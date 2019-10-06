@@ -135,9 +135,7 @@ router.post('/login', (req, res, next) => {
 
 });
 
-router.get('/google', passport.authenticate('google', {
-    scope: ['profile', 'email']
-}));
+router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 
 // callback route for google to redirect to
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
@@ -145,9 +143,7 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
     res.redirect('/');
 });
 
-router.get('/facebook',  passport.authenticate('facebook'/*, {
-    scope: ['profile', 'email']
-}*/));
+router.get('/facebook',  passport.authenticate('facebook', {scope: ['email']}));
 
 // callback route for facebook to redirect to
 router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
