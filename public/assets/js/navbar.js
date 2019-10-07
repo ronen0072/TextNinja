@@ -21,8 +21,12 @@ aboutLink.click( function(){
 contactLink.click( function(){
     navTo('contact');
 });
-$('#simple_practice').click( function(){
-    navTo('practice');
+$('#simplePractice').click( function(){
+    navTo('simple-practice');
+});
+$('#dividePractice').click( function(){
+    console.log('divide-practice');
+    navTo('divide-practice');
 });
 function navTo(pageName){
     $.ajax({

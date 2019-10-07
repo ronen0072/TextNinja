@@ -34,7 +34,14 @@
                 <% break;
             case 3:
                 if(typeof user !== 'undefined'){%>
-                    <% include pages/practice.ejs%>
+                    <% include pages/simple-practice.ejs%>
+                <%}else {%>
+                    <% include pages/home.ejs%>
+                <%}%>
+                <% break;
+            case 4:
+                if(typeof user !== 'undefined'){%>
+                    <% include pages/divide-practice.ejs%>
                 <%}else {%>
                     <% include pages/home.ejs%>
                 <%}%>

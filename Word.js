@@ -49,17 +49,6 @@ class Word {
     getSoundURL(){
         return this.soundURL;
     }
-    getHTML(index){
-        var htmlTag = 'b';
-        var res = "<"+htmlTag+" title= '" + this.getName() + "'class='wor' id='word"+index+"'>";
-        res += this.getName();
-        res += "</"+htmlTag+">";
-
-        res += "<"+htmlTag+" title= '" + this.getName() + "'class='syll' id='syllables_word"+index+"'>";
-        res += this.getName();
-        res += "</"+htmlTag+"><"+htmlTag+"> </"+htmlTag+"><"+htmlTag+" class='spacing'> </"+htmlTag+">";
-        return res;
-    }
 }
 function getSoundURLformOxford(wordID){
     let oxforddictionaries = new oxford(keys.Oxford.app_id, keys.Oxford.app_key);
@@ -108,13 +97,19 @@ function getSyllablesFormDictionaryAPI(wordID){
     return requestPromise(options).then(function (body) {
         return new Promise(resolve => {
             var obj = JSON.parse(body);
-            //console.log(obj[0].hwi.hw);
-            var string = obj[0].hwi.hw;
-            if(string === ''){
-                string = wordID;
+            var count = 1;
+            var syllables = [wordID];
+            if(obj.length > 0) {
+                console.log(wordID);
+                console.log(obj);
+                //console.log(obj[0].hwi.hw);
+                var string = obj[0].hwi.hw;
+                if (string === '') {
+                    string = wordID;
+                }
+                syllables = string.split('*');
+                count = syllables.length;
             }
-            var syllables = string.split('*');
-            var count = syllables.length;
             resolve({
                 "count": count,
                 "list": syllables
@@ -134,10 +129,16 @@ function getSoundURLformDictionaryAPI(wordID){
         return new Promise(resolve => {
             var obj = JSON.parse(body);
             //(obj[0].hwi.prs[0].sound.audio);
-            var sound = obj[0].hwi.prs[0].sound.audio;
-            var fileName = sound;//.slice(0, (sound.length     -4));
-            var dirName= fileName.slice(0, 1);
-            resolve("https://media.merriam-webster.com/audio/prons/en/us/mp3/"+dirName+"/"+fileName+".mp3");
+            console.log(wordID);
+            if(obj.length > 0) {
+                var sound = obj[0].hwi.prs[0].sound.audio;
+                var fileName = sound;//.slice(0, (sound.length     -4));
+                var dirName= fileName.slice(0, 1);
+                resolve("https://media.merriam-webster.com/audio/prons/en/us/mp3/"+dirName+"/"+fileName+".mp3");
+            }
+            else {
+                resolve("");
+            }
         });
     })
         .catch(function (err) {

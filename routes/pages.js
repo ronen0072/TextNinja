@@ -2,9 +2,10 @@ var page = {
     index: 0,
     about: 1,
     contact: 2,
-    practice: 3
+    simplePractice: 3,
+    dividePractice: 4
 };
-var pagesArray = ['home','about','contact','practice'];
+var pagesArray = ['home','about','contact','simple-practice'];
 module.exports = {
     getPageNameByID: function (pageID) {
         return 'pages/'+pagesArray[pageID];
@@ -20,8 +21,8 @@ module.exports = {
             case 'contact':
                 return page.contact;
                 break;
-            case 'practice':
-                return page.practice;
+            case 'divide-practice':
+                return page.dividePractice;
                 break;
             default:
                 return page.index;

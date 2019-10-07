@@ -2,6 +2,7 @@
 <div class="content">
     <h3 class="title">Contact Us</h3><br/>
     <div class="wrapper">
+        <% include ../partials/errors-messages.ejs%>
         <div class="container-contact100">
             <div class="contact100-map" id="google_map" data-map-x="40.722047" data-map-y="-73.986422" data-pin="images/icons/map-marker.png" data-scrollwhell="0" data-draggable="1"></div>
 
@@ -10,23 +11,26 @@
                 <form class="contact100-form validate-form flex-sb flex-w">
 
                     <div class="wrap-inputL" data-validate = "Name is required">
-                        <input id="contactUserName" class="inputL" type="text" name="name" placeholder="Name" value="<%= typeof user !== 'undefined'? user.username : '' %>">
+                        <input id="contactUserName" class="inputL" type="text" name="name" placeholder="Name" value="<%= typeof name !== 'undefined'? name : typeof user !== 'undefined'? user.username : '' %>">
                         <span class="focus-input100"></span>
                     </div>
 
                     <div  class="wrap-inputR" data-validate = "Email is required: e@a.z">
-                        <input id="contactEmail" class="inputR" type="text" name="email" placeholder="Email Address" value="<%= typeof user !== 'undefined'? user.email : '' %>">
+                        <input id="contactEmail" class="inputR" type="text" name="email" placeholder="Email Address" value="<%= typeof email !== 'undefined'? email : typeof user !== 'undefined'? user.email : '' %>">
                         <span class="focus-input100"></span>
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate = "Message is required">
-                        <textarea class="content-message" name="message" placeholder="Write Us A Message"></textarea>
+                        <textarea id="contactMessage" class="content-message" name="message" placeholder="Write Us A Message" value="<%= typeof message !== 'undefined'? message : '' %>"></textarea>
                         <span class="focus-input100"></span>
                     </div>
-
-                    <div>
-                        <input id="send" type="submit" name="contact_submit" value="Send" /><br/>
-                    </div>
+                    <button type="button"
+                            class="submitButton"
+                            id="submitContactUs"
+                            name="submit contact Us"
+                    >
+                        send
+                    </button><br/>
                 </form>
             </div>
 
@@ -38,3 +42,5 @@
 <span class="contact100-form-symbol">
 <img src="\assets\icon\contact.png" alt="contact">
 </span>
+
+<script src="/assets/js/contact.js"></script>

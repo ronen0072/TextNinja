@@ -81,7 +81,7 @@ passport.use(
         clientID: keys.facebook.clientID,
         clientSecret: keys.facebook.clientSecret,
         callbackURL: '/auth/facebook/redirect',
-        profileFields: ['emails']
+        profileFields: ['id', 'displayName', 'emails']
     }, (accessToken, refreshToken, profile, done) => {
         console.log(profile);
         User.findOneAndUpdate(

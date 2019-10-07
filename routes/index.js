@@ -19,7 +19,7 @@ router.get('/:pageName',updateCurrentPageName, isLogin, (req, res) => {
     const pageName = req.session.pageName;
     const needToLogin = req.session.needToLogin;
     req.session.needToLogin = false;
-    res.render('pages/'+pageName,{user: req.user, login: needToLogin});
+    res.render('pages/'+pageName,{user: req.user, pageID: getPageID(req.session.pageName), login: needToLogin});
 });
 
 router.get('/login/:pageName',updateCurrentPageName, (req, res) => {

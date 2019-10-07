@@ -14,8 +14,8 @@ seeWikipedeia.click( function() {
     //$('#menu').attr('title');
     console.log("seeWikipedeia");
     console.log("display see in Wikipedeia");
-    popBox.attr('style', display);
-    wikipediaBox.attr('style', display);
+    popBox.attr('style', blockDisplay);
+    wikipediaBox.attr('style', blockDisplay);
 });
 closeWikipediaBox.click(function() {
     closeAll();
@@ -30,7 +30,7 @@ function checkWikipedia(toUpdate){
         success: function(data){
             console.log(data);
             if(!(data.wiki === 'not-exists')){
-                seeWikipedeia.attr('style', display);
+                seeWikipedeia.attr('style', blockDisplay);
                 if(toUpdate) {
                     $('#wiki-title').html(data.wiki.title);
                     update(data.wiki.info, $('#wikiInfo'), false);

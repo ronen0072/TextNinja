@@ -1,30 +1,5 @@
 const hashSet = require('hashset');
 var forUserOnly = new hashSet('practice');
-var page = {
-    home: 0,
-    about: 1,
-    contact: 2,
-    practice: 3
-};
-
-function getPageID(pageName) {
-    switch(pageName) {
-        case 'home':
-            return page.home;
-            break;
-        case 'about':
-            return page.about;
-            break;
-        case 'contact':
-            return page.contact;
-            break;
-        case 'practice':
-            return page.practice;
-            break;
-        default:
-            return page.home;
-    }
-}
 
 module.exports = {
     updateCurrentPageName: function(req, res, next) {

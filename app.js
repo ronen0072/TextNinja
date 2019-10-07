@@ -20,8 +20,8 @@ const app = express();
 //app.use(expressLayouts);
 app.set('view engine', 'ejs');
 app.use(cookieSession({
-    /*maxAge:24*60*60*1000,*/
-    maxAge:2*60*1000,
+    maxAge:24*60*60*1000,
+    /*maxAge:1*60*1000,*/
     keys:[keys.session.cookieKey]
 }));
 

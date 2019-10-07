@@ -13,7 +13,9 @@ const WordSchema = new Schema({
 
     soundURL:{
         type: String
-    }
+    },
+
+    difficulty: Number
 });
 
 const Word_db = mongoose.model('word_db', WordSchema);

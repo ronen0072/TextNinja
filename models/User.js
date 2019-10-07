@@ -4,7 +4,8 @@ const Schema =  mongoose.Schema;
 //create word Schema & model
 const PracticeWord = new Schema({
     wID: String,
-    word: String
+    word: String,
+    difficulty: Number
 });
 
 //create word Schema & model

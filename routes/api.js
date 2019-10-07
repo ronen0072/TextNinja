@@ -1,13 +1,45 @@
 const express = require('express');
 const router = express.Router();
 const Word_db = require('../models/Word_db');
+const Messages = require('../models/message');
 const User = require('../models/User');
 const Word = require('../Word');
 const http = require("https");
 const requestPromise = require('request-promise');
 var ObjectId = require('mongodb').ObjectID;
+var dateFormat = require('dateformat');
 const isLogin = require('../config/redirectBack').isLogin;
 
+router.post('/contact', function(req,res){
+    const {name, email, message} = req.body;
+    console.log('name: '+name);
+    console.log('email: '+email);
+    console.log('message: '+message);
+    let errors = [];
+    if(!name || !email || !message){
+        errors.push({msg: 'Please fill in all the fields'});
+    }
+    if(errors.length === 0){
+        console.log('create Messages');
+        Messages.create({name:name, email:email, message:message, date: new Date()})
+            .then(()=>{
+                req.session.pageName = 'home';
+                const pageName = req.session.pageName;
+                const needToLogin = req.session.needToLogin;
+                req.session.needToLogin = false;
+                res.render('pages/'+pageName,{user: req.user, login: needToLogin, success_msg:{msg:'Message sent!'}});
+            })
+            .catch((err)=>{console.log(err);});
+    }
+    else{
+        console.log('not create Messages');
+        const pageName = req.session.pageName;
+        const needToLogin = req.session.needToLogin;
+        req.session.needToLogin = false;
+        res.render('pages/'+pageName,{user: req.user, login: needToLogin, name: name, email: email, message: message, errors: errors});
+    }
+
+});
 router.get('/words/:word', function  (req,res) {
     const wordID = req.params.word;
     var wordObj = new Word(wordID);
@@ -17,7 +49,7 @@ router.get('/words/:word', function  (req,res) {
         if(result === null) {
             //console.log('the word is not exists');
             wordObj.initialization().then(function(){
-                Word_db.create({wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL()});
+                Word_db.create({wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL(), difficulty: (wordObj.getSyllables().count*5)});
                 res.send({type: 'GET', wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL()});
             });
         }

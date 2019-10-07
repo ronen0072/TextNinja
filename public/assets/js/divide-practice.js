@@ -1,7 +1,21 @@
-var wordToDivide = $('#toDivide');
-var wrapSyllables = $('#wrapSyllables');
-var inputSyllables = $('.inputSyllable');
-var numOfSyllables = $('#numOfSyllables');
+var wordsToPractice = [];
+function initialWordToPractice(words){
+    wordsToPractice = words;
+    console.log(wordsToPractice);
+    $('.toDivide').attr('index',0);
+    $('.toDivide').html(wordsToPractice[0].wordID);
+}
+$(document).ready(function(){
+    getWords(initialWordToPractice);
+
+
+});
+
+
+var toDividePractice = $('#toDividePractice');
+var wrapSyllablesPractice = $('#wrapSyllablesPractice');
+var inputSyllables = $('.toDivide');
+var numOfSyllablesPractice = $('#numOfSyllablesPractice');
 
 // Get the pop Box
 var popBox = $('#popBox');
@@ -15,9 +29,16 @@ var fixSyll = $('#fixSyll');
 // Get the <span> element that closes the fix syll Box
 var closeFixSyllBox = $('#closeFixSyll');
 
-initialInput(wrapSyllables, inputSyllables, numOfSyllables,'inputSyllable');
+initialInput(wrapSyllables, inputSyllables, numOfSyllables);
 
-
+numOfSyllables.change( function() {
+    inputSyllables = $('.inputSyllable');
+    console.log("change");
+    $('#alertErrorTooMany').remove();
+    if(checkNunOFSyllables(wordToDivide.html(), numOfSyllables)){
+        initialInput(wrapSyllables, inputSyllables, numOfSyllables);
+    }
+});
 // When the user clicks the button, open the modal
 fixSyll.click( function() {
     console.log($(this));
@@ -76,3 +97,4 @@ $('#submitSyllables').click( function() {
         });
     }
 });
+
