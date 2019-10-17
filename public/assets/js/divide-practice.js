@@ -1,85 +1,118 @@
 var wordsToPractice = [];
+
+wordToDivide = $('#divide_Practice  .toDivide');
+wrapSyllables = $('#divide_Practice .wrapSyllables ');
+inputSyllables = $('#divide_Practice .inputSyllable');
+numOfSyllables = $('#divide_Practice  .selectNumOfSyll');
+
 function initialWordToPractice(words){
     wordsToPractice = words;
     console.log(wordsToPractice);
-    $('.toDivide').attr('index',0);
-    $('.toDivide').html(wordsToPractice[0].wordID);
+    console.log('wordsToPractice.length:'+wordsToPractice.length);
+    if(wordsToPractice.length > 0){
+        console.log(wordsToPractice[0].wordID);
+
+        wordToDivide.html(wordsToPractice[0].wordID+'');
+        wordToDivide.attr('index',0);
+        wordToDivide.attr('title',wordsToPractice[0].wordID);
+        console.log(wordToDivide);
+    }
+    else {
+        wordToDivide.html('There are no words to practice!');
+    }
+}
+function nextWord(index){
+    index++;
+    if(wordsToPractice.length < index) {
+        index=0;
+    }
+    console.log(wordsToPractice[index].wordID);
+    wordToDivide.attr('index', index);
+    wordToDivide.html(wordsToPractice[index].wordID);
+    wordToDivide.attr('syllables', wordsToPractice[index].wordID);
+
 }
 $(document).ready(function(){
     getWords(initialWordToPractice);
-
-
+    wordToDivide = $('#divide_Practice  .toDivide');
+    wrapSyllables = $('#divide_Practice .wrapSyllables ');
+    inputSyllables = $('#divide_Practice .inputSyllable');
+    numOfSyllables = $('#divide_Practice  .selectNumOfSyll');
+    initialSelectNumOfSyllables(wrapSyllables, wordToDivide, numOfSyllables, 'inputSyllablePractice');
+    initialInput(wrapSyllables, inputSyllables, numOfSyllables,'inputSyllablePractice',false);
 });
 
 
-var toDividePractice = $('#toDividePractice');
-var wrapSyllablesPractice = $('#wrapSyllablesPractice');
-var inputSyllables = $('.toDivide');
-var numOfSyllablesPractice = $('#numOfSyllablesPractice');
 
-// Get the pop Box
-var popBox = $('#popBox');
+function checkIfTheSyllablesIsCorrect(){
+    let ans = true;
+    let wordObj = wordsToPractice[wordToDivide.attr('index')];
+    if (numOfSyllables.val() === wordObj.syllables.count+'') {
+        inputSyllables.each(function (index, syllable) {
+            if (syllable.value !== wordObj.syllables.list[index]) {
 
-// Get the fix syll Box
-var fixSyllBox = $('#fixSyll-box');
-
-// Get the button that opens the fix the syllables
-var fixSyll = $('#fixSyll');
-
-// Get the <span> element that closes the fix syll Box
-var closeFixSyllBox = $('#closeFixSyll');
-
-initialInput(wrapSyllables, inputSyllables, numOfSyllables);
-
-numOfSyllables.change( function() {
-    inputSyllables = $('.inputSyllable');
-    console.log("change");
-    $('#alertErrorTooMany').remove();
-    if(checkNunOFSyllables(wordToDivide.html(), numOfSyllables)){
-        initialInput(wrapSyllables, inputSyllables, numOfSyllables);
-    }
-});
-// When the user clicks the button, open the modal
-fixSyll.click( function() {
-    console.log($(this));
-    $('#toDivide').html($('#menu').attr('title'));
-    console.log("fixSyll");
-    console.log("display fix the syllables");
-    popBox.attr('style', blockDisplay);
-    fixSyllBox.attr('style', blockDisplay);
-});
-
-closeFixSyllBox.click(function() {
-    console.log(close);
-    fixSyllBox.attr('style', noneDisplay);
-    popBox.attr('style', noneDisplay);
-});
-
-$('#submitSyllables').click( function() {
-    $('#alertError').remove();
-    var wordToFix = wordToDivide.html();
-
-    if(checkNunOFSyllables(wordToDivide.html(), numOfSyllables) && checkTheSyllables(wordToDivide.html(), inputSyllables, numOfSyllables)) {
-        console.log('submit Syllables');
-        var newSyllables = "\"";
-        var syll = "";
-        inputSyllables.each(function (index, element) {
-            if (index < numOfSyllables.val() - 1) {
-                newSyllables += element.value + "\",\"";
-                syll += element.value + "*";
-            } else {
-                newSyllables += element.value + "\"";
-                syll += element.value;
+                ans = false;
+                return;
             }
-
         });
-        text.getWord(wordToFix).setSyllables(syll);
+    }
+    else {
+        var alertWrongNumOfSyllables = "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+            "WRONG: The number of Syllables in the word is incorrect" +
+            "      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+            "        <span aria-hidden=\"true\">&times;</span>\n" +
+            "      </button>\n" +
+            "    </div>";
+        $('.wrapper').before(alertWrongNumOfSyllables);
+        return false;
+    }
+    if(ans) {
+        var alertSuccess = "<div id=\"good-gob\" class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+            "GOOD JOB" +
+            "      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+            "        <span aria-hidden=\"true\">&times;</span>\n" +
+            "      </button>\n" +
+            "    </div>";
+        $('.wrapper').before(alertSuccess);
+    }
+    else {
+        var alertWrongSyllables = "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+            "WRONG: The division word into Syllables is incorrect" +
+            "      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+            "        <span aria-hidden=\"true\">&times;</span>\n" +
+            "      </button>\n" +
+            "    </div>";
+        $('.wrapper').before(alertWrongSyllables);
+    }
+    return ans;
 
-        var message = `{"wordID":"${wordToFix}","syllables":{"count":"${numOfSyllables.val()}","list":[${newSyllables}]}}`;
-        console.log('message: ' + message);
-        var data = JSON.parse(message);
+}
 
-        $.ajax({
+
+$('#divide_Practice .submitSyllables').click( function() {
+    $('#alertError').remove();
+    let ans = true;
+    var wordToFix =    wordToDivide.html();
+    inputSyllables = $('#divide_Practice .inputSyllablePractice');
+    if(checkNunOFSyllables(wordToDivide.html(), numOfSyllables) && checkTheSyllables(wordToDivide.html(), inputSyllables, numOfSyllables)) {
+        ans = checkIfTheSyllablesIsCorrect();
+    }
+    else {
+        ans = false;
+    }
+    console.log(ans);
+    if(ans === true) {
+        console.log(ans);
+        //TODO upDate the difficulty
+        $('#good-gob').fadeOut(2000);
+        setTimeout(() => {
+            nextWord(wordToDivide.attr('index'));
+            initialInput(wrapSyllables, inputSyllables, numOfSyllables,'inputSyllablePractice',true);
+            $('#good-gob').remove();
+        }, 2100);
+
+    }
+/*        $.ajax({
             type: 'PUT',
             url: "/api/words/syllables",
             // The key needs to match your method's input parameter (case-sensitive).
@@ -95,6 +128,11 @@ $('#submitSyllables').click( function() {
                 console.log(errMsg);
             }
         });
-    }
+    }*/
 });
-
+$('#yes').click( function(){
+    $('#delete').attr('style',displayInlineBlock);
+    $('#checkIfSafe').attr('style',noneDisplay);
+    deleteWords([wordsToPractice[wordToDivide.attr('index')]._id]);
+    nextWord(wordToDivide.attr('index'));
+});

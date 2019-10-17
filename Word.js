@@ -99,7 +99,7 @@ function getSyllablesFormDictionaryAPI(wordID){
             var obj = JSON.parse(body);
             var count = 1;
             var syllables = [wordID];
-            if(obj.length > 0) {
+            if((obj.length > 0)&&(obj[0].hwi)&&(obj[0].hwi.hw)) {
                 console.log(wordID);
                 console.log(obj);
                 //console.log(obj[0].hwi.hw);
@@ -130,7 +130,7 @@ function getSoundURLformDictionaryAPI(wordID){
             var obj = JSON.parse(body);
             //(obj[0].hwi.prs[0].sound.audio);
             console.log(wordID);
-            if(obj.length > 0) {
+            if((obj.length > 0)&&(obj[0].hwi)&&(obj[0].hwi.prs[0])&&(obj[0].hwi.prs[0].sound)&&(obj[0].hwi.prs[0].sound.audio)) {
                 var sound = obj[0].hwi.prs[0].sound.audio;
                 var fileName = sound;//.slice(0, (sound.length     -4));
                 var dirName= fileName.slice(0, 1);

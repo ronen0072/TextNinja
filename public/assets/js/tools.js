@@ -101,18 +101,18 @@ function initialSettings(){
     else{
         document.getElementById("bold").checked = false;
     }
-    if(sessionStorage.font_size !== undefined){
+   /* if(sessionStorage.font_size !== undefined){
         document.getElementById("font_size").value = sessionStorage.font_size;
     }
     else{
         document.getElementById("font_size").value = 12;
-    }
+    }*/
     console.log('---------initialSettings-----------');
     console.log('highlighting: '+  document.getElementById('highlighting').checked);
     console.log('backgroundColor: ', document.getElementById('Pick').style.backgroundColor );
     console.log('syllables: '+  document.getElementById('syllables').checked);
     console.log('bold: '+  document.getElementById("bold").checked);
-    console.log('font_size: '+  document.getElementById("font_size").value);
+  /*  console.log('font_size: '+  document.getElementById("font_size").value);*/
 
 }
 function updateSettings(){
@@ -120,13 +120,13 @@ function updateSettings(){
     sessionStorage.setItem('backgroundColor', document.getElementById('Pick').style.backgroundColor );
     sessionStorage.setItem('syllables', document.getElementById('syllables').checked);
     sessionStorage.setItem('bold', document.getElementById("bold").checked);
-    sessionStorage.setItem('font_size', document.getElementById("font_size").value);
+   /* sessionStorage.setItem('font_size', document.getElementById("font_size").value);*/
     console.log('---------updateSettings-----------');
     console.log('highlighting: '+  sessionStorage.highlighting);
     console.log('backgroundColor: '+  sessionStorage.backgroundColor);
     console.log('syllables: '+  sessionStorage.syllables);
     console.log('bold: '+  sessionStorage.bold);
-    console.log('font_size: '+  sessionStorage.font_size);
+  /*  console.log('font_size: '+  sessionStorage.font_size);*/
 
 }
 

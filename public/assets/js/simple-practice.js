@@ -16,28 +16,13 @@ function displayWordToPractice(words) {
     updateFunOfWord(true);
 }
 //TODO delete the words in the front end
-$('#delete').click( function(){
-    $('#checkIfSafe').attr('style',displayInlineBlock);
-    $('#delete').attr('style',noneDisplay);
-});
+
 $('#yes').click( function(){
     $('#delete').attr('style',displayInlineBlock);
     $('#checkIfSafe').attr('style',noneDisplay);
     deleteWords(getWordToDelete());
 });
-$('#no').click( function(){
-    $('#delete').attr('style',displayInlineBlock);
-    $('#checkIfSafe').attr('style',noneDisplay);
-});
-$('#delete').hover( function(){
-    $('#trash').attr('src',"/assets/icon/trash on hover.png")
-},function(){
-    $('#trash').attr('src',"/assets/icon/trash.png")
-});
-$('.content').hover(function(){},function(){
-    $('#delete').attr('style',displayInlineBlock);
-    $('#checkIfSafe').attr('style',noneDisplay);
-});
+
 function getWordToDelete() {
     var checkbox = $(".toDelete");
     var wordsToDelete = '';

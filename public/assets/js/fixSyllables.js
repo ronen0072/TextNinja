@@ -1,8 +1,7 @@
-var wordToDivide = $('#toDivide');
-var wrapSyllables = $('#wrapSyllables');
-var inputSyllables = $('.inputSyllable');
-var numOfSyllables = $('#numOfSyllables');
-
+var wordToDivide;
+var wrapSyllables;
+var inputSyllables;
+var numOfSyllables;
 // Get the pop Box
 var popBox = $('#popBox');
 
@@ -15,13 +14,19 @@ var fixSyll = $('#fixSyll');
 // Get the <span> element that closes the fix syll Box
 var closeFixSyllBox = $('#closeFixSyll');
 
-initialInput(wrapSyllables, inputSyllables, numOfSyllables,'inputSyllable');
+
 
 
 // When the user clicks the button, open the modal
 fixSyll.click( function() {
+    wordToDivide = $('#fixSyll-box  .toDivide');
+    wrapSyllables = $('#fixSyll-box .wrapSyllables ');
+    inputSyllables = $('#fixSyll-box .inputSyllable');
+    numOfSyllables = $('#fixSyll-box  .selectNumOfSyll');
+    initialSelectNumOfSyllables(wrapSyllables, wordToDivide, numOfSyllables, 'inputSyllable');
+    initialInput(wrapSyllables, inputSyllables, numOfSyllables,'inputSyllable',true);
     console.log($(this));
-    $('#toDivide').html($('#menu').attr('title'));
+    wordToDivide.html($('#menu').attr('title'));
     console.log("fixSyll");
     console.log("display fix the syllables");
     popBox.attr('style', blockDisplay);
@@ -34,10 +39,10 @@ closeFixSyllBox.click(function() {
     popBox.attr('style', noneDisplay);
 });
 
-$('#submitSyllables').click( function() {
+$('#fixSyll-box .submitSyllables').click( function() {
     $('#alertError').remove();
     var wordToFix = wordToDivide.html();
-
+    inputSyllables = $('.inputSyllable');
     if(checkNunOFSyllables(wordToDivide.html(), numOfSyllables) && checkTheSyllables(wordToDivide.html(), inputSyllables, numOfSyllables)) {
         console.log('submit Syllables');
         var newSyllables = "\"";

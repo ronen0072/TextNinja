@@ -47,13 +47,16 @@ input.deleteCheckbox:hover {
   border-top: 10px solid #01cbc6
 
 }
-h1{
+.logoLX{
   font-size: 275%;
   color:white;
   letter-spacing: -4px;
   margin: 0px 0px 3px;
   padding-right: 30px;
   display: inline-block;
+}
+h1 {
+display: inline-block;
 }
 h2 {
   font-size: 200%;
@@ -208,7 +211,7 @@ intro{
     height: 530px;
     margin-left: -5px;
     margin-top: 18px;
-    padding: 2px 7px 0px;
+    padding: 2px 7px 2px 20px;
     display: inline-block;
   }
   #textInput:hover{
@@ -216,7 +219,7 @@ intro{
     border-left: 0px;
     margin-left: -5px;
     margin-top: 18px;
-    padding: 2px 7px 2px;
+    padding: 2px 7px 2px 20px;
     display:  inline-block;
     overflow: hidden;
   }
@@ -256,7 +259,7 @@ intro{
     height: 530px;
     margin-left: -5px;
     margin-top: 18px;
-    padding: 2px 7px 0px;
+    padding: 2px 7px 2px 20px;
     display:  inline-block;
     overflow: hidden;
   }
@@ -265,7 +268,7 @@ intro{
     border-left: 0px;
     margin-left: -5px;
     margin-top: 18px;
-    padding: 2px 7px 2px;
+    padding: 2px 7px 2px 20px;
     display:  inline-block;
     overflow: hidden;
   }
@@ -516,7 +519,7 @@ select{
   display: initial;
   overflow: hidden;
 }
-.inputSyllable{
+.inputSyllable, .inputSyllablePractice{
   width: 70px;
   display: inline-block;
 }
@@ -541,6 +544,7 @@ input[type="submit"] {
   text-transform: uppercase;
   transition: 0.1s ease;
   cursor: pointer;
+  margin-right: 40px;
 }
 .submitButton {
    padding: 5px 20px;
@@ -894,4 +898,10 @@ input.inputR, input.inputL{
   padding-left: 12px;
   padding-right: 12px;
   color: var(--red);
+}
+#successMsg{
+  position: fixed;
+  z-index: 1; /* Sit on top */
+  right: 0px;
+  top: 0px;
 }
