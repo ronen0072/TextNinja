@@ -61,13 +61,10 @@ $('#fixSyll-box .submitSyllables').click( function() {
 
         var message = `{"wordID":"${wordToFix}","syllables":{"count":"${numOfSyllables.val()}","list":[${newSyllables}]}}`;
         console.log('message: ' + message);
-        var data = JSON.parse(message);
-
         $.ajax({
             type: 'PUT',
             url: "/api/words/syllables",
-            // The key needs to match your method's input parameter (case-sensitive).
-            data: JSON.stringify(data),
+            data: message,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {

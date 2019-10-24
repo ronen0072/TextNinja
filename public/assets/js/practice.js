@@ -1,3 +1,44 @@
+var sortBy = 'time';
+var orderBy = 'time';
+
+function compare( a, b ) {
+    if ( a.difficulty < b.difficulty ){
+        return -1;
+    }
+    if ( a.difficulty > b.difficulty ){
+        return 1;
+    }
+    return 0;
+}
+function practiceSettings(callback){
+    return function () {
+        if ($('#settings').attr('title') === 'settingsOn') {
+            let newOrder = $('input[name=order]:checked', '#settingsForm').val();
+            console.log('_________________________________________________________');
+            let oldSort = sortBy;
+            console.log(newOrder);
+            //sort words if it the  is Changed
+            if ((sortBy === 'difficulty') && (newOrder === 'time')) {
+                sortBy = 'time';
+                console.log(sortBy);
+                getWords(callback);
+            } else {
+                if ((sortBy === 'time') && ((newOrder === 'gradual') || (newOrder === 'dynamic'))) {
+                    sortBy = 'difficulty';
+                    console.log(sortBy);
+                    getWords(callback);
+                }
+            }
+            console.log(orderBy);
+            //update the index if the order is Changed
+            if ((newOrder !== orderBy) && ($('#divide_Practice  .toDivide').length !== 0)) {
+                orderBy = newOrder;
+                $('#divide_Practice  .toDivide').attr('index', -1);
+                console.log('the index is update');
+            }
+        };
+    }
+}
 function getWords(callback){
     $.ajax({
         type: "GET",

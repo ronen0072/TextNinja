@@ -117,6 +117,13 @@ intro{
 #textInput:hover{
   border: 1.5px solid var(--blue);
 }
+#buttons{
+  /*    position: fixed;
+      top: 110px;*/
+  float: right;
+  float: top;
+  display: block;
+}
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   #textInput{
@@ -145,10 +152,6 @@ intro{
     margin: 0px 5% 3px 5%;
     padding: 3px 5px 5px;
 
-  }
-  #buttons{
-  float: none;
-  display: inline-block;
   }
   textarea {
     width: 100%;
@@ -184,10 +187,6 @@ intro{
   #output{
     margin: 0px 5% 3px 5%;
     padding: 3px 5px 5px;
-  }
-  #buttons{
-  float: none;
-  display: inline-block;
   }
   img.button{
     margin: 3px 0px 3px 0px;
@@ -231,12 +230,6 @@ intro{
     padding: 3px 0px 3px 3px;
     display: inline-block;
   }
-  #buttons{
-    position: fixed;
-    top: 110px;
-    float: right;
-    display: initial;
-  }
   img.button{
     margin: 3px 0px 3px 0px;
     display: block;
@@ -279,12 +272,6 @@ intro{
     margin: 0px 3px 3px 0%;
     padding: 3px 0px 3px 3px;
     display: inline-block;
-  }
-  #buttons{
-    position: fixed;
-    top: 110px;
-    float: right;
-    display: initial;
   }
   img.button{
     margin: 3px 0px 3px 0px;
@@ -898,6 +885,37 @@ input.inputR, input.inputL{
   padding-left: 12px;
   padding-right: 12px;
   color: var(--red);
+}
+
+.custom-radio {
+  border-radius: 25px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  top: 5px;
+  background-color: #eee;
+}
+.custom-radio:hover {
+  background-color: #ccc;
+}
+.custom-radio.selected {
+  background-color: #2196F3;
+}
+.custom-radio input[type="radio"]{
+  margin: 1px;
+  position: absolute;
+  z-index: 2;
+  cursor: pointer;
+  outline: none;
+  opacity: 0;
+  /* CSS hacks for older browsers */
+  _noFocusLine: expression(this.hideFocus=true);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  -khtml-opacity: 0;
+  -moz-opacity: 0;
 }
 #successMsg{
   position: fixed;

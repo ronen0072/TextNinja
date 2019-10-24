@@ -9,7 +9,9 @@ const requestPromise = require('request-promise');
 var ObjectId = require('mongodb').ObjectID;
 var dateFormat = require('dateformat');
 const isLogin = require('../config/redirectBack').isLogin;
-
+const calcDifficulty = require('./utils').calcDifficulty;
+const incDifficulty = require('./utils').incDifficulty;
+const decDifficulty = require('./utils').decDifficulty;
 router.post('/contact', function(req,res){
     const {name, email, message} = req.body;
     console.log('name: '+name);
@@ -49,7 +51,7 @@ router.get('/words/:word', function  (req,res) {
         if(result === null) {
             //console.log('the word is not exists');
             wordObj.initialization().then(function(){
-                Word_db.create({wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL(), difficulty: (wordObj.getSyllables().count*5)});
+                Word_db.create({wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL(), difficulty: calcDifficulty(wordObj)});
                 res.send({type: 'GET', wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL()});
             });
         }
@@ -82,17 +84,39 @@ router.put('/user/words/:word', isLogin, function(req,res){
     Word_db.findOne({wordID: word}).then((result) => {
         User.findById(user.id).then((record) => {
             var words = record.words;
+            let difficulty;
+            if(!result.difficulty){
+                difficulty = calcDifficulty(result);
+                Word_db.updateOne(
+                    {'_id': result.id},
+                    {'$set': {'difficulty': difficulty}},
+                    function(err) {if(err) console.log('err: '+err);}
+                );
+            }
             var exist = false;
             words.forEach(function (element) {
                 if (element.wID === result.id) {
                     exist = true;
+                    console.log(element);
+                    difficulty = incDifficulty(element);
                 }
             });
             //console.log(exist);
             if (!exist) {
-                record.words.push({wID: result.id, word: result.wordID});
+                record.words.push({wID: result.id, word: result.wordID, difficulty: result.difficulty});
                 record.save().then(() => {
-                    res.send({type: 'PUT', username: record.username, wordID: result.id, word: result.wordID});
+                    res.send({type: 'PUT', username: record.username, wordID: result.id, word: result.wordID, difficulty: result.difficulty});
+                });
+            }
+            else{
+                console.log(difficulty);
+                User.update(
+                    {'_id': user.id,'words.wID': result.id},
+                    {'$set': {'words.$.difficulty': difficulty}},
+                    function(err) {if(err) console.log('err: '+err);}
+                    )
+                .then(() => {
+                    res.send({type: 'PUT', username: record.username, wordID: result.id, word: result.wordID, difficulty: difficulty});
                 });
             }
         });
@@ -106,7 +130,15 @@ router.get('/user/words', isLogin, function(req,res){
             words.push(word.wID);
         });
         Word_db.find({_id: {$in: words}}).then((items) => {
-            //console.log(items);
+            items.forEach(function (item) {
+                record.words.forEach(function (word) {
+                    if(item.id === word.wID){
+                        item.difficulty = word.difficulty;
+                        return;
+                    }
+                });
+
+            });
             res.send({type: 'GET', username: record.username, words: items});
         });
     });
@@ -140,7 +172,7 @@ router.get('/word/wiki/:word', function(req,res){
         var wiki = jOb.query.pages;
         if(!(wiki[Object.keys(wiki)[0]].pageid === undefined)) {
             var title =  wiki[Object.keys(wiki)[0]].title;
-            var wikiInfo =  clearwWiki(wiki[Object.keys(wiki)[0]].extract);
+            var wikiInfo =  clearWiki(wiki[Object.keys(wiki)[0]].extract);
             res.send({type: 'GET', wiki:{title: title, info: wikiInfo}});
         }
         else{
@@ -152,8 +184,46 @@ router.get('/word/wiki/:word', function(req,res){
         console.log(err);
     });
 });
+router.put('/user/words/difficulty/:wordID/:method', isLogin, function(req,res){
+
+    var wordID = req.params.wordID;
+    var method = req.params.method;
+    console.log('difficulty update: '+ wordID+', method: '+method)
+    var user = req.user;
+    User.findById(user.id).then((record) => {
+        var words = record.words;
+        let difficulty;
+        var exist = false;
+        words.forEach(function (element) {
+            if (element.wID === wordID) {
+                exist = true;
+                if(method === 'inc'){
+                    difficulty = incDifficulty(element);
+                }
+                else
+                    difficulty = decDifficulty(element);
+                }
+            }
+        );
+        //console.log(exist);
+        if (exist) {
+            User.update(
+                {'_id': user.id,'words.wID': wordID},
+                {'$set': {'words.$.difficulty': difficulty}},
+                function(err) {if(err) console.log('err: '+err);}
+            )
+            .then(() => {
+                res.send({type: 'PUT', username: record.username, wordID: result.id, word: result.wordID, difficulty: difficulty});
+            });
+
+        }
+        else{
+            res.send({type: 'ERROR', username: record.username, wordID: wordID});
+        }
+    });
+});
 module.exports = router;
-function clearwWiki(wikiInput){
+function clearWiki(wikiInput){
     for(var i = 0; i < wikiInput.length; i++){
         var toClaer = false;
         if(wikiInput.charAt(i) === '<'){

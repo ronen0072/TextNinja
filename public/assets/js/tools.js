@@ -11,6 +11,7 @@ $(document).ready(function(){
         clearTheInputBox();
     });
     $('#output').mousemove(function(){showCoords(event, '#output')});
+    customRadio("order");
 });
 
 
@@ -129,4 +130,20 @@ function updateSettings(){
   /*  console.log('font_size: '+  sessionStorage.font_size);*/
 
 }
-
+function customRadio(radioName){
+    var radioButton = $('input[name="'+ radioName +'"]');
+    $(radioButton).each(function(){
+        $(this).wrap( "<span class='custom-radio'></span>" );
+        if($(this).is(':checked')){
+            $(this).parent().addClass("selected");
+        }
+    });
+    $(radioButton).click(function(){
+        if($(this).is(':checked')){
+            $(this).parent().addClass("selected");
+        }
+        $(radioButton).not(this).each(function(){
+            $(this).parent().removeClass("selected");
+        });
+    });
+}

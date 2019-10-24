@@ -1,37 +1,39 @@
 var wordsToPractice = [];
-
+var lastIndex = -1;
 wordToDivide = $('#divide_Practice  .toDivide');
 wrapSyllables = $('#divide_Practice .wrapSyllables ');
 inputSyllables = $('#divide_Practice .inputSyllable');
 numOfSyllables = $('#divide_Practice  .selectNumOfSyll');
 
 function initialWordToPractice(words){
+    if(sortBy === 'difficulty'){
+        words.sort(compare);
+    }
     wordsToPractice = words;
     console.log(wordsToPractice);
     console.log('wordsToPractice.length:'+wordsToPractice.length);
-    if(wordsToPractice.length > 0){
-        console.log(wordsToPractice[0].wordID);
-
-        wordToDivide.html(wordsToPractice[0].wordID+'');
-        wordToDivide.attr('index',0);
-        wordToDivide.attr('title',wordsToPractice[0].wordID);
-        console.log(wordToDivide);
+    nextWord();
+}
+function nextWord(){
+    if(wordsToPractice.length > 0) {
+        if (lastIndex < 0) {
+            lastIndex = wordsToPractice.length - 1;
+        }
+        let randomIndex = Math.floor(Math.random() * lastIndex);
+        let temp = wordsToPractice[randomIndex];
+        wordsToPractice[randomIndex] = wordsToPractice[lastIndex];
+        wordsToPractice[lastIndex] = temp;
+        console.log(wordsToPractice[lastIndex].wordID);
+        wordToDivide.attr('index', lastIndex);
+        wordToDivide.html(wordsToPractice[lastIndex].wordID);
+        wordToDivide.attr('syllables', wordsToPractice[lastIndex].wordID);
+        lastIndex--;
     }
     else {
         wordToDivide.html('There are no words to practice!');
     }
 }
-function nextWord(index){
-    index++;
-    if(wordsToPractice.length < index) {
-        index=0;
-    }
-    console.log(wordsToPractice[index].wordID);
-    wordToDivide.attr('index', index);
-    wordToDivide.html(wordsToPractice[index].wordID);
-    wordToDivide.attr('syllables', wordsToPractice[index].wordID);
 
-}
 $(document).ready(function(){
     getWords(initialWordToPractice);
     wordToDivide = $('#divide_Practice  .toDivide');
@@ -40,13 +42,11 @@ $(document).ready(function(){
     numOfSyllables = $('#divide_Practice  .selectNumOfSyll');
     initialSelectNumOfSyllables(wrapSyllables, wordToDivide, numOfSyllables, 'inputSyllablePractice');
     initialInput(wrapSyllables, inputSyllables, numOfSyllables,'inputSyllablePractice',false);
+    $('#settings').click(practiceSettings(initialWordToPractice));
 });
 
-
-
-function checkIfTheSyllablesIsCorrect(){
+function checkIfTheSyllablesIsCorrect(wordObj){
     let ans = true;
-    let wordObj = wordsToPractice[wordToDivide.attr('index')];
     if (numOfSyllables.val() === wordObj.syllables.count+'') {
         inputSyllables.each(function (index, syllable) {
             if (syllable.value !== wordObj.syllables.list[index]) {
@@ -88,51 +88,78 @@ function checkIfTheSyllablesIsCorrect(){
 
 }
 
-
 $('#divide_Practice .submitSyllables').click( function() {
-    $('#alertError').remove();
+    $('.alert').remove();
     let ans = true;
-    var wordToFix =    wordToDivide.html();
+    let wordObj = wordsToPractice[wordToDivide.attr('index')];
     inputSyllables = $('#divide_Practice .inputSyllablePractice');
     if(checkNunOFSyllables(wordToDivide.html(), numOfSyllables) && checkTheSyllables(wordToDivide.html(), inputSyllables, numOfSyllables)) {
-        ans = checkIfTheSyllablesIsCorrect();
+        ans = checkIfTheSyllablesIsCorrect(wordObj);
     }
     else {
         ans = false;
     }
-    console.log(ans);
     if(ans === true) {
         console.log(ans);
         //TODO upDate the difficulty
+
         $('#good-gob').fadeOut(2000);
         setTimeout(() => {
-            nextWord(wordToDivide.attr('index'));
+            nextWord();
             initialInput(wrapSyllables, inputSyllables, numOfSyllables,'inputSyllablePractice',true);
             $('#good-gob').remove();
         }, 2100);
-
-    }
-/*        $.ajax({
+        $.ajax({
             type: 'PUT',
-            url: "/api/words/syllables",
-            // The key needs to match your method's input parameter (case-sensitive).
-            data: JSON.stringify(data),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                console.log(data);
-                console.log(close);
-                popBox.attr('style', noneDisplay);
+            url: "../../../api/user/words/difficulty/"+wordObj._id+"/dec",
+            success: function () {
+                console.log("success");
             },
             failure: function (errMsg) {
-                console.log(errMsg);
+                console.log('errMsg');
             }
         });
-    }*/
+
+    }
+    else{
+        console.log(ans);
+        $.ajax({
+            type: 'PUT',
+            url: "../../../api/user/words/difficulty/"+wordObj._id+"/inc",
+            success: function () {
+                console.log("success");
+            },
+            failure: function (errMsg) {
+                console.log('errMsg');
+            }
+        });
+    }
+/*
+    var message = `{"wordObj":"${wordsToPractice[wordToDivide.attr('index')]}", "_id":"${wordsToPractice[wordToDivide.attr('index')]}"}`;
+    console.log('message: ' + message);
+    $.ajax({
+        type: 'PUT',
+        url: "/api/words/update-difficulty",
+        // The key needs to match your method's input parameter (case-sensitive).
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            console.log(close);
+            popBox.attr('style', noneDisplay);
+        },
+        failure: function (errMsg) {
+            console.log(errMsg);
+        }
+    });
+*/
+
 });
+
 $('#yes').click( function(){
     $('#delete').attr('style',displayInlineBlock);
     $('#checkIfSafe').attr('style',noneDisplay);
     deleteWords([wordsToPractice[wordToDivide.attr('index')]._id]);
-    nextWord(wordToDivide.attr('index'));
+    nextWord();
 });

@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const pages = require('./pages');
 const updateCurrentPageName = require('../config/redirectBack').updateCurrentPageName;
 const isLogin = require('../config/redirectBack').isLogin;
-const {getPageNameByID, getPageID} = require('./pages');
+const getPageID = require('./utils').getPageID;
 
 // Welcome Page
 router.get('/', updateCurrentPageName, isLogin, (req, res) => {
@@ -14,7 +13,7 @@ router.get('/', updateCurrentPageName, isLogin, (req, res) => {
     res.render('layout',{user: req.user, pageID: getPageID(req.session.pageName), login: needToLogin});
 });
 router.get('/:pageName',updateCurrentPageName, isLogin, (req, res) => {
-  /*  console.log('needToLogin: '+ req.session.needToLogin);
+/*    console.log('needToLogin: '+ req.session.needToLogin);
     console.log('user: '+ req.user);*/
     const pageName = req.session.pageName;
     const needToLogin = req.session.needToLogin;

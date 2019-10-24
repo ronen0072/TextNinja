@@ -1,7 +1,12 @@
+
 $(document).ready(function(){
     getWords(displayWordToPractice);
+    $('#settings').click(practiceSettings(displayWordToPractice));
 });
 function displayWordToPractice(words) {
+    if(sortBy === 'difficulty'){
+        words.sort(compare);
+    }
     var res = "";
     const htmlTag = 'b';
     console.log(words);
@@ -41,3 +46,4 @@ function getWordToDelete() {
     }
     return wordsToDelete;
 }
+
