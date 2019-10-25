@@ -213,7 +213,7 @@ router.put('/user/words/difficulty/:wordID/:method', isLogin, function(req,res){
                 function(err) {if(err) console.log('err: '+err);}
             )
             .then(() => {
-                res.send({type: 'PUT', username: record.username, wordID: result.id, word: result.wordID, difficulty: difficulty});
+                res.send({type: 'PUT', username: record.username, wordID: wordID, difficulty: difficulty});
             });
 
         }

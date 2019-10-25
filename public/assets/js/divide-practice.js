@@ -15,25 +15,84 @@ function initialWordToPractice(words){
     nextWord();
 }
 function nextWord(){
+    console.log(wordsToPractice);
     if(wordsToPractice.length > 0) {
-        if (lastIndex < 0) {
-            lastIndex = wordsToPractice.length - 1;
+        let nextIndex;
+
+        if((orderBy === 'dynamic')){
+            nextIndex = dynamicPolicy();
         }
-        let randomIndex = Math.floor(Math.random() * lastIndex);
-        let temp = wordsToPractice[randomIndex];
-        wordsToPractice[randomIndex] = wordsToPractice[lastIndex];
-        wordsToPractice[lastIndex] = temp;
-        console.log(wordsToPractice[lastIndex].wordID);
-        wordToDivide.attr('index', lastIndex);
-        wordToDivide.html(wordsToPractice[lastIndex].wordID);
-        wordToDivide.attr('syllables', wordsToPractice[lastIndex].wordID);
-        lastIndex--;
+        if(orderBy === 'random'){
+            nextIndex = randomPolicy()
+        }
+        if((orderBy === 'time')||(orderBy === 'difficulty')){
+            nextIndex = simplePolicy()
+        }
+
+        wordToDivide.attr('index', nextIndex);
+        console.log('nextIndex: '+nextIndex );
+        wordToDivide.html(wordsToPractice[nextIndex].wordID);
+        wordToDivide.attr('syllables', wordsToPractice[nextIndex].wordID);
     }
     else {
         wordToDivide.html('There are no words to practice!');
     }
 }
 
+function simplePolicy(){
+    let nextIndex;
+    if((!wordToDivide.attr('index'))||(parseInt(wordToDivide.attr('index')) === wordsToPractice.length-1)){
+        nextIndex = 0;
+    }
+    else{
+        nextIndex =  parseInt(wordToDivide.attr('index')) + 1;
+    }
+
+    return nextIndex;
+}
+
+function randomPolicy(){
+    let swap = true;
+    console.log('lastIndex: '+lastIndex);
+    if (lastIndex <= 0) {
+        lastIndex = wordsToPractice.length - 1;
+    }
+    let index = parseInt(wordToDivide.attr('index'));
+    let nextIndex = Math.floor(Math.random() * lastIndex);
+    //swap
+    if(swap){
+        let temp = wordsToPractice[index];
+        wordsToPractice[index] = wordsToPractice[lastIndex];
+        wordsToPractice[lastIndex] = temp;
+        lastIndex--;
+    }
+    return nextIndex;
+}
+
+function dynamicPolicy(){
+    let nextIndex;
+    console.log('indexUp: '+ !(wordToDivide.attr('indexUp')));
+    if((!wordToDivide.attr('indexUp'))||
+        ((parseInt(wordToDivide.attr('indexUp')) >= wordsToPractice.length) && (parseInt(wordToDivide.attr('indexDown')) < 0))){
+        wordToDivide.attr('next','up');
+        nextIndex = Math.floor(wordsToPractice.length/2);
+        wordToDivide.attr('indexUp', nextIndex + 1);
+        wordToDivide.attr('indexDown', nextIndex - 1);
+        return nextIndex;
+    }
+    if(((wordToDivide.attr('next') === 'up') &&
+        (parseInt(wordToDivide.attr('indexUp')) < wordsToPractice.length)) ||
+        (parseInt(wordToDivide.attr('indexDown')) < 0)){
+        nextIndex =  parseInt(wordToDivide.attr('indexUp'));
+        wordToDivide.attr('indexUp', nextIndex + 1);
+    }else{
+        if(parseInt(wordToDivide.attr('indexUp')) <= wordsToPractice.length){
+            nextIndex =  parseInt(wordToDivide.attr('indexDown'));
+            wordToDivide.attr('indexDown', nextIndex - 1);
+        }
+    }
+    return nextIndex;
+}
 $(document).ready(function(){
     getWords(initialWordToPractice);
     wordToDivide = $('#divide_Practice  .toDivide');
@@ -105,6 +164,18 @@ $('#divide_Practice .submitSyllables').click( function() {
 
         $('#good-gob').fadeOut(2000);
         setTimeout(() => {
+            if(wordToDivide.attr('next') !== 'up'){
+                console.log('next: up');
+                if(wordToDivide.attr('next') === 'none'){
+                    wordToDivide.attr('next','');
+                }
+                else{
+                    wordToDivide.attr('next','none');
+                }
+            }
+            else{
+                wordToDivide.attr('next','up');
+            }
             nextWord();
             initialInput(wrapSyllables, inputSyllables, numOfSyllables,'inputSyllablePractice',true);
             $('#good-gob').remove();
@@ -122,7 +193,8 @@ $('#divide_Practice .submitSyllables').click( function() {
 
     }
     else{
-        console.log(ans);
+        wordToDivide.attr('next','down');
+        console.log('next: down');
         $.ajax({
             type: 'PUT',
             url: "../../../api/user/words/difficulty/"+wordObj._id+"/inc",

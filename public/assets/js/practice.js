@@ -12,7 +12,7 @@ function compare( a, b ) {
 }
 function practiceSettings(callback){
     return function () {
-        if ($('#settings').attr('title') === 'settingsOn') {
+        if ($('#settings').attr('title') === 'settingsoff') {
             let newOrder = $('input[name=order]:checked', '#settingsForm').val();
             console.log('_________________________________________________________');
             let oldSort = sortBy;
@@ -23,7 +23,7 @@ function practiceSettings(callback){
                 console.log(sortBy);
                 getWords(callback);
             } else {
-                if ((sortBy === 'time') && ((newOrder === 'gradual') || (newOrder === 'dynamic'))) {
+                if ((sortBy === 'time') && ((newOrder === 'difficulty') || (newOrder === 'dynamic'))) {
                     sortBy = 'difficulty';
                     console.log(sortBy);
                     getWords(callback);
@@ -32,10 +32,14 @@ function practiceSettings(callback){
             console.log(orderBy);
             //update the index if the order is Changed
             if ((newOrder !== orderBy) && ($('#divide_Practice  .toDivide').length !== 0)) {
+                if((orderBy === 'difficulty')&&(newOrder === 'dynamic')){
+                    nextWord();
+                }
                 orderBy = newOrder;
-                $('#divide_Practice  .toDivide').attr('index', -1);
+                lastIndex = -1;
                 console.log('the index is update');
             }
+            console.log(orderBy);
         };
     }
 }
