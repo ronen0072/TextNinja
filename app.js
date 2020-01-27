@@ -58,5 +58,5 @@ app.use(express.static('./public'));
 
 
 //listen to port
-app.listen(process.env.port || 5000);
-console.log('Text Ninja listen to port 5000');
+app.listen(process.env.port || 3000);
+console.log('Text Ninja listen to port 3000');

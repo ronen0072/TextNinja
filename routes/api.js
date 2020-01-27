@@ -181,11 +181,15 @@ router.delete('/user/words/:words', isLogin, function(req,res){
     User.update(
         {_id: user.id},
         {$pull: {words: {wID: {$in: wordsToDelete}}}}
-    ).then((items) => {
+    )
+    .then((items) => {
         console.log("items: ");
         console.log(items);
         res.send({type: 'DELETE', username: req.user.username, words: items});
-    });
+    })
+    .catch((err)=>{
+        res.send({type: 'DELETE FAIL', ERROR: err});
+    })
 });
 
 // @route GET api/word/wiki/:word
