@@ -42,18 +42,18 @@ class Word {
         return res;
     }
     clearTheWord(){
-        var clearWord = this.WordID.replace(/\,|\.|\:|\'|\"|\!|\?|\%|\$|\(|\)/g, "");
-        return clearWord.toLowerCase();
+        this.clearWord = (this.WordID.replace(/\,|\.|\:|\'|\"|\!|\?|\%|\$|\(|\)/g, "")).toLowerCase();
+        return this.clearWord;
     }
     switchBack(syllables){
         var word = this.getWordID();
         var i,j;
         for(i = 0, j = 0; i<syllables.length; i++, j++){
-            if(syllables.charAt(i).toUpperCase() === word.charAt(j)){
-                syllables = syllables.replaceAt(i, word.charAt(j));
-            }
             if((syllables.charAt(i) === '*') && !(word.charAt(j) === '*')) {
                 i++;
+            }
+            if(syllables.charAt(i).toUpperCase() === word.charAt(j)){
+                syllables = syllables.replaceAt(i, word.charAt(j));
             }
             if(!(syllables.charAt(i) === word.charAt(j))){
                 syllables = syllables.insertAt(i, word.charAt(j));
@@ -77,8 +77,10 @@ class Word {
                         var s =word.switchBack(syllables.toLowerCase());
                         console.log(s);
                         word.setSyllables(s);
+                        //console.log("syllables:",word.getSyllables());
                     }
                     word.setSoundURL(data.soundURL);
+                    console.log("data.soundURL:",data.soundURL);
                 },
                 error: function(jqXHR, textStatus, error){
                     word.setSyllables(word.getWordID());

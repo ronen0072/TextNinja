@@ -12,6 +12,10 @@ const isLogin = require('../config/redirectBack').isLogin;
 const calcDifficulty = require('./utils').calcDifficulty;
 const incDifficulty = require('./utils').incDifficulty;
 const decDifficulty = require('./utils').decDifficulty;
+
+// @route POST api/contact
+// @desc put in DB the message that get from the user
+// @access public
 router.post('/contact', function(req,res){
     const {name, email, message} = req.body;
     console.log('name: '+name);
@@ -42,6 +46,9 @@ router.post('/contact', function(req,res){
     }
 
 });
+// @route GET api/words/:word
+// @desc get word from the user and response the syllables ans soundURL of the word.
+// @access public
 router.get('/words/:word', function  (req,res) {
     const wordID = req.params.word;
     var wordObj = new Word(wordID);
@@ -62,6 +69,9 @@ router.get('/words/:word', function  (req,res) {
     });
 });
 
+// @route PUT api/words/syllables
+// @desc get word and new syllables to update the word syllables in the DB.
+// @access public
 router.put('/words/syllables', function(req,res){
     var req_word = req.body;
     //var wordO = new Word(req_word);
@@ -73,12 +83,20 @@ router.put('/words/syllables', function(req,res){
     res.send({type:'PUT' , word:req_word});
 
 });
+
+// @route GET api/user/details
+// @desc response details of the connected user.
+// @access Registered users who are logged in
 router.get('/user/details',  isLogin, function(req,res){
     var user = req.user;
     res.send({type: 'GET', username: user.username, email: user.email});
 });
 
+// @route PUT api/user/words/:word
+// @desc insert to the user word in the DB
+// @access Registered users who are logged in
 router.put('/user/words/:word', isLogin, function(req,res){
+    console.log( req.params.word);
     var word = req.params.word;
     var user = req.user;
     Word_db.findOne({wordID: word}).then((result) => {
@@ -122,6 +140,10 @@ router.put('/user/words/:word', isLogin, function(req,res){
         });
     });
 });
+
+// @route GET api/user/words
+// @desc response array of words from the user.
+// @access Registered users who are logged in
 router.get('/user/words', isLogin, function(req,res){
     var user = req.user;
     User.findById(user.id).then((record) => {
@@ -143,6 +165,10 @@ router.get('/user/words', isLogin, function(req,res){
         });
     });
 });
+
+// @route DELETE api/user/words/:words
+// @desc delete array of words from the array of words in the user.
+// @access Registered users who are logged in
 router.delete('/user/words/:words', isLogin, function(req,res){
     var user = req.user;
     var idOfWordsToDelete = req.params.words.split(',');
@@ -161,6 +187,10 @@ router.delete('/user/words/:words', isLogin, function(req,res){
         res.send({type: 'DELETE', username: req.user.username, words: items});
     });
 });
+
+// @route GET api/word/wiki/:word
+// @desc response info from words from wikipedia about the word.
+// @access public
 router.get('/word/wiki/:word', function(req,res){
     var word = req.params.word;
     var options = {
@@ -184,6 +214,10 @@ router.get('/word/wiki/:word', function(req,res){
         console.log(err);
     });
 });
+
+// @route PUT api/user/words/difficulty/:wordID/:method
+// @desc update the word difficulty
+// @access Registered users who are logged in
 router.put('/user/words/difficulty/:wordID/:method', isLogin, function(req,res){
 
     var wordID = req.params.wordID;
@@ -222,13 +256,13 @@ router.put('/user/words/difficulty/:wordID/:method', isLogin, function(req,res){
         }
     });
 });
-module.exports = router;
+
 function clearWiki(wikiInput){
-    for(var i = 0; i < wikiInput.length; i++){
-        var toClaer = false;
+    for(let i = 0; i < wikiInput.length; i++){
+        let toClaer = false;
         if(wikiInput.charAt(i) === '<'){
-            for(var j = 0; j < wikiInput.length; j++){
-                var tag =  wikiInput.substring(i,j+1);
+            for(let j = 0; j < wikiInput.length; j++){
+                let tag =  wikiInput.substring(i,j+1);
                 if(toClaer || (tag = '<b') || (tag = '</b') ||(tag = '<p') || (tag = '</p') || (tag = '<span') || (tag = '</span')|| (tag = '<ul') || (tag = '</ul')|| (tag = '<li') || (tag = '</li')){
                     toClaer = true;
                 }
@@ -241,10 +275,11 @@ function clearWiki(wikiInput){
             }
         }
     }
-    var i;
-    var j;
-    for(i = 0;  ((i < wikiInput.length) && (wikiInput.charAt(i) === '\n')); i++);
-    for(j = wikiInput.length;  ((j > 0) && (wikiInput.charAt(j) === '\n')); j--);
-    wikiInput = wikiInput.substring(i,j);
+    let startIndex;
+    let endIndex;
+    for(startIndex = 0;  ((i < wikiInput.length) && (wikiInput.charAt(startIndex) === '\n')); startIndex++){}
+    for(endIndex = wikiInput.length;  ((endIndex > 0) && (wikiInput.charAt(j) === '\n')); endIndex--){}
+    wikiInput = wikiInput.substring(startIndex,j);
     return wikiInput;
 }
+module.exports = router;

@@ -4,7 +4,7 @@ const displayInlineBlock = "display: inline-block;";
 function update(input, output, update) {
   console.log('update');
   if(update) {
-    if (textBox.val() != '') {
+    if (textBox && textBox.val() != '') {
       sessionStorage.setItem('textBox', input);
     } else {
       sessionStorage.setItem('textBox', input);
@@ -92,15 +92,16 @@ function updateWord(word, wordId){
 }
 function clickWord(word){
   console.log(word);
-  let wordObj = text.getWord(word);;
+  let wordObj = text.getWord(word);
+  console.log('word:',text.isExists(word));
   if(wordObj.getSoundURL !== undefined) {
     document.getElementById('sound').src = text.findSoundURL(word);
   }
-  console.log("../../../api/user/words/"+word);
+  console.log("../../../api/user/words/"+wordObj.getClearWord());
   return new Promise(resolve => {
     $.ajax({
       type: 'PUT',
-      url: "../../../api/user/words/"+word,
+      url: "../../../api/user/words/"+wordObj.getClearWord(),
       success: function () {
         console.log("success");
       },
