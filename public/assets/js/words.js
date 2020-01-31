@@ -1,9 +1,9 @@
 String.prototype.replaceAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
-}
+};
 String.prototype.insertAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index);
-}
+};
 class Word {
     constructor(word) {
         this.WordID = word;

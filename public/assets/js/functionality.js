@@ -4,7 +4,7 @@ const displayInlineBlock = "display: inline-block;";
 function update(input, output, update) {
   console.log('update');
   if(update) {
-    if (textBox && textBox.val() != '') {
+    if (textBox.val() != '') {
       sessionStorage.setItem('textBox', input);
     } else {
       sessionStorage.setItem('textBox', input);
