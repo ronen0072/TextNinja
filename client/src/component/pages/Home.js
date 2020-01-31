@@ -38,10 +38,7 @@ function Home(){
                         {/*<tools/>*/}
                     </Grid>
             </Grid>
-            <Grid item xs={12} sm={12} md={6} className={'output'}>
-                <TextNinjaTool>{state.input}</TextNinjaTool>
-                <Word>ronen</Word> <Word>finish</Word> <Word>ronen</Word>
-            </Grid>
+            <TextNinjaTool>{state.input}</TextNinjaTool>
         </Grid>
     );
 }

@@ -34,7 +34,6 @@ function TextNinjaTool(props){
                     <Word key={index}>{word}</Word>
                 )
             })}
-            {props.children}
         </Grid>
     );
 }

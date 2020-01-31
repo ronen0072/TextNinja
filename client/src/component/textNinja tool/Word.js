@@ -104,6 +104,14 @@ class Word extends Component{
         });
         console.log('componentDidMount',this.props.words[this.props.words.findIndex( (element) => element.wordID === this.state.word)]);
     };
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.props.children != this.state.word){
+            this.setState({
+                word: this.props.children,
+                display: this.props.children
+            });
+        }
+    }
 
     handleOnMouseOver = (e) => {
         if(this.state.syllables || this.state.syllables === ""){
@@ -125,7 +133,7 @@ class Word extends Component{
 
     };
     render(){
-        console.log('Word',this.state.word);
+        console.log('Word',this.props.children);
         return (
             <b onMouseOver={this.handleOnMouseOver} onMouseOut={this.handleOnBlur} onClick={this.handleOnClick} >{this.state.display + " "}</b>
         );
