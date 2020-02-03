@@ -4,6 +4,13 @@ import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import Word from './Word';
 
+var syllablesFontSize = 18;
+var fontSize = syllablesFontSize -4;
+
+function calcLetterSpacing(fontSize){
+    return ((fontSize/(-1.95)) + 9.56);
+}
+
 var useStyles = makeStyles({
     root: {
         flexGrow: 1,
@@ -13,8 +20,22 @@ var useStyles = makeStyles({
     },
     wrap:{
         height: '100%',
+    },
+    wordStyle:{
+        fontSize: fontSize+'px',
+        letterSpacing: calcLetterSpacing(fontSize),
+        lineHeight: syllablesFontSize+'px',
+        marginLeft: 0
+    },
+    syllablesStyle:{
+        fontSize: syllablesFontSize+'px',
+        letterSpacing: calcLetterSpacing(syllablesFontSize),
+        lineHeight: fontSize+'px',
+        margin: 0
     }
 });
+
+
 
 
 function TextNinjaTool(props){
@@ -31,7 +52,13 @@ function TextNinjaTool(props){
             {words && words.map( (word, index)=>{
                 console.log('word',word);
                 return(
-                    <Word key={index}>{word}</Word>
+                    <Word
+                        fontSize={fontSize}
+                        classOnOver={classes.syllablesStyle}
+                        classOnOut={classes.wordStyle}
+                        key={index}>
+                        {word}
+                    </Word>
                 )
             })}
         </Grid>

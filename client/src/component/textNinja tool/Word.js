@@ -32,13 +32,20 @@ class Word extends Component{
         syllables:"",
         numOfSyllables: 0,
         soundURL:"",
-        display: ""
+        display: "",
+        classStyles: this.props.classOnOut,
+        wordPadding: {}
 
     };
-
-    setSyllables(syllables) {
+    wordPadding(){
+        let amountOfSpace =  (this.state.numOfSyllables-1)*(this.props.fontSize)*0.1738;
+        let padding = {paddingLeft: amountOfSpace+'px',paddingRight:amountOfSpace+'px'};
+        return padding;
+    }
+    setSyllables(syllables, numOfSyllables) {
         this.setState({
             syllables: syllables,
+            numOfSyllables: numOfSyllables,
             display: syllables
         });
     }
@@ -73,7 +80,7 @@ class Word extends Component{
             syllables += data.syllables.list[i] + "*";
         syllables += data.syllables.list[data.syllables.count - 1];
 
-        this.setSyllables(this.switchBack(syllables.toLowerCase()));
+        this.setSyllables(this.switchBack(syllables.toLowerCase()), data.syllables.count);
     }
     createSoundURL(data){
         this.setSoundURL(data.soundURL);
@@ -114,18 +121,27 @@ class Word extends Component{
     }
 
     handleOnMouseOver = (e) => {
-        if(this.state.syllables || this.state.syllables === ""){
+        if(!this.state.syllables || this.state.syllables === ""){
             this.wordFactory();
-            // this.setState({
-            //     display: this.state.syllables
-            // });
+            this.setState({
+                classStyles: this.props.classOnOver
+            });
+        }
+        else{
+            this.setState({
+                display: this.state.syllables,
+                classStyles: this.props.classOnOver,
+                wordPadding: {}
+            });
         }
 
     };
 
     handleOnBlur = (e) => {
         this.setState({
-            display: this.state.word
+            display: this.state.word,
+            classStyles: this.props.classOnOut,
+            wordPadding: this.wordPadding()
         });
     };
 
@@ -135,11 +151,19 @@ class Word extends Component{
     render(){
         console.log('Word',this.props.children);
         return (
-            <b onMouseOver={this.handleOnMouseOver} onMouseOut={this.handleOnBlur} onClick={this.handleOnClick} >{this.state.display + " "}</b>
+            <b
+                className={this.state.classStyles}
+                onMouseOver={this.handleOnMouseOver}
+                onMouseOut={this.handleOnBlur}
+                onClick={this.handleOnClick}
+                style={this.state.wordPadding}
+            >
+                {this.state.display + " "}
+            </b>
         );
     }
 }
-
+//
 const mapStateToProps = (state) =>{
     return{
         words: state.word.words
