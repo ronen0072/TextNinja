@@ -1,5 +1,5 @@
 
-import React, {Component, Fragment} from 'react';
+import React, {useState} from 'react';
 import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import Word from './Word';
@@ -40,15 +40,17 @@ var useStyles = makeStyles({
 
 function TextNinjaTool(props){
     let classes = useStyles();
-    const [state, setState] = React.useState({
+    const [state, setState] = useState({
         input: props.children
     });
 
-    let words = props.children.split(" ");
-
+    let words;
+    if(props.children){
+        words = props.children.split(" ");
+    }
     console.log('TextNinjaTool word',words);
     return (
-        <Grid item xs={12} sm={12} md={6} className={'output'}>
+        <Grid item xs={12} sm={12} md={6} className={'textNinjaWrap'}>
             {words && words.map( (word, index)=>{
                 console.log('word',word);
                 return(
@@ -56,6 +58,7 @@ function TextNinjaTool(props){
                         fontSize={fontSize}
                         classOnOver={classes.syllablesStyle}
                         classOnOut={classes.wordStyle}
+                        onWordClick = {props.onWordClick}
                         key={index}>
                         {word}
                     </Word>

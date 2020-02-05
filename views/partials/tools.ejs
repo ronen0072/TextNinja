@@ -7,12 +7,12 @@ const inlineBlockDisplay = "display:inline-block;";%>
     <div id="settings_content" title = 'settingsoff' class="dropdown-none">
         <form id="settingsForm">
             <a onclick = highlighting() href=""
-            style=<%= ((typeof pageID !== 'undefined')&&(pageID === 0 || pageID === 1 ))? blockDisplay : noneDisplay%>>
-            <label id="label1" class="container2" for="highlighting">
-                <input id="highlighting"i type="checkbox">
-                <span class="checkmark" value="true"></span>
-                mark line
-                <button onclick = pick() id = "Pick" class="jscolor {valueElement: 'color_value'}">Pick a color</button>
+                       style=<%= ((typeof pageID !== 'undefined')&&(pageID === 0 || pageID === 1 ))? blockDisplay : noneDisplay%>>
+                <label id="label1" class="container2" for="highlighting">
+                    <input id="highlighting"i type="checkbox">
+                    <span class="checkmark" value="true"></span>
+                    mark line
+                    <button onclick = pick() id = "Pick" class="jscolor {valueElement: 'color_value'}">Pick a color</button>
                 </label>
             </a>
 

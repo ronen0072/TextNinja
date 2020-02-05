@@ -1,6 +1,5 @@
 
-import React, {Component, Fragment} from 'react';
-import {makeStyles} from "@material-ui/core/styles";
+import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { getWord } from '../../store/actions/wordActions';
 import PropTypes from 'prop-types';
@@ -13,17 +12,6 @@ String.prototype.insertAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index);
 };
 
-var useStyles = makeStyles({
-    root: {
-        flexGrow: 1,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        height: '100%'
-    },
-    wrap:{
-        height: '100%',
-    }
-});
 
 
 class Word extends Component{
@@ -39,8 +27,7 @@ class Word extends Component{
     };
     wordPadding(){
         let amountOfSpace =  (this.state.numOfSyllables-1)*(this.props.fontSize)*0.1738;
-        let padding = {paddingLeft: amountOfSpace+'px',paddingRight:amountOfSpace+'px'};
-        return padding;
+        return {paddingLeft: amountOfSpace+'px',paddingRight:amountOfSpace+'px'};
     }
     setSyllables(syllables, numOfSyllables) {
         this.setState({
@@ -51,7 +38,7 @@ class Word extends Component{
     }
     setSoundURL(soundURL) {
         this.setState({
-            setSoundURL: soundURL
+            soundURL: soundURL
         });
     }
 
@@ -84,7 +71,7 @@ class Word extends Component{
     }
     createSoundURL(data){
         this.setSoundURL(data.soundURL);
-        console.log("data.soundURL:",data.soundURL);
+        console.log("createSoundURL: ",this.soundURL);
     }
 
     wordFactory(){
@@ -112,7 +99,7 @@ class Word extends Component{
         console.log('componentDidMount',this.props.words[this.props.words.findIndex( (element) => element.wordID === this.state.word)]);
     };
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.props.children != this.state.word){
+        if(this.props.children !== this.state.word){
             this.setState({
                 word: this.props.children,
                 display: this.props.children
@@ -120,7 +107,7 @@ class Word extends Component{
         }
     }
 
-    handleOnMouseOver = (e) => {
+    handleOnMouseOver = () => {
         if(!this.state.syllables || this.state.syllables === ""){
             this.wordFactory();
             this.setState({
@@ -137,7 +124,7 @@ class Word extends Component{
 
     };
 
-    handleOnBlur = (e) => {
+    handleOnBlur = () => {
         this.setState({
             display: this.state.word,
             classStyles: this.props.classOnOut,
@@ -145,8 +132,8 @@ class Word extends Component{
         });
     };
 
-    handleOnClick = (e) => {
-
+    handleOnClick = () => {
+        this.props.onWordClick(this.state.soundURL);
     };
     render(){
         console.log('Word',this.props.children);
@@ -155,7 +142,7 @@ class Word extends Component{
                 className={this.state.classStyles}
                 onMouseOver={this.handleOnMouseOver}
                 onMouseOut={this.handleOnBlur}
-                onClick={this.handleOnClick}
+                onClick={() => this.props.onWordClick(this.state.soundURL)}
                 style={this.state.wordPadding}
             >
                 {this.state.display + " "}

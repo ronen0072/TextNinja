@@ -1,9 +1,9 @@
-
-import React, {Component, Fragment} from 'react';
+import React, {useState} from 'react';
 import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
-import {Settings, Sound} from './IconButton'
+import Settings from './Settings';
+import Volume from './Volume';
+import Clear from './Clear';
 
 
 var useStyles = makeStyles({
@@ -12,10 +12,9 @@ var useStyles = makeStyles({
         marginLeft: 'auto',
         marginRight: 'auto',
         height: '100%',
-
     },
     wrap:{
-        paddingLeft: 0,
+        paddingRight: '0.5vw',
         color: '#d9dad6'//'#59beee'
     },
 });
@@ -25,16 +24,15 @@ var useStyles = makeStyles({
 
 function Tools(props){
     let classes = useStyles();
-    const [state, setState] = React.useState({
-        
+    const [state, setState] = useState({
+
     });
 
     return(
         <Grid className={classes.wrap}>
             <Settings/>
-            <Sound/>
-            <Icon fontSize="large" >{'delete'}</Icon>
-
+            <Volume mutedFun={props.mutedFun}/>
+            <Clear/>
         </Grid>
 
     )
