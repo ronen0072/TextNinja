@@ -23,10 +23,8 @@ export default function Volume(props) {
         iconStyle: classes.iconOn
     });
     useEffect(()=>{
-        console.log('sessionStorage.sound: ',sessionStorage.sound);
-        console.log('initialization Volume: ',sessionStorage.sound === 'true');
         if(sessionStorage.sound === 'true'){
-            console.log('initialization Volume off: ',sessionStorage.sound);
+            //console.log('initialization Volume off: ',sessionStorage.sound);
             setState({
                 volumeState: 'off',
                 iconStyle: classes.iconOff,
@@ -34,7 +32,7 @@ export default function Volume(props) {
             });
         }
         else{
-            console.log('initialization Volume on: ',sessionStorage.sound);
+            //console.log('initialization Volume on: ',sessionStorage.sound);
             setState({
                 volumeState: 'on',
                 iconStyle: classes.iconOn,

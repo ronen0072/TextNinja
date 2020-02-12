@@ -22,7 +22,6 @@ export default function Switcher(props) {
         switcherState: sessionStorage.getItem(props.name)
     });
     useEffect(()=>{
-        console.log('sessionStorage.sound: ',sessionStorage.sound);
         setState({
             switcherState: sessionStorage.getItem(props.name)
         });
@@ -42,7 +41,7 @@ export default function Switcher(props) {
                 <FormControlLabel
                     control={
                         <Switch
-                            // checked={state.checkedB}
+                            checked={sessionStorage[props.name] === 'true'}
                             onChange={handleOnClick}
                             value="checkedB"
                             color="primary"

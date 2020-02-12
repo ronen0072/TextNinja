@@ -65,18 +65,33 @@ function Home(props){
     return (
         <Grid container className={classes.root}>
             <Grid item xs={11} md={12} className={classes.root}>
-                <Grid container className={classes.wrap} >
+                <Grid container className={classes.wrap}>
                     <Grid item  xs={12} sm={12} md={6} className={'inputWrap'}>
                         <Grid container className={"textNinjaInput"}>
                             <Grid item xs={12} sm={12} md={11} className={classes.wrap90Height} >
                                 <textarea id="input" placeholder="Insert text" onChange={handleChange}/>
                             </Grid>
                             <Grid item xs={12} sm={12} md={1}>
-                                <Tools mutedFun={props.mutedFun} clearFuc={clearInput}/>
+                                <Tools
+                                    mutedFun={props.mutedFun}
+                                    clearFuc={clearInput}
+                                    toggleChapterToSyllables={props.toggleChapterToSyllables}
+                                    toggleMarkWord = {props.toggleMarkWord}
+                                    toggleMarkLine = {props.toggleMarkLine}
+                                    setFontSize = {props.setFontSize}
+                                />
                             </Grid>
                         </Grid>
                     </Grid>
-                    <TextNinjaTool onWordClick = {props.playFun}>{state.input}</TextNinjaTool>
+                    <TextNinjaTool
+                        onWordClick = {props.playFun}
+                        chapterToSyllables = {props.chapterToSyllables}
+                        markWord = {props.markWord}
+                        markLineEvent = {props.markLineEvent}
+                        fontSize = {props.fontSize}
+                    >
+                        {state.input}
+                    </TextNinjaTool>
                 </Grid>
             </Grid>
         </Grid>

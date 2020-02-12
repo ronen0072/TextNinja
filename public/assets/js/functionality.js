@@ -129,8 +129,8 @@ function showCoords(event, outputBackground) {
       shift = 184;
     }
     backgroundColor = sessionStorage.backgroundColor;
-    var whidth = '27px';
-    var background = "background-repeat: no-repeat; background-size: 100% "+whidth+"; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-shift -(y % 27)+20) +"px;";
+    var width = '27px';
+    var background = "background-repeat: no-repeat; background-size: 100% "+width+"; background-position: 0px 0px;background-image: radial-gradient("+backgroundColor+" , "+backgroundColor+"); background-position: "+ 0 +"px "+ (y-shift -(y % 27)+20) +"px;";
     //console.log(background);
     $(outputBackground).attr('style', background);
   }

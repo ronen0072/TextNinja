@@ -21,7 +21,7 @@ export const getWord = word => (dispatch, getState) =>{
     return new Promise(function(resolve, reject) {
         axios.get(`/api/words/${word}`)
         .then((res) => {
-            console.log(res);
+            //console.log(res);
             dispatch({
                 type: GET_WORD,
                 payload: res

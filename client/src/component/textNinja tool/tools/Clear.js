@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Icon from "@material-ui/core/Icon";
 
@@ -16,14 +16,13 @@ const useStyles = makeStyles({
     }
 });
 
-export default function Clear() {
+export default function Clear(props) {
     const classes = useStyles();
     const [state, setState] = useState({
         iconName: 'clear_two_tone',
         iconStyle: classes.iconOnLeave
     });
     const handleOnMouseOver = () =>{
-        console.log( classes.iconOnOver);
         setState({
             iconName: 'cancel_two_ton',
             iconStyle: classes.iconOnOver
@@ -31,7 +30,6 @@ export default function Clear() {
     };
 
     const handleOnMouseLeave = () =>{
-        console.log("handleOnMouseLeave");
         setState({
             iconName: 'clear_two_tone',
             iconStyle: classes.iconOnLeave
@@ -48,7 +46,7 @@ export default function Clear() {
                 iconStyle: classes.iconOnLeave
             });
         }, 300);
-            
+        props.clearFun();
     };
     return (
         <Icon

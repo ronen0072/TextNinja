@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import Settings from './Settings';
@@ -24,15 +24,16 @@ var useStyles = makeStyles({
 
 function Tools(props){
     let classes = useStyles();
-    const [state, setState] = useState({
-
-    });
-
     return(
         <Grid className={classes.wrap}>
-            <Settings/>
+            <Settings
+                toggleChapterToSyllables = {props.toggleChapterToSyllables}
+                toggleMarkWord = {props.toggleMarkWord}
+                toggleMarkLine = {props.toggleMarkLine}
+                setFontSize = {props.setFontSize}
+            />
             <Volume mutedFun={props.mutedFun}/>
-            <Clear/>
+            <Clear  clearFun={props.clearFuc}/>
         </Grid>
 
     )

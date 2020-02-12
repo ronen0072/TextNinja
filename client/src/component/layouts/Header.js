@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {NavLink} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Drawer, Hidden, IconButton, Typography, Tabs, Tab} from '@material-ui/core';
+import {AppBar, Toolbar, Drawer, Hidden, IconButton, Typography} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
