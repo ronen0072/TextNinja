@@ -1,6 +1,7 @@
 const express = require('express');
 //const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
+const config = require('config');
 const homeControllers = require('./controllers/homeControllers');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
@@ -8,7 +9,6 @@ const routesAPI = require('./routes/api');
 const routesAuth = require('./routes/auth');
 const routesPractice = require('./routes/practice');
 var session = require('express-session');
-const keys = require('./config/keys');
 const passportSetup = require('./config/passport-setup');
 const path = require('path');
 
@@ -22,7 +22,7 @@ app.set('view engine', 'ejs');
 app.use(cookieSession({
     maxAge:24*60*60*1000,
     /*maxAge:1*60*1000,*/
-    keys:[keys.session.cookieKey]
+    keys:[config.get('session.cookieKey')]
 }));
 
 app.use(

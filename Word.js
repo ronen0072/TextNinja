@@ -1,38 +1,38 @@
 const oxford= require('oxford-dictionaries-api');
-const keys  = require('./config/keys');
 const requestPromise = require('request-promise');
 const parseString  = require('xml2js');
-var parse = require('xml-parser');
+const parse = require('xml-parser');
+const config = require('config');
 
 class Word {
     constructor(word) {
         this.wordID = word;
     }
     initialization() {
-                var PromiseSyllables =  getSyllablesFormWordsAPI(this.wordID).then((syllables)=> {
-                    return new Promise(resolve => {
-                        if(syllables === {}){
-                            this.syllables = wordID;
-                        }
-                        else {
-                            this.syllables = syllables;
-                        }
-                        //console.log('getSyllablesFormWordsAPI: '+ syllables);
-                        resolve();
-                    });
-                });
-                var PromiseURL = getSoundURLformOxford(this.wordID).then((URL)=> {
-                    return new Promise(resolve => {
-                        this.soundURL = URL;
-                        //console.log('getSoundURLformOxford: '+ URL);
-                        resolve();
-                    });
-                });
-                return Promise.all([PromiseSyllables,PromiseURL]).then(() =>{
-                    return new Promise(resolve => {
-                        resolve();
-                    });
-                });
+        var PromiseSyllables =  getSyllablesFormWordsAPI(this.wordID).then((syllables)=> {
+            return new Promise(resolve => {
+                if(syllables === {}){
+                    this.syllables = wordID;
+                }
+                else {
+                    this.syllables = syllables;
+                }
+                //console.log('getSyllablesFormWordsAPI: '+ syllables);
+                resolve();
+            });
+        });
+        var PromiseURL = getSoundURLformOxford(this.wordID).then((URL)=> {
+            return new Promise(resolve => {
+                this.soundURL = URL;
+                //console.log('getSoundURLformOxford: '+ URL);
+                resolve();
+            });
+        });
+        return Promise.all([PromiseSyllables,PromiseURL]).then(() =>{
+            return new Promise(resolve => {
+                resolve();
+            });
+        });
     }
     setSyllables(_syllables){
         this.syllables = _syllables;
@@ -51,9 +51,9 @@ class Word {
     }
 }
 function getSoundURLformOxford(wordID){
-    let oxforddictionaries = new oxford(keys.Oxford.app_id, keys.Oxford.app_key);
+    let oxfordDictionaries = new oxford(config.get('Oxford.app_id'), config.get('Oxford.app_key'));
 
-    return oxforddictionaries.entries({word_id: wordID}).then((data)=> {
+    return oxfordDictionaries.entries({word_id: wordID}).then((data)=> {
         return new Promise(resolve => {
             var soundURL = data.results[0].lexicalEntries[0].pronunciations[0].audioFile;
             //console.log(soundURL);
@@ -71,7 +71,7 @@ function getSyllablesFormWordsAPI(wordID){
     var options = {
         method: 'GET',
         url: 'https://wordsapiv1.p.rapidapi.com/words/'+wordID+'/syllables',
-        headers: keys.WordsAPI
+        headers: config.get('WordsAPI')
     };
     return requestPromise(options).then(function (body) {
         return new Promise(resolve => {
@@ -92,7 +92,7 @@ function getSyllablesFormWordsAPI(wordID){
 function getSyllablesFormDictionaryAPI(wordID){
     var options = {
         method: 'GET',
-        url: 'https://dictionaryapi.com/api/v3/references/collegiate/json/'+wordID+'?key='+keys.DictionaryAPI.apiKey
+        url: 'https://dictionaryapi.com/api/v3/references/collegiate/json/'+wordID+'?key='+config.get('DictionaryAPI.apiKey')
     };
     return requestPromise(options).then(function (body) {
         return new Promise(resolve => {
@@ -123,7 +123,7 @@ function getSyllablesFormDictionaryAPI(wordID){
 function getSoundURLformDictionaryAPI(wordID){
     var options = {
         method: 'GET',
-        url: 'https://dictionaryapi.com/api/v3/references/collegiate/json/'+wordID+'?key='+keys.DictionaryAPI.apiKey
+        url: 'https://dictionaryapi.com/api/v3/references/collegiate/json/'+wordID+'?key='+config.get('DictionaryAPI.apiKey')
     };
     return requestPromise(options).then(function (body) {
         return new Promise(resolve => {

@@ -1,5 +1,4 @@
-keys.js
 default.json
 .idea*
 .idea/*
-/config/keys.js
+/config/default.json
