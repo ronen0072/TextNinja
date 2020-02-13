@@ -10,8 +10,14 @@ const PracticeWord = new Schema({
 
 //create word Schema & model
 const UserSchema = new Schema({
-    username: String,
-    email: String,
+    username: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
     local:{
         password: String
     },

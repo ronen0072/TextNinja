@@ -1,7 +1,6 @@
 const express = require('express');
 //const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const homeControllers = require('./controllers/homeControllers');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
@@ -11,6 +10,7 @@ const routesPractice = require('./routes/practice');
 var session = require('express-session');
 const keys = require('./config/keys');
 const passportSetup = require('./config/passport-setup');
+const path = require('path');
 
 const app = express();
 
@@ -40,12 +40,16 @@ app.use(passport.session());
 mongoose.promise = global.Promise;
 
 //connect to mongodb
-mongoose.connect("mongodb://localhost/textNinja", () => {
+mongoose.connect("mongodb://localhost/textNinja", {
+    useNewUrlParser: true,
+    useCreateIndex: true
+    })
+    .then( () => {
     console.log('connected to mongodb');
 });
 
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use('/', require('./routes/index.js'));
 app.use('/api', routesAPI);
 app.use('/auth', routesAuth);
@@ -56,6 +60,15 @@ app.use(express.static('./public'));
 
 /*homeControllers(app);*/
 
+//Serve static assets if in production
+if(process.env.NODE_ENV === 'production'){
+    //set static folder
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(_dirname, 'client', 'build', 'index.html'));
+    })
+}
 
 //listen to port
 app.listen(process.env.port || 5000);

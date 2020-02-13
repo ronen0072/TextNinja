@@ -12,8 +12,6 @@ String.prototype.insertAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index);
 };
 
-
-
 class Word extends Component{
     state={
         word: "",
@@ -21,7 +19,7 @@ class Word extends Component{
         numOfSyllables: 0,
         soundURL:"",
         display: "",
-        styles: this.wordStyle,
+        styles: this.wordStyle(this.props.fontSize),
         wordPadding: {}
 
     };
@@ -39,6 +37,7 @@ class Word extends Component{
             this.createSoundURL(word);
         }
     };
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(this.props.children !== this.state.word || this.props.fontSize !== this.state.fontSize){
             this.setState({
@@ -50,31 +49,14 @@ class Word extends Component{
             });
         }
     }
-    // componentWillReceiveProps(nextProps) {
-    //     console.log('componentWillReceiveProps');
-    //     this.setState({
-    //         fontSize: nextProps.fontSize,
-    //         styles: this.wordStyle()
-    //     });
-    // }
-    // shouldComponentUpdate(nextProps) {
-    //     console.log('shouldComponentUpdate1: ',nextProps);
-    //     console.log('shouldComponentUpdate2: ',this.props);
-    //
-    //     if(nextProps.fontSize !== this.props.fontSize){
-    //         this.render()
-    //     }
-    //
-    //     return this.props !== nextProps;
-    // }
 
     wordPadding(){
         let amountOfSpace =  (this.state.numOfSyllables-1)*(this.props.fontSize)*0.1738;
         return {paddingLeft: amountOfSpace+'px',paddingRight:amountOfSpace+'px'};
     }
     setSyllables(syllables, numOfSyllables) {
+        console.log('setSyllables: ', syllables);
         this.setState({
-            ...this.state,
             syllables: syllables,
             numOfSyllables: numOfSyllables,
         });
@@ -82,22 +64,20 @@ class Word extends Component{
     }
     setSoundURL(soundURL) {
         this.setState({
-            ...this.state,
             soundURL: soundURL
         });
     }
+
     setDisplay(isOver) {
         if(this.props.chapterToSyllables){
             if(isOver) {
                 this.setState({
-                    ...this.state,
                     display: this.state.syllables,
                     wordPadding: {}
                 });
             }
             else{
                 this.setState({
-                    ...this.state,
                     display: this.state.word,
                     wordPadding: this.wordPadding()
                 });
@@ -105,7 +85,7 @@ class Word extends Component{
         }
     }
     setStyles(isOver) {
-        console.log(this.state.styles);
+        //console.log(this.state.styles);
         if(this.props.markWord){
             if(isOver) {
                 this.setState({
@@ -119,9 +99,11 @@ class Word extends Component{
             }
         }
     }
-    calcLetterSpacing = (fontSize)=>{
+
+    calcLetterSpacing(fontSize){
         return ((fontSize/(-1.95)) + 9.56);
     };
+
     wordStyle(fontSize){
         return {
             fontSize: fontSize+ 'px',
@@ -163,32 +145,27 @@ class Word extends Component{
         for (var i = 0; i < data.syllables.count - 1; i++)
             syllables += data.syllables.list[i] + "*";
         syllables += data.syllables.list[data.syllables.count - 1];
-
-        this.setSyllables(this.switchBack(syllables.toLowerCase()), data.syllables.count);
+        this.setSyllables(this.switchBack(syllables), data.syllables.count);
     }
     createSoundURL(data){
         this.setSoundURL(data.soundURL);
-        //console.log("createSoundURL: ",this.soundURL);
     }
 
     wordFactory(){
         let word = this.props.words[this.props.words.findIndex( (element) => element.wordID === this.state.word)];
-        //console.log('wordIndex',word);
         //if the word already exists?
         if(word){
             this.createSyllables(word);
             this.createSoundURL(word);
         }
         else{
-            this.props.getWord(this.state.word).then((res)=>{
+            this.props.getWord(this.state.word.toLowerCase()).then((res)=>{
                 this.createSyllables(res.data);
                 this.createSoundURL(res.data);
                 }
             );
         }
     }
-
-
 
     handleOnMouseOver = () => {
         if(!this.state.syllables || this.state.syllables === ""){
@@ -209,6 +186,7 @@ class Word extends Component{
     handleOnClick = () => {
         this.props.onWordClick(this.state.soundURL);
     };
+
     render(){
         return (
             <b
@@ -216,7 +194,7 @@ class Word extends Component{
                 onTouchStart={this.handleOnMouseOver}
                 onMouseOut={this.handleOnBlur}
                 onTouchEnd={this.handleOnBlur}
-                onClick={() => this.props.onWordClick(this.state.soundURL)}
+                onClick={this.handleOnClick}
                 style={{...this.state.wordPadding ,...this.state.styles}}
             >
                 {this.state.display + " "}
@@ -224,7 +202,7 @@ class Word extends Component{
         );
     }
 }
-//
+
 const mapStateToProps = (state) =>{
     return{
         words: state.word.words

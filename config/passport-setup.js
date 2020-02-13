@@ -19,9 +19,8 @@ passport.use(
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
         console.log('email: '+email);
         // Match user
-        User.findOne({
-            email: email
-        }).then(user => {
+        User.findOne({email})
+            .then(user => {
             if (!user) {
                 return done(null, false, [{ msg: 'That email is not registered' }]);
             }
@@ -89,7 +88,7 @@ passport.use(
             {username:profile.displayName, email:profile.emails[0].value, facebookID:profile.id},
             {upsert: true, new: true, runValidators: true}, // options
         ).then((user)=>{
-            console.log('User: '+user)
+            console.log('User: '+user);
             done(null, user);
         });
     })
