@@ -14,7 +14,6 @@ function practiceSettings(callback){
     return function () {
         if ($('#settings').attr('title') === 'settingsoff') {
             let newOrder = $('input[name=order]:checked', '#settingsForm').val();
-            console.log('_________________________________________________________');
             let oldSort = sortBy;
             console.log(newOrder);
             //sort words if it the  is Changed

@@ -5,13 +5,14 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
-var session = require('express-session');
+const auth = require('../middleware/auth');
+const session = require('express-session');
 const {updateCurrentPageName} = require('../config/redirectBack');
 
 
-router.get('/logOut', (req, res) => {
+router.get('/logOut', auth, (req, res) => {
     req.logout();
-    res.redirect('/');
+    //res.redirect('/');
 });
 
 router.get('/login', (req, res) => {
@@ -41,19 +42,31 @@ function returnUserAndToken(user, res){
     );
 }
 
+// @route GET api/user/details
+// @desc response details of the connected user.
+// @access Registered users who are logged in
+router.get('/user',  auth, function(req,res){
+    let user = req.user;
+    User.findById(user.id)
+        .select('-local -facebookID -googleID -words')
+        .then(user=>{
+            console.log(user);
+            res.json({type: 'GET', username: user.username, email: user.email});
+        });
+});
 
 // @route POST auth/signup
 // @desc Register new user
 // @access public
 router.post('/signup', (req, res) => {
-    const {username, email, password, password2} = req.body;
+    const {username, email, password} = req.body;
     console.log('username: '+username);
-    if(!username || !email || !password || !password2){
-        return res.status(400).json({msg: 'Please fill in all the fields ' + username +", "+ email+", "+ password+", "+ password2});
+    if(!username || !email || !password){
+        return res.status(400).json({msg: 'Please fill in all the fields'});
     }
-    if(password !== password2){
-        return res.status(400).json({msg: 'Password do not match'});
-    }
+    // if(password !== password2){
+    //     return res.status(400).json({msg: 'Password do not match'});
+    // }
     if((!password || password.length < 6)) {
         return res.status(400).json({msg: 'Password must be at least 6 characters'});
     }
@@ -96,16 +109,16 @@ router.post('/signup', (req, res) => {
 router.post('/login', (req, res, next) => {
     const {email, password} = req.body;
     if(!email || !password){
-        return res.status(400).json({msg: 'Please fill in all the fields'});
+        return res.status(400).json({msg: 'Please fill in all the fields email'});
     }
-    passport.authenticate('local', function (err, user, errors) {
+    passport.authenticate('local', function (err, user, error) {
         if (err) {
             console.log(err);
             return next(err);
         }
-        if (errors) {
-            console.log(errors);
-            return res.status(400).json(errors);
+        if (error) {
+            console.log(error);
+            return res.status(400).json(error);
         }
         return returnUserAndToken(user, res);
 

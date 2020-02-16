@@ -32,10 +32,11 @@ function Home(props){
         input: ''
     });
     useEffect(()=>{
-        document.getElementById("input").value = sessionStorage.textNinjaInput;
+        let inputSS =  sessionStorage.textNinjaInput?  sessionStorage.textNinjaInput : ''
+        document.getElementById("input").value = inputSS;
         setState({
             ...state,
-            input: sessionStorage.textNinjaInput
+            input: inputSS
         });
         },
         []
@@ -83,15 +84,18 @@ function Home(props){
                             </Grid>
                         </Grid>
                     </Grid>
-                    <TextNinjaTool
-                        onWordClick = {props.playFun}
-                        chapterToSyllables = {props.chapterToSyllables}
-                        markWord = {props.markWord}
-                        markLineEvent = {props.markLineEvent}
-                        fontSize = {props.fontSize}
-                    >
-                        {state.input}
-                    </TextNinjaTool>
+                    <Grid item xs={12} sm={12} md={6} className={'textNinjaTool'}>
+                        <TextNinjaTool
+                            onWordClick = {props.playFun}
+                            chapterToSyllables = {props.chapterToSyllables}
+                            markWord = {props.markWord}
+                            markLineEvent = {props.markLineEvent}
+                            fontSize = {props.fontSize}
+                            outputClassName={'textNinjaWrap'}
+                        >
+                            {state.input}
+                        </TextNinjaTool>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

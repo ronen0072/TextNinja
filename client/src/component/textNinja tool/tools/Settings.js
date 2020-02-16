@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import { Modal, Backdrop, Grid, Icon, Fade, FormControl, InputLabel, Select, Input } from '@material-ui/core';
+import React, {useEffect, useState, Fragment} from 'react';
+import { Modal, Backdrop, Grid, Icon, Fade, FormControl, InputLabel, Select, Input,  } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import { SketchPicker } from 'react-color';
 import Switcher from './Switcher';
@@ -92,7 +92,7 @@ export default function Settings(props) {
     };
     
     return (
-        <span>
+        <Fragment>
             <Icon
                 title={'settings'}
                 fontSize="large"
@@ -169,6 +169,6 @@ export default function Settings(props) {
                     </Grid>
                 </Fade>
             </Modal>
-        </span>
+        </Fragment>
     );
 }

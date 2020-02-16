@@ -22,18 +22,18 @@ passport.use(
         User.findOne({email})
             .then(user => {
             if (!user) {
-                return done(null, false, [{ msg: 'That email is not registered' }]);
+                return done(null, false, { msg: 'That email is not registered' });
             }
             if(!user.local.password){
                 let error = [];
                 if(user.googleID) {
-                    error.push({msg: 'this user can log in with Google'});
+                    return done(null, false, { msg: 'this user can log in with Google'});
                 }
                 if(user.facebookID) {
-                    error.push({msg: 'this user can log in with Facebook'});
+                    return done(null, false, { msg: 'this user can log in with Facebook'});
                 }
                 if(user.twitterID) {
-                    error.push({msg: 'this user can log in with Twitter'});
+                    return done(null, false, { msg: 'this user can log in with Twitter'});
                 }
                 console.log(error);
                 return done(null, false, error);
@@ -45,7 +45,7 @@ passport.use(
                 if (isMatch) {
                     return done(null, user);
                 } else {
-                    return done(null, false, [{ msg: 'Password incorrect' }]);
+                    return done(null, false, { msg: 'Password incorrect' });
                 }
             });
         })

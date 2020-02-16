@@ -1,5 +1,6 @@
 import React from 'react';
-import {NavLink} from "react-router-dom";
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles';
 import {AppBar, Toolbar, Drawer, Hidden, IconButton, Typography} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -10,6 +11,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Icon from '@material-ui/core/Icon';
 import MenuIcon from '@material-ui/icons/Menu';
+import LoginAndSignUpModal from '../auth/LoginAndSignUpModal';
+import Logout from "../auth/Logout";
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Header() {
+function Header(props) {
     const classes = useStyles();
     const [state, setState] = React.useState({
         top: false,
@@ -59,12 +62,12 @@ export default function Header() {
             <div
                 className={classes.list}
                 role="presentation"
-                onClick={toggleDrawer(side, false)}
-                onKeyDown={toggleDrawer(side, false)}
+
+                //onKeyDown={toggleDrawer(side, false)}
             >
                 <List>
                     {['Home', 'About', 'Contact Us'].map((text, index) => (
-                        <NavLink to={'/'+text} key={text}>
+                        <NavLink to={'/'+text} key={text}  onClick={toggleDrawer(side, false)}>
                             <ListItem button>
                                 <ListItemIcon> <Icon>{iconsName[index]}</Icon> </ListItemIcon>
                                 <ListItemText primary={text} />
@@ -74,10 +77,20 @@ export default function Header() {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem button key={'Login'}>
-                        {/*<ListItemIcon> </ListItemIcon>*/}
-                        <ListItemText primary={'Login'} />
-                    </ListItem>
+                    {!props.auth.isAuthenticated?
+                    <LoginAndSignUpModal>
+                        <ListItem button key={'Login'} >
+                            {/*<ListItemIcon> </ListItemIcon>*/}
+                            <ListItemText primary={'Login'} />
+                        </ListItem>
+                    </LoginAndSignUpModal> :
+                    <Logout>
+                        <ListItem button key={'Logout'}  onClick={toggleDrawer(side, false)}>
+                            {/*<ListItemIcon> </ListItemIcon>*/}
+                            <ListItemText primary={'Logout'} />
+                        </ListItem>
+                    </Logout>
+                    }
                 </List>
             </div>
         );
@@ -95,7 +108,7 @@ export default function Header() {
                 </Hidden>
                 <div className={classes.alignRight}>
                     <Hidden xsDown>
-                        <Button className={classes.nuvLink} color="inherit">Login</Button>
+                        {!props.auth.isAuthenticated? <LoginAndSignUpModal/> : <Logout/>}
                     </Hidden>
                     <Hidden smUp>
                         <IconButton onClick={toggleDrawer('left', true)} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
@@ -110,3 +123,8 @@ export default function Header() {
         </AppBar>
     );
 }
+const mapStateToProps = (state)=>({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(Header);

@@ -7,8 +7,8 @@ import Word from './Word';
 var useStyles = makeStyles({
     root: {
         flexGrow: 1,
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        // marginLeft: 'auto',
+        // marginRight: 'auto',
         // height: '100%'
     },
 });
@@ -56,12 +56,12 @@ function TextNinjaTool(props){
         })
     };
     return (
-        <Grid item xs={12} sm={12} md={6} className={'textNinjaTool'}>
-            <div
+
+            <span
                 style={state.backgroundColor}
                 onMouseMove={handleOnMouseMove}
                 onMouseOut={handleOnMouseOut}
-                className={'textNinjaWrap'}
+                className={props.outputClassName}
             >
                 {state.words && state.words.map( (word, index)=>{
                     return(
@@ -75,9 +75,9 @@ function TextNinjaTool(props){
                         </Word>
                     )
                 })}
-            </div>
+            </span>
 
-        </Grid>
+
     );
 }
 

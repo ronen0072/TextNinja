@@ -12,6 +12,7 @@ const isLogin = require('../config/redirectBack').isLogin;
 const calcDifficulty = require('./utils').calcDifficulty;
 const incDifficulty = require('./utils').incDifficulty;
 const decDifficulty = require('./utils').decDifficulty;
+const auth = require('../middleware/auth');
 
 // @route POST api/contact
 // @desc put in DB the message that get from the user
@@ -46,6 +47,7 @@ router.post('/contact', function(req,res){
     }
 
 });
+
 // @route GET api/words/:word
 // @desc get word from the user and response the syllables ans soundURL of the word.
 // @access public
@@ -85,23 +87,27 @@ router.put('/words/syllables', function(req,res){
 });
 
 // @route GET api/user/details
-// @desc response details of the connected user.
+// @desc Get user data.
 // @access Registered users who are logged in
-router.get('/user/details',  isLogin, function(req,res){
-    var user = req.user;
-    res.send({type: 'GET', username: user.username, email: user.email});
+router.get('/user/data',  auth, function(req,res){
+    let user = req.user;
+    User.findById(user.id)
+        .select('-local -facebookID -googleID')
+        .then(user=>{
+            res.json(user);
+        });
 });
 
 // @route PUT api/user/words/:word
 // @desc insert to the user word in the DB
 // @access Registered users who are logged in
-router.put('/user/words/:word', isLogin, function(req,res){
+router.put('/user/words/:word', auth, function(req,res){
     console.log( req.params.word);
-    var word = req.params.word;
-    var user = req.user;
+    let word = req.params.word;
+    let user = req.user;
     Word_db.findOne({wordID: word}).then((result) => {
         User.findById(user.id).then((record) => {
-            var words = record.words;
+            let words = record.words;
             let difficulty;
             if(!result.difficulty){
                 difficulty = calcDifficulty(result);
@@ -111,7 +117,7 @@ router.put('/user/words/:word', isLogin, function(req,res){
                     function(err) {if(err) console.log('err: '+err);}
                 );
             }
-            var exist = false;
+            let exist = false;
             words.forEach(function (element) {
                 if (element.wID === result.id) {
                     exist = true;
@@ -144,10 +150,10 @@ router.put('/user/words/:word', isLogin, function(req,res){
 // @route GET api/user/words
 // @desc response array of words from the user.
 // @access Registered users who are logged in
-router.get('/user/words', isLogin, function(req,res){
-    var user = req.user;
+router.get('/user/words', auth, function(req,res){
+    let user = req.user;
     User.findById(user.id).then((record) => {
-        var words = [];
+        let words = [];
         record.words.forEach(function (word) {
             words.push(word.wID);
         });
@@ -169,10 +175,10 @@ router.get('/user/words', isLogin, function(req,res){
 // @route DELETE api/user/words/:words
 // @desc delete array of words from the array of words in the user.
 // @access Registered users who are logged in
-router.delete('/user/words/:words', isLogin, function(req,res){
-    var user = req.user;
-    var idOfWordsToDelete = req.params.words.split(',');
-    var wordsToDelete = [];
+router.delete('/user/words/:words', auth, function(req,res){
+    let user = req.user;
+    let idOfWordsToDelete = req.params.words.split(',');
+    let wordsToDelete = [];
     //console.log(idOfWordsToDelete);
     idOfWordsToDelete.forEach(function (id) {
         wordsToDelete.push(ObjectId(id));
@@ -196,17 +202,17 @@ router.delete('/user/words/:words', isLogin, function(req,res){
 // @desc response info from words from wikipedia about the word.
 // @access public
 router.get('/word/wiki/:word', function(req,res){
-    var word = req.params.word;
-    var options = {
+    let word = req.params.word;
+    let options = {
         method: 'GET',
         url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles='+word,
     };
     return requestPromise(options).then(function (body) {
-        var jOb = JSON.parse(body);
-        var wiki = jOb.query.pages;
+        let jOb = JSON.parse(body);
+        let wiki = jOb.query.pages;
         if(!(wiki[Object.keys(wiki)[0]].pageid === undefined)) {
-            var title =  wiki[Object.keys(wiki)[0]].title;
-            var wikiInfo =  clearWiki(wiki[Object.keys(wiki)[0]].extract);
+            let title =  wiki[Object.keys(wiki)[0]].title;
+            let wikiInfo =  clearWiki(wiki[Object.keys(wiki)[0]].extract);
             res.send({type: 'GET', wiki:{title: title, info: wikiInfo}});
         }
         else{
@@ -222,16 +228,16 @@ router.get('/word/wiki/:word', function(req,res){
 // @route PUT api/user/words/difficulty/:wordID/:method
 // @desc update the word difficulty
 // @access Registered users who are logged in
-router.put('/user/words/difficulty/:wordID/:method', isLogin, function(req,res){
+router.put('/user/words/difficulty/:wordID/:method', auth, function(req,res){
 
-    var wordID = req.params.wordID;
-    var method = req.params.method;
+    let wordID = req.params.wordID;
+    let method = req.params.method;
     console.log('difficulty update: '+ wordID+', method: '+method)
-    var user = req.user;
+    let user = req.user;
     User.findById(user.id).then((record) => {
-        var words = record.words;
+        let words = record.words;
         let difficulty;
-        var exist = false;
+        let exist = false;
         words.forEach(function (element) {
             if (element.wID === wordID) {
                 exist = true;
