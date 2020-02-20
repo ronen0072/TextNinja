@@ -42,13 +42,6 @@ export default function Volume(props) {
     }, []);
 
 
-    const handleOnMouseOver = () =>{
-        console.log('sessionStorage.sound: ',sessionStorage.sound);
-    };
-    //
-    // const handleOnMouseLeave = () =>{
-    //
-    // };
     const handleOnClick = () =>{
         if(state.volumeState !== 'on'){
             setState({
@@ -72,8 +65,6 @@ export default function Volume(props) {
             fontSize="large"
             className={"toolsIcon "+ state.iconStyle}
             onClick={handleOnClick}
-            onMouseOver={handleOnMouseOver}
-            // onMouseLeave={handleOnMouseLeave}
         >
             {state.iconName}
         </Icon>

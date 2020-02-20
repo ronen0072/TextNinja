@@ -1,26 +1,14 @@
-
 import React, {useEffect, useState} from 'react';
-import {Grid} from '@material-ui/core';
-import {makeStyles} from "@material-ui/core/styles";
 import Word from './Word';
 
-var useStyles = makeStyles({
-    root: {
-        flexGrow: 1,
-        // marginLeft: 'auto',
-        // marginRight: 'auto',
-        // height: '100%'
-    },
-});
-
 function TextNinjaTool(props){
-    let classes = useStyles();
     const [state, setState] = useState({
         input: props.children,
         backgroundColor: {},
         fontSize: props.fontSize,
         words : []
     });
+
     useEffect(()=>{
         setState({
             ...state,

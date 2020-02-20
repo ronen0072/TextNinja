@@ -85,14 +85,14 @@ const TextNinjaHOC = (WrappedComponent)=>{
         markLineEvent = (event, outputBackground)=>{
             let background;
             if(this.state.markLine){
-                let lineHeight = parseInt(this.state.fontSize) + 7;
+                let lineHeight = parseInt(this.state.fontSize)+4;
 
-                let  lineShift = window.innerWidth > 960 ? lineHeight + 2 : lineHeight + 2;
+                //let  lineShift = window.innerWidth > 960 ? lineHeight + 2 : lineHeight + 2;
                 let shift = 0;
                 if(!outputBackground) {
-                    shift = window.innerWidth > 960 ? 110 - lineHeight : 440 - lineHeight;
+                    shift = window.innerWidth > 960 ? 120 - lineHeight : 440 - lineHeight;
                 }
-                let y = event.clientY - ((event.clientY - (shift - this.state.fontSize)) % (lineHeight + 2));// - lineShift;
+                let y = event.clientY - ((event.clientY - (shift - this.state.fontSize)+8) % (lineHeight + 2));// - lineShift;
 
 
                 // if(outputBackground === '.inner-content') {
@@ -104,7 +104,6 @@ const TextNinjaHOC = (WrappedComponent)=>{
                 let backgroundColor = sessionStorage.lineColor;
 
                 background = {
-                    position: 'absolute',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: '100% '+ lineHeight+'px',
                     backgroundImage: 'radial-gradient('+backgroundColor+' , '+backgroundColor+')',

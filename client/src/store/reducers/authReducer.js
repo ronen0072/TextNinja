@@ -43,6 +43,7 @@ export default function (state = initialState, action) {
         case LOGIN_FAIL:
         case LOGOUT_SUCCESS:
         case SIGNUP_FAIL:
+            console.log('SIGNUP_FAIL: ',localStorage.getItem('token'));
             localStorage.removeItem('token');
             return{
                 ...state,

@@ -1,10 +1,12 @@
-
 import React, { useState, useEffect} from 'react';
 import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import Tools from '../textNinja tool/tools';
+import FileUpload from '../textNinja tool/tools/FileUpload';
 import TextNinjaTool from '../textNinja tool';
 import TextNinjaHOC from '../textNinja tool/TextNinjaHOC'
+import axios from 'axios';
+import AttachFile from "../textNinja tool/tools/AttachFile";
 
 var useStyles = makeStyles({
     root: {
@@ -22,69 +24,97 @@ var useStyles = makeStyles({
         height: '88%',
         display: 'inlineBlock'
 
+    },
+    readFileModOpen:{
+        height: 'auto',
+    },
+    open:{
+        height: '100%',
+        zDepth: '-1',
+        backgroundColor: '#fff212',
+        position: 'relative',
+        left:' 0px',
+        top: '0px',
+    },
+    toolsWrap:{
+        display: 'flex',
     }
 });
 
 
 function Home(props){
     let classes = useStyles();
-    const [state, setState] = useState({
-        input: ''
-    });
+    const [fileMod, setFileMod] = useState(false);
+    const [input, setInput] = useState('');
+    const [minimizeMod, setMinimizeMod] = useState(false);
+    const toggleMinimizeMod = () => {
+        setMinimizeMod(!minimizeMod);
+    };
+    const openInput = (e, toOpen) =>{
+        if((e && (e.target.id === 'textNinjaInput' || e.target.id === 'textNinjaTool')) || toOpen){
+            setMinimizeMod(false);
+        }
+    };
+
     useEffect(()=>{
-        let inputSS =  sessionStorage.textNinjaInput?  sessionStorage.textNinjaInput : ''
-        document.getElementById("input").value = inputSS;
-        setState({
-            ...state,
-            input: inputSS
-        });
+        if(!fileMod && !minimizeMod){
+            let inputSS =  sessionStorage.textNinjaInput?  sessionStorage.textNinjaInput : '';
+            document.getElementById("input").value = inputSS;
+            setInput(inputSS);
+        }
         },
         []
     );
 
     useEffect(() => {
-        sessionStorage.setItem('textNinjaInput', state.input);
-        document.getElementById("input").value = state.input;
+        if(!fileMod && !minimizeMod){
+            sessionStorage.setItem('textNinjaInput', input);
+            document.getElementById("input").value = input;
+        }
     });
 
     const handleChange = () => {
-        setState({
-            input: document.getElementById("input").value
-        });
-        // sessionStorage.setItem('textNinjaInput', state.input);
-        console.log('state.input: ',state.input);
-        console.log('sessionStorage: ',sessionStorage.textNinjaInput)
+        setInput(document.getElementById("input").value)
     };
 
-    const clearInput = () => {
-        setState({
-            ...state,
-            input: ''
-        });
+    const readFromFileModToggle = () => {
+        setFileMod(!fileMod);
     };
+
 
     return (
         <Grid container className={classes.root}>
             <Grid item xs={11} md={12} className={classes.root}>
                 <Grid container className={classes.wrap}>
-                    <Grid item  xs={12} sm={12} md={6} className={'inputWrap'}>
-                        <Grid container className={"textNinjaInput"}>
-                            <Grid item xs={12} sm={12} md={11} className={classes.wrap90Height} >
-                                <textarea id="input" placeholder="Insert text" onChange={handleChange}/>
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={1}>
+                    <Grid item  xs={12}  md={minimizeMod? 1 : 6} className={'inputWrap'}>
+                        <Grid container className={"textNinjaInput "+ ((fileMod || minimizeMod)? classes.readFileModOpen: '')} id='textNinjaInput' onClick={openInput}>
+                            {minimizeMod?
+                                null :
+                                <Grid item xs={12} md={minimizeMod? 0 : 11} className={fileMod?  classes.readFileModOpen : classes.wrap90Height} >
+                                    {fileMod?
+                                        <FileUpload setInput={setInput}/>
+                                        :
+                                        <textarea id="input" placeholder="Insert text" onChange={handleChange} style={{fontSize: props.fontSize+'px'}}/>
+                                    }
+                                </Grid>
+                            }
+                            <Grid item xs={12} md={minimizeMod? 12 : 1} id='textNinjaTool' onClick={openInput}>
                                 <Tools
                                     mutedFun={props.mutedFun}
-                                    clearFuc={clearInput}
                                     toggleChapterToSyllables={props.toggleChapterToSyllables}
                                     toggleMarkWord = {props.toggleMarkWord}
                                     toggleMarkLine = {props.toggleMarkLine}
                                     setFontSize = {props.setFontSize}
+                                    readFromFileModToggle = {readFromFileModToggle}
+                                    toggleMinimizeMod={ toggleMinimizeMod }
+                                    minimizeMod = {minimizeMod}
+                                    openInput = {openInput}
+                                    setInput = {setInput}
                                 />
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6} className={'textNinjaTool'}>
+                    <Grid item xs={12} md={minimizeMod? 11 : 6} className={'textNinjaTool'}>
                         <TextNinjaTool
                             onWordClick = {props.playFun}
                             chapterToSyllables = {props.chapterToSyllables}
@@ -93,7 +123,7 @@ function Home(props){
                             fontSize = {props.fontSize}
                             outputClassName={'textNinjaWrap'}
                         >
-                            {state.input}
+                            {input}
                         </TextNinjaTool>
                     </Grid>
                 </Grid>

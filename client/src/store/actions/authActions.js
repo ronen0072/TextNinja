@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { returnErrors } from './errorActions'
 import{
     USER_LOADED,
@@ -12,15 +13,17 @@ import{
 } from './types';
 
 // Check token & load user
-export const loadUser = () => (dispatch, getState) =>{
+export const loadUser = (token) => (dispatch, getState) =>{
     // User loading
     dispatch({ type: USER_LOADING });
-
-    axios.get('/auth/user', tokenConfig(getState))
-        .then(res => dispatch({
+    console.log('loadUser: ',token);
+    axios.get('/auth/user', tokenConfig(token? token : getState().auth.token))
+        .then(res => {
+            dispatch({
             type: USER_LOADED,
             payload: res.data
-        }))
+        });
+        })
         .catch(err=>{
             dispatch(returnErrors(err.response.data, err.response.status, ));
             dispatch({
@@ -85,9 +88,8 @@ export const login =({ email, password }) => dispatch => {
 };
 
 // Setup config/headers and token
-export const tokenConfig = (getState) => {
-    // Get token from localstorage
-    const token = getState().auth.token;
+export const tokenConfig = (token) => {
+
     // Headers
     const config = {
         headers:{

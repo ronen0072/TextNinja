@@ -1,4 +1,5 @@
 const express = require('express');
+const fileUpload  = require('express-fileupload');
 //const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const config = require('config');
@@ -19,6 +20,7 @@ const app = express();
 //set the template engine
 //app.use(expressLayouts);
 app.set('view engine', 'ejs');
+app.use(fileUpload());
 app.use(cookieSession({
     maxAge:24*60*60*1000,
     /*maxAge:1*60*1000,*/

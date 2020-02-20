@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import TextNinjaTool from '../textNinja tool';
 import TextNinjaHOC from '../textNinja tool/TextNinjaHOC'
 import {Container} from "@material-ui/core";

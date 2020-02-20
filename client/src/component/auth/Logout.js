@@ -1,10 +1,7 @@
-import React, {Fragment, useState, useEffect} from 'react';
-
+import React, {Fragment} from 'react';
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core';
-
 import {makeStyles} from "@material-ui/core/styles";
-import { clearErrors } from '../../store/actions/errorActions'
 import { logout } from '../../store/actions/authActions'
 const useStyles = makeStyles(theme => ({
     root:{
@@ -37,8 +34,5 @@ function Logout(props) {
         </Fragment>
     );
 }
-const mapStateToProps = (state) => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error
-});
+
 export default connect(null,{ logout })(Logout);

@@ -47,6 +47,7 @@ export default function Clear(props) {
             });
         }, 300);
         props.clearFun();
+        props.openInput(null,true);
     };
     return (
         <Icon

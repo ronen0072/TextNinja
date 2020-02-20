@@ -1,5 +1,5 @@
 import React, {useEffect, useState, Fragment} from 'react';
-import { Modal, Backdrop, Grid, Icon, Fade, FormControl, InputLabel, Select, Input,  } from '@material-ui/core';
+import { Modal, Backdrop, Grid, Icon, Fade, FormControl, Select, Input,  } from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import { SketchPicker } from 'react-color';
 import Switcher from './Switcher';
@@ -52,7 +52,7 @@ export default function Settings(props) {
     });
     useEffect(()=>{
         let fontSize = sessionStorage.getItem('fontSize');
-        console.log('sessionStorage.fontSize: ',fontSize);
+        //console.log('sessionStorage.fontSize: ',fontSize);
         fontSize = (fontSize !== undefined)? fontSize : 18;
         setState({
             fontSize: fontSize

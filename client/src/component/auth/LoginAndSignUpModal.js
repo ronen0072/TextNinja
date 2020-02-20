@@ -7,7 +7,6 @@ import {
     Backdrop,
     Grid,
     Fade,
-    IconButton,
     Button
 } from '@material-ui/core';
 

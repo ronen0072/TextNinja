@@ -2,8 +2,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { getWord } from '../../store/actions/wordActions';
-import PropTypes from 'prop-types';
-import wordReducer from "../../store/reducers/wordReducer";
 
 String.prototype.replaceAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
@@ -55,7 +53,7 @@ class Word extends Component{
         return {paddingLeft: amountOfSpace+'px',paddingRight:amountOfSpace+'px'};
     }
     setSyllables(syllables, numOfSyllables) {
-        console.log('setSyllables: ', syllables);
+        //console.log('setSyllables: ', syllables);
         this.setState({
             syllables: syllables,
             numOfSyllables: numOfSyllables,
@@ -108,7 +106,7 @@ class Word extends Component{
         return {
             fontSize: fontSize+ 'px',
             letterSpacing: this.calcLetterSpacing(fontSize),
-            lineHeight: (parseInt(fontSize) + 4) + 'px',
+            lineHeight: (parseInt(fontSize) + 6) + 'px',
             margin: 0
         }
     };

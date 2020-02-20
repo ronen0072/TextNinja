@@ -13,39 +13,31 @@ const calcDifficulty = require('./utils').calcDifficulty;
 const incDifficulty = require('./utils').incDifficulty;
 const decDifficulty = require('./utils').decDifficulty;
 const auth = require('../middleware/auth');
+var mammoth = require("mammoth");
 
 // @route POST api/contact
 // @desc put in DB the message that get from the user
 // @access public
 router.post('/contact', function(req,res){
-    const {name, email, message} = req.body;
+    const {name, email, userMessage} = req.body;
     console.log('name: '+name);
     console.log('email: '+email);
-    console.log('message: '+message);
-    let errors = [];
-    if(!name || !email || !message){
-        errors.push({msg: 'Please fill in all the fields'});
-    }
-    if(errors.length === 0){
-        console.log('create Messages');
-        Messages.create({name:name, email:email, message:message, date: new Date()})
-            .then(()=>{
-                req.session.pageName = 'home';
-                const pageName = req.session.pageName;
-                const needToLogin = req.session.needToLogin;
-                req.session.needToLogin = false;
-                res.render('pages/'+pageName,{user: req.user, login: needToLogin, success_msg:{msg:'Message sent!'}});
-            })
-            .catch((err)=>{console.log(err);});
-    }
-    else{
-        console.log('not create Messages');
-        const pageName = req.session.pageName;
-        const needToLogin = req.session.needToLogin;
-        req.session.needToLogin = false;
-        res.render('pages/'+pageName,{user: req.user, login: needToLogin, name: name, email: email, message: message, errors: errors});
+    console.log('userMessage: '+userMessage);
+
+    if(!name || !email || !userMessage){
+        return res.status(400).json({msg: 'Please fill in all the fields'});
     }
 
+    console.log('create Messages');
+    Messages.create({name:name, email:email, message:userMessage, date: new Date()})
+        .then(()=>{
+            console.log('The message was received!');
+            return res.status(200).json({msg: 'The message was received!'});
+        })
+        .catch((err)=>{
+            console.log(err);
+            return res.status(400).json({msg: 'There was a problem, so the message was not sent please try again!'});
+        });
 });
 
 // @route GET api/words/:word
@@ -292,4 +284,41 @@ function clearWiki(wikiInput){
     wikiInput = wikiInput.substring(startIndex,j);
     return wikiInput;
 }
+
+
+router.post('/get-content', (req, res) => {
+    if (req.files === null) {
+        return res.status(400).json({ msg: 'No file uploaded' });
+    }
+
+    const file = req.files.file;
+    console.log(file);
+    mammoth.extractRawText({buffer: file.data})
+        .then(function(result){
+            var text = result.value; // The raw text
+            console.log(text);
+            var messages = result.messages;
+            res.json({ text: text });
+        })
+        .done();
+    // file.mv(`${__dirname}/client/public/uploads/${file.name}`, err => {
+    //     if (err) {
+    //         console.error(err);
+    //         return res.status(500).send(err);
+    //     }
+    //     // mammoth.extractRawText({path: `${__dirname}/client/public/uploads/${file.name}`})
+    //     //     .then(function(result){
+    //     //         var text = result.value; // The raw text
+    //     //         console.log(text);
+    //     //         var messages = result.messages;
+    //     //     })
+    //     //     .done();
+    // });
+
+
+
+    //
+    //     res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+    // });
+});
 module.exports = router;

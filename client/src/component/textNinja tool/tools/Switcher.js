@@ -19,15 +19,15 @@ const useStyles = makeStyles ({
 export default function Switcher(props) {
     const classes = useStyles();
     const [state, setState] = useState({
-        switcherState: sessionStorage.getItem(props.name)
+        switcherState: sessionStorage.getItem(props.name) === 'true'
     });
     useEffect(()=>{
         setState({
-            switcherState: sessionStorage.getItem(props.name)
+            switcherState: sessionStorage.getItem(props.name) === 'true'
         });
     }, []);
     
-    const handleOnClick = () =>{
+    const handleChange = () =>{
         setState({
             switcherState: !state.switcherState
         });
@@ -41,8 +41,8 @@ export default function Switcher(props) {
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={sessionStorage[props.name] === 'true'}
-                            onChange={handleOnClick}
+                            checked={sessionStorage.getItem(props.name) === 'true'}
+                            onChange={handleChange}
                             value="checkedB"
                             color="primary"
                         />

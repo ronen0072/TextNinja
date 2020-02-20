@@ -10,18 +10,18 @@ const session = require('express-session');
 const {updateCurrentPageName} = require('../config/redirectBack');
 
 
-router.get('/logOut', auth, (req, res) => {
+router.get('/logOut', (req, res) => {
     req.logout();
-    //res.redirect('/');
-});
-
-router.get('/login', (req, res) => {
-    req.pageID = 0;
     res.redirect('/');
-
 });
 
-// @desc Register new user
+// router.get('/login', (req, res) => {
+//     req.pageID = 0;
+//     res.redirect('/');
+//
+// });
+
+// @desc return user & token
 function returnUserAndToken(user, res){
     jwt.sign(
         {id: user.id},
@@ -40,6 +40,19 @@ function returnUserAndToken(user, res){
             });
         }
     );
+}
+
+// @desc return token
+function redirectWithToken(user, res){
+    jwt.sign(
+        {id: user.id},
+        config.get('jwt.jwtSecret'),
+        {expiresIn: 3600*24},
+        (err, token)=>{
+            if(err) throw err;
+            console.log('---------------------------/facebook/redirect token: '+config.get('clientURL')+'/?token='+token);
+            return res.redirect(config.get('clientURL')+'/?token='+token);
+        });
 }
 
 // @route GET api/user/details
@@ -109,7 +122,7 @@ router.post('/signup', (req, res) => {
 router.post('/login', (req, res, next) => {
     const {email, password} = req.body;
     if(!email || !password){
-        return res.status(400).json({msg: 'Please fill in all the fields email'});
+        return res.status(400).json({msg: 'Please fill in all the fields'});
     }
     passport.authenticate('local', function (err, user, error) {
         if (err) {
@@ -129,14 +142,13 @@ router.get('/google', passport.authenticate('google', {scope: ['profile', 'email
 
 // callback route for google to redirect to
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-    /*console.log('redirect: '+req.session.pageID);*/
-    return returnUserAndToken(req.user, res);
+    return redirectWithToken(req.user, res);
 });
 
 router.get('/facebook',  passport.authenticate('facebook', {scope: ['email']}));
 
 // callback route for facebook to redirect to
 router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
-    return returnUserAndToken(req.user, res);
+    return redirectWithToken(req.user, res);
 });
 module.exports = router;

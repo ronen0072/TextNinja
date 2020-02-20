@@ -1,15 +1,30 @@
-import React from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles';
-import {AppBar, Toolbar, Drawer, Hidden, IconButton, Typography} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Icon from '@material-ui/core/Icon';
+import {
+    AppBar,
+    Toolbar,
+    Drawer,
+    Hidden,
+    IconButton,
+    Typography,
+    Button,
+    List,
+    Divider,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Icon,
+    ClickAwayListener,
+    Grow,
+    Paper,
+    Popper,
+    MenuItem,
+    MenuList,
+
+
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import LoginAndSignUpModal from '../auth/LoginAndSignUpModal';
 import Logout from "../auth/Logout";
@@ -37,17 +52,25 @@ const useStyles = makeStyles(theme => ({
     nuvLink:{
         lineHeight: '2rem',
         paddingTop: '1.5rem'
+    },
+    paper: {
+        marginRight: theme.spacing(2),
+        backgroundColor: '#171717',
+        color: '#ffffff',
+        zDepth: '3'
     }
 }));
 
 function Header(props) {
     const classes = useStyles();
-    const [state, setState] = React.useState({
+    const [open, setOpen] = useState(false);
+    const [state, setState] = useState({
         top: false,
         left: false,
         bottom: false,
         right: false,
     });
+    const anchorRef = useRef(null);
 
     const toggleDrawer = (side, open) => event => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -56,6 +79,36 @@ function Header(props) {
 
         setState({ ...state, [side]: open });
     };
+
+    const handleToggle = () => {
+        setOpen(prevOpen => !prevOpen);
+    };
+
+    const handleClose = event => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    function handleListKeyDown(event) {
+        if (event.key === "Tab") {
+            event.preventDefault();
+            setOpen(false);
+        }
+    }
+
+    // return focus to the button when we transitioned from !open -> open
+    const prevOpen = useRef(open);
+    useEffect(() => {
+        if (prevOpen.current === true && open === false) {
+            anchorRef.current.focus();
+        }
+
+        prevOpen.current = open;
+    }, [open]);
+
     const sideList = (side) => {
         let iconsName = ['home', 'info', 'contact_mail'];
         return(
@@ -95,17 +148,66 @@ function Header(props) {
             </div>
         );
     };
+    const mdBar = () => {
+        return(
+            <Hidden xsDown>
+                <NavLink to='/' ><Button className={classes.nuvLink} color="inherit">Home</Button></NavLink>
+                <NavLink to='/About' ><Button className={classes.nuvLink} color="inherit">About</Button></NavLink>
+                <NavLink to='/Contact Us' ><Button className={classes.nuvLink} color="inherit">Contact Us</Button></NavLink>
+
+                <Button
+                    ref={anchorRef}
+                    aria-controls={open ? "menu-list-grow" : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                    className={classes.nuvLink}
+                        color="inherit">
+                    practice
+                </Button>
+                <Popper
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    transition
+                    disablePortal
+                >
+                    {({ TransitionProps, placement }) => (
+                        <Grow
+                            {...TransitionProps}
+                            style={{
+                                transformOrigin:
+                                    placement === "bottom" ? "center top" : "center bottom"
+                            }}
+                        >
+                            <Paper className={classes.paper}>
+                                <ClickAwayListener onClickAway={handleClose}>
+                                    <MenuList
+                                        autoFocusItem={open}
+                                        id="menu-list-grow"
+                                        onKeyDown={handleListKeyDown}
+                                    >
+
+
+                                        <MenuItem onClick={handleClose}>  <NavLink to='/simple practice' >simple practice</NavLink></MenuItem>
+                                        <MenuItem onClick={handleClose}><NavLink to='/divide practice' >divide practice</NavLink></MenuItem>
+                                    </MenuList>
+                                </ClickAwayListener>
+                            </Paper>
+                        </Grow>
+                    )}
+                </Popper>
+            </Hidden>
+        )
+    };
+
+
     return (
         <AppBar position="static" className={classes.nav}>
             <Toolbar>
                 <Typography variant="h3" className={classes.title}>
                     <NavLink to='/' >TextNinja</NavLink>
                 </Typography>
-                <Hidden xsDown>
-                    <NavLink to='/' ><Button className={classes.nuvLink} color="inherit">Home</Button></NavLink>
-                    <NavLink to='/About' ><Button className={classes.nuvLink} color="inherit">About</Button></NavLink>
-                    <NavLink to='/Contact Us' ><Button className={classes.nuvLink} color="inherit">Contact Us</Button></NavLink>
-                </Hidden>
+                {mdBar()}
                 <div className={classes.alignRight}>
                     <Hidden xsDown>
                         {!props.auth.isAuthenticated? <LoginAndSignUpModal/> : <Logout/>}
