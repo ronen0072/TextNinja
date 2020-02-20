@@ -1,0 +1,165 @@
+:root {
+    --white: #ffffff;
+    --black: #000000;
+    --dark: #181818;
+    --blue: #59beee;
+    --gray: #6c757d;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #f30014;
+    --light-red: #ffa2a3;
+    --yes: #1c7430;
+    --light-gray: #d9dad6;
+}
+body{
+    margin: 0;
+    height: 93vh;
+    font-family: Arimo,GeogrotesqueUltraLight,Arial,Helvetica,sans-serif;
+}
+.App, #root {
+    height: 100%;
+}
+.title{
+    background-color: var(--gray);
+    font-size: 200%;
+    color:var(--white);
+    letter-spacing: -2px;
+    margin: 20px -3% 15px;
+    padding: 10px 5% 5px;
+}
+.smallLogo{
+    padding-right: 10px;
+    font-size: 160%;
+    color:var(--dark);
+    letter-spacing: -1.5px;
+    margin: 0 0 3px;
+    display: inline-block;
+}
+a:-webkit-any-link {
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+.inputWrap{
+    height: 35%;
+}
+.wikiContent, .content, .textNinjaInput{
+    border-radius: 0 0 15px 15px;
+    border: 2px solid #e1e1e1;
+    border-top: 0;
+    margin: 0 auto !important;
+    margin-bottom: 2px !important;
+    padding: 10px;
+    height: 100%;
+}
+.textNinjaInput:hover, .textNinjaInput:focus-within{
+    border: 2px solid var(--blue);
+    border-top: 0;
+}
+.textNinjaInput textarea{
+    display: inline-block;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    border: 0 solid #f7f7f7;
+    box-shadow: 0.0px 0.0px 0.0px #ccc;
+    resize: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+}
+.textNinjaTool{
+    margin-top: 25px !important;
+    height: 62%;
+    width: 95%;
+}
+.textNinjaWrap{
+    height: 55%;
+    width: 91.5%;
+    cursor: pointer;
+    position: absolute;
+}
+.toolsIcon{
+    display: inline-block !important;
+}
+
+button.social-login {
+    margin-bottom: 20px;
+    width: 100% ;
+    max-width: 220px;
+    height: 36px;
+    border: none;
+    border-radius: 2px;
+    color: #FFF;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+button.social-login:hover,
+button.social-login:focus {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    transition: 0.2s ease;
+}
+
+button.social-login:active {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    transition: 0.2s ease;
+}
+
+button.social-login.facebook {
+    background: #32508E;
+}
+
+button.social-login.twitter {
+    background: #55ACEE;
+}
+
+button.social-login.google {
+    background: #DD4B39;
+}
+.zDepth{
+    z-index: -2;
+    height: 100%;
+    backgroundColor: #fff212;
+}
+
+@media only screen and (min-width: 960px) {
+    .inputWrap{
+        height: 100%;
+    }
+    .textNinjaInput {
+        float: left;
+        border-radius: 0 15px 15px 0;
+        border: 2px solid #e1e1e1;
+        border-left: 0;
+        width: 49%;
+        height: 100%;
+        max-height: 80%;
+        margin-top: 25px !important;
+        padding: 10px 0 10px 20px;
+        display: inline-block;
+    }
+    .textNinjaInput:hover, .textNinjaInput:focus-within{
+        border: 2px solid var(--blue);
+        border-left: 0;
+    }
+    .textNinjaTool{
+        margin-top: 25px !important;
+        height: auto;
+        padding: 10px 7px 10px 20px !important;
+    }
+    .textNinjaWrap{
+        /*margin-left: 40px;*/
+        /*padding: 10px 7px 10px 20px !important;*/
+        width: 100%;
+        position: relative;
+    }
+    .toolsIcon{
+        display: block !important;
+        margin-left: auto !important;
+    }
+}
