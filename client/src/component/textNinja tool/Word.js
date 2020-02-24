@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { getWord } from '../../store/actions/wordActions';
+import { addUserWords } from '../../store/actions/userWordsActions';
 
 String.prototype.replaceAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
@@ -18,7 +19,8 @@ class Word extends Component{
         soundURL:"",
         display: "",
         styles: this.wordStyle(this.props.fontSize),
-        wordPadding: {}
+        wordPadding: {},
+        wordObj: {}
 
     };
 
@@ -139,7 +141,7 @@ class Word extends Component{
 
     createSyllables(data){
         var syllables = '';
-        //console.log('createSyllables',data);
+        console.log('createSyllables',data);
         for (var i = 0; i < data.syllables.count - 1; i++)
             syllables += data.syllables.list[i] + "*";
         syllables += data.syllables.list[data.syllables.count - 1];
@@ -151,15 +153,27 @@ class Word extends Component{
 
     wordFactory(){
         let word = this.props.words[this.props.words.findIndex( (element) => element.wordID === this.state.word)];
+        if(!word)
+            word = this.props.userWords[this.props.userWords.findIndex( (element) => element.wordID === this.state.word)];
+
+
         //if the word already exists?
         if(word){
+            this.setState({
+                wordObj: word
+            });
             this.createSyllables(word);
             this.createSoundURL(word);
         }
         else{
-            this.props.getWord(this.state.word.toLowerCase()).then((res)=>{
-                this.createSyllables(res.data);
-                this.createSoundURL(res.data);
+            this.props.getWord(this.state.word.toLowerCase())
+                .then((wordObj)=>{
+                    this.setState({
+                       wordObj: wordObj
+                    });
+                    console.log('getWord?: ',wordObj);
+                    this.createSyllables(wordObj);
+                    this.createSoundURL(wordObj);
                 }
             );
         }
@@ -183,6 +197,7 @@ class Word extends Component{
 
     handleOnClick = () => {
         this.props.onWordClick(this.state.soundURL);
+        this.props.addUserWords(this.state.wordObj);
     };
 
     render(){
@@ -203,8 +218,9 @@ class Word extends Component{
 
 const mapStateToProps = (state) =>{
     return{
-        words: state.word.words
+        words: state.word.words,
+        userWords: state.userWords.userWords,
     };
 };
 
-export default connect(mapStateToProps,{ getWord })(Word);
+export default connect(mapStateToProps,{ getWord, addUserWords })(Word);

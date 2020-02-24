@@ -9,11 +9,13 @@ export const getWord = word => (dispatch, getState) =>{
         axios.get(`/api/words/${word}`)
         .then((res) => {
             //console.log(res);
+            let wordObj = res.data;
+            delete wordObj.type;
             dispatch({
                 type: GET_WORD,
-                payload: res
+                wordObj: wordObj
             });
-            resolve(res);
+            resolve(wordObj);
         })
         .catch(error => {
            console.log(error);

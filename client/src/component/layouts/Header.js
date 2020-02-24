@@ -188,7 +188,7 @@ function Header(props) {
                                     >
 
 
-                                        <MenuItem onClick={handleClose}>  <NavLink to='/simple practice' >simple practice</NavLink></MenuItem>
+                                        <MenuItem onClick={handleClose}>  <NavLink to='/words list' >Words List</NavLink></MenuItem>
                                         <MenuItem onClick={handleClose}><NavLink to='/divide practice' >divide practice</NavLink></MenuItem>
                                     </MenuList>
                                 </ClickAwayListener>

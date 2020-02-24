@@ -126,7 +126,48 @@ button.social-login.google {
     height: 100%;
     backgroundColor: #fff212;
 }
+#delete{
+    /*  cursor: pointer;
+      font-weight: bold;*/
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-top: 20px;
+    float: bottom;
+}
+#delete:hover{
+    background-color: var(--red);
+}
+.choose{
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+    /*  padding-top: 4px;*/
+    border-radius: 25px;
+    display: inline-block;
+    background-color: var(--light-gray);;
 
+}
+.choose:hover {
+    color: var(--white);
+}
+#yes{
+    padding-left: 9px;
+    padding-right: 9px;
+    color: var(--yes);
+}
+#yes:hover{
+    background-color: var(--yes);
+    color: var(--white);
+}
+#no:hover{
+    background-color: var(--red);
+    color: var(--white);
+}
+#no{
+    padding-left: 12px;
+    padding-right: 12px;
+    color: var(--red);
+}
 @media only screen and (min-width: 960px) {
     .inputWrap{
         height: 100%;

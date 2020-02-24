@@ -43,7 +43,7 @@ const FileUpload = (props) => {
         formData.append('file', file);
         console.log('formData: ',formData);
         try {
-            const res =  axios.post('/api/get-content', formData, {
+            const res =  axios.post('/api/get-file-content', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

@@ -16,20 +16,19 @@ import{
 export const loadUser = (token) => (dispatch, getState) =>{
     // User loading
     dispatch({ type: USER_LOADING });
-    console.log('loadUser: ',token);
-    axios.get('/auth/user', tokenConfig(token? token : getState().auth.token))
-        .then(res => {
-            dispatch({
+    axios.get('/auth/user', tokenConfig(getState().auth.token))
+    .then(res => {
+        dispatch({
             type: USER_LOADED,
             payload: res.data
         });
-        })
-        .catch(err=>{
-            dispatch(returnErrors(err.response.data, err.response.status, ));
-            dispatch({
-                type: AUTH_ERROR
-            });
+    })
+    .catch(err => {
+        dispatch(returnErrors(err.response.data, err.response.status,));
+        dispatch({
+            type: AUTH_ERROR
         });
+    });
 };
 
 // Sign up User
@@ -83,6 +82,30 @@ export const login =({ email, password }) => dispatch => {
             dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL'));
             dispatch({
                 type: LOGIN_FAIL
+            });
+        });
+};
+// Login User
+export const loginWith =(token) => dispatch => {
+    // Headers
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    axios.get('/auth/user', tokenConfig(token))
+        .then(res => {
+            dispatch({
+                type: LOGIN_SUCCESS,
+                payload: res.data,
+                token: token
+            });
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status,));
+            dispatch({
+                type: AUTH_ERROR
             });
         });
 };

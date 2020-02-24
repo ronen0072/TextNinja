@@ -7,7 +7,7 @@ const wordReducer = (state = initState, action)=>{
             // console.log('get word', action.payload);
             return {
                 ...state,
-                words: [action.payload.data, ...state.words]
+                words: [action.wordObj, ...state.words]
             };
         case 'GET_WORD_ERROR':
             console.log('get word error', action.err);

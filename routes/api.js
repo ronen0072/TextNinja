@@ -41,7 +41,7 @@ router.post('/contact', function(req,res){
 });
 
 // @route GET api/words/:word
-// @desc get word from the user and response the syllables ans soundURL of the word.
+// @desc get word from the user and response a word object that contains the syllables ans soundURL of the word and more.
 // @access public
 router.get('/words/:word', function  (req,res) {
     const wordID = req.params.word;
@@ -52,13 +52,15 @@ router.get('/words/:word', function  (req,res) {
         if(result === null) {
             //console.log('the word is not exists');
             wordObj.initialization().then(function(){
-                Word_db.create({wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL(), difficulty: calcDifficulty(wordObj)});
-                res.send({type: 'GET', wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL()});
+                Word_db.create({wordID: wordObj.getWordID(), syllables: wordObj.getSyllables(), soundURL: wordObj.getSoundURL(), difficulty: calcDifficulty(wordObj)})
+                    .then((wordFromDB)=>{
+                        res.send({type: 'GET', ...wordFromDB._doc});
+                    });
             });
         }
         else {
             //console.log('the word is already exists');
-            res.send({type: 'GET', wordID: wordObj.getWordID(), syllables: result.syllables, soundURL: result.soundURL});
+            res.send({type: 'GET', ...result._doc});
         }
     });
 });
@@ -93,49 +95,38 @@ router.get('/user/data',  auth, function(req,res){
 // @route PUT api/user/words/:word
 // @desc insert to the user word in the DB
 // @access Registered users who are logged in
-router.put('/user/words/:word', auth, function(req,res){
-    console.log( req.params.word);
-    let word = req.params.word;
+router.put('/user/words/:word_id', auth, function(req,res){
+    let word_id = req.params.word_id;
     let user = req.user;
-    Word_db.findOne({wordID: word}).then((result) => {
-        User.findById(user.id).then((record) => {
-            let words = record.words;
-            let difficulty;
-            if(!result.difficulty){
-                difficulty = calcDifficulty(result);
-                Word_db.updateOne(
-                    {'_id': result.id},
-                    {'$set': {'difficulty': difficulty}},
-                    function(err) {if(err) console.log('err: '+err);}
-                );
-            }
-            let exist = false;
-            words.forEach(function (element) {
-                if (element.wID === result.id) {
-                    exist = true;
-                    console.log(element);
-                    difficulty = incDifficulty(element);
-                }
-            });
-            //console.log(exist);
-            if (!exist) {
-                record.words.push({wID: result.id, word: result.wordID, difficulty: result.difficulty});
-                record.save().then(() => {
-                    res.send({type: 'PUT', username: record.username, wordID: result.id, word: result.wordID, difficulty: result.difficulty});
-                });
-            }
-            else{
-                console.log(difficulty);
-                User.update(
-                    {'_id': user.id,'words.wID': result.id},
-                    {'$set': {'words.$.difficulty': difficulty}},
-                    function(err) {if(err) console.log('err: '+err);}
-                    )
-                .then(() => {
-                    res.send({type: 'PUT', username: record.username, wordID: result.id, word: result.wordID, difficulty: difficulty});
-                });
+    User.findById(user.id).then((record) => {
+        let words = record.words;
+        let difficulty;
+        let exist = false;
+        words.forEach(function (element) {
+            if (element.wID === word_id) {
+                exist = true;
+                difficulty = incDifficulty(element);
             }
         });
+        if (!exist) {
+            Word_db.findById(word_id)
+                .then((result) => {
+                    record.words.push({wID: result.id, word: result.wordID, difficulty: result.difficulty});
+                    record.save().then(() => {
+                        res.send({type: 'PUT', ...record, word: result.wordID});
+                    });
+                });
+        }
+        else{
+            User.update(
+                {'_id': user.id,'words.wID': word_id},
+                {'$set': {'words.$.difficulty':difficulty}},
+                function(err) {if(err) console.log('err: '+err);}
+            )
+            .then(() => {
+                res.send({type: 'PUT', ...record, word: word_id});
+            });
+        }
     });
 });
 
@@ -144,6 +135,7 @@ router.put('/user/words/:word', auth, function(req,res){
 // @access Registered users who are logged in
 router.get('/user/words', auth, function(req,res){
     let user = req.user;
+    console.log('________________GET api/user/words______________________');
     User.findById(user.id).then((record) => {
         let words = [];
         record.words.forEach(function (word) {
@@ -159,6 +151,7 @@ router.get('/user/words', auth, function(req,res){
                 });
 
             });
+            console.log('words: ',items);
             res.send({type: 'GET', username: record.username, words: items});
         });
     });
@@ -286,7 +279,7 @@ function clearWiki(wikiInput){
 }
 
 
-router.post('/get-content', (req, res) => {
+router.post('/get-file-content', (req, res) => {
     if (req.files === null) {
         return res.status(400).json({ msg: 'No file uploaded' });
     }
@@ -301,24 +294,5 @@ router.post('/get-content', (req, res) => {
             res.json({ text: text });
         })
         .done();
-    // file.mv(`${__dirname}/client/public/uploads/${file.name}`, err => {
-    //     if (err) {
-    //         console.error(err);
-    //         return res.status(500).send(err);
-    //     }
-    //     // mammoth.extractRawText({path: `${__dirname}/client/public/uploads/${file.name}`})
-    //     //     .then(function(result){
-    //     //         var text = result.value; // The raw text
-    //     //         console.log(text);
-    //     //         var messages = result.messages;
-    //     //     })
-    //     //     .done();
-    // });
-
-
-
-    //
-    //     res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
-    // });
 });
 module.exports = router;
