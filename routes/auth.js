@@ -50,7 +50,7 @@ function redirectWithToken(user, res){
         {expiresIn: 3600*24},
         (err, token)=>{
             if(err) throw err;
-            console.log('---------------------------/facebook/redirect token: '+config.get('clientURL')+'/?token='+token);
+            //console.log('---------------------------/facebook/redirect token: '+config.get('clientURL')+'/?token='+token);
             return res.redirect(config.get('clientURL')+'/?token='+token);
         });
 }
@@ -64,7 +64,7 @@ router.get('/user',  auth, function(req,res){
         .select('-local -facebookID -googleID -words')
         .then(user=>{
             console.log(user);
-            res.json({type: 'GET', username: user.username, email: user.email});
+            res.json({type: 'GET', user: {id: user._id, username: user.username, email: user.email}});
         });
 });
 
@@ -113,8 +113,6 @@ router.post('/signup', (req, res) => {
         .catch(function (error) {
             throw(error);
         })
-
-
 });
 // @route POST auth/login
 // @desc login for register
@@ -134,7 +132,6 @@ router.post('/login', (req, res, next) => {
             return res.status(400).json(error);
         }
         return returnUserAndToken(user, res);
-
     })(req, res, next);
 });
 

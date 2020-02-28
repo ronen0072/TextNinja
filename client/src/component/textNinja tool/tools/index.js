@@ -16,9 +16,10 @@ var useStyles = makeStyles({
         height: '100%',
     },
     wrap:{
-        zDepth: '1',
+        zIndex: '1',
         paddingRight: '0.5vw',
-        color: '#d9dad6'//'#59beee'
+        color: '#d9dad6',//'#59beee'
+        minHeight: '40px',
     },
 });
 

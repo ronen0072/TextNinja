@@ -11,6 +11,8 @@ import Home from './component/pages/Home';
 import About from './component/pages/About';
 import Contact from './component/pages/Contact';
 import WordsList from './component/pages/WordsList';
+import DivideWords from './component/pages/DivideWords';
+
 import './App.css';
 const theme = createMuiTheme({
     palette: {
@@ -30,23 +32,17 @@ const theme = createMuiTheme({
 });
 
 class App extends Component{
-    componentDidMount(){
+    static getDerivedStateFromProps(props, state){
         var token = queryString.parse(window.location.search).token;
 
-        // if(store.getState().auth.isAuthenticated && token)
-        //     window.location.href = '/';
-        // console.log('token: '+token);
-        // console.log('isAuthenticated: ',store.getState().auth.isAuthenticated);
         if(token){
             console.log(token);
             store.dispatch(loginWith(token));
+            window.history.back();
         }
         else {
             store.dispatch(loadUser());
         }
-
-
-
     }
     render(){
         return (
@@ -55,12 +51,12 @@ class App extends Component{
                     <div className="App">
                         <MuiThemeProvider theme = {theme}>
                             <Header />
-
                             <Route exact path='/' component={Home}/>
                             <Route path='/Home' component={Home}/>
                             <Route path='/about' component={About}/>
-                            <Route path='/Contact Us' component={Contact} />
-                            <Route path='/Words List' component={WordsList} />
+                            <Route path='/contact us' component={Contact} />
+                            <Route path='/words List' component={WordsList} />
+                            <Route path='/divide words' component={DivideWords} />
                             <Footer />
                         </MuiThemeProvider>
                     </div>

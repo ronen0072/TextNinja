@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {Fragment ,useState, useRef, useEffect} from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { makeStyles } from '@material-ui/core/styles';
@@ -58,6 +58,12 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#171717',
         color: '#ffffff',
         zDepth: '3'
+    },
+    practiceItem:{
+        paddingLeft: '40px',
+    },
+    practice: {
+        backgroundColor: 'rgba(0,0,0,0.02)',
     }
 }));
 
@@ -127,6 +133,28 @@ function Header(props) {
                             </ListItem>
                         </NavLink>
                     ))}
+                    {props.auth.isAuthenticated &&
+                        <div className={classes.practice}>
+                            <ListItem>
+                                <ListItemIcon> <Icon>fitness_center</Icon> </ListItemIcon>
+                                practice
+                            </ListItem>
+
+                                <NavLink to='/Words List'  onClick={toggleDrawer(side, false)}>
+                                    <ListItem button className={classes.practiceItem}>
+                                        <ListItemIcon> <Icon>list</Icon> </ListItemIcon>
+                                        <ListItemText primary='Words List' />
+                                    </ListItem>
+                                </NavLink>
+                                <NavLink to='/Divide Words'  onClick={toggleDrawer(side, false)}>
+                                    <ListItem button className={classes.practiceItem}>
+                                        <ListItemIcon> <Icon>view_column</Icon> </ListItemIcon>
+                                        <ListItemText primary='Divide Words' />
+                                    </ListItem>
+                                </NavLink>
+                        </div>
+
+                    }
                 </List>
                 <Divider />
                 <List>
@@ -154,48 +182,49 @@ function Header(props) {
                 <NavLink to='/' ><Button className={classes.nuvLink} color="inherit">Home</Button></NavLink>
                 <NavLink to='/About' ><Button className={classes.nuvLink} color="inherit">About</Button></NavLink>
                 <NavLink to='/Contact Us' ><Button className={classes.nuvLink} color="inherit">Contact Us</Button></NavLink>
-
-                <Button
-                    ref={anchorRef}
-                    aria-controls={open ? "menu-list-grow" : undefined}
-                    aria-haspopup="true"
-                    onClick={handleToggle}
-                    className={classes.nuvLink}
-                        color="inherit">
-                    practice
-                </Button>
-                <Popper
-                    open={open}
-                    anchorEl={anchorRef.current}
-                    role={undefined}
-                    transition
-                    disablePortal
-                >
-                    {({ TransitionProps, placement }) => (
-                        <Grow
-                            {...TransitionProps}
-                            style={{
-                                transformOrigin:
-                                    placement === "bottom" ? "center top" : "center bottom"
-                            }}
-                        >
-                            <Paper className={classes.paper}>
-                                <ClickAwayListener onClickAway={handleClose}>
-                                    <MenuList
-                                        autoFocusItem={open}
-                                        id="menu-list-grow"
-                                        onKeyDown={handleListKeyDown}
-                                    >
-
-
-                                        <MenuItem onClick={handleClose}>  <NavLink to='/words list' >Words List</NavLink></MenuItem>
-                                        <MenuItem onClick={handleClose}><NavLink to='/divide practice' >divide practice</NavLink></MenuItem>
-                                    </MenuList>
-                                </ClickAwayListener>
-                            </Paper>
-                        </Grow>
-                    )}
-                </Popper>
+                {props.auth.isAuthenticated &&
+                (<Fragment>
+                    <Button
+                        ref={anchorRef}
+                        aria-controls={open ? "menu-list-grow" : undefined}
+                        aria-haspopup="true"
+                        onClick={handleToggle}
+                        className={classes.nuvLink}
+                            color="inherit">
+                        practice
+                    </Button>
+                    <Popper
+                        open={open}
+                        anchorEl={anchorRef.current}
+                        role={undefined}
+                        transition
+                        disablePortal
+                    >
+                        {({ TransitionProps, placement }) => (
+                            <Grow
+                                {...TransitionProps}
+                                style={{
+                                    transformOrigin:
+                                        placement === "bottom" ? "center top" : "center bottom"
+                                }}
+                            >
+                                <Paper className={classes.paper}>
+                                    <ClickAwayListener onClickAway={handleClose}>
+                                        <MenuList
+                                            autoFocusItem={open}
+                                            id="menu-list-grow"
+                                            onKeyDown={handleListKeyDown}
+                                        >
+                                            <MenuItem onClick={handleClose}>  <NavLink to='/words list' >Words List</NavLink></MenuItem>
+                                            <MenuItem onClick={handleClose}><NavLink to='/divide words' >Divide Words</NavLink></MenuItem>
+                                        </MenuList>
+                                    </ClickAwayListener>
+                                </Paper>
+                            </Grow>
+                        )}
+                    </Popper>
+                </Fragment>)
+                    }
             </Hidden>
         )
     };

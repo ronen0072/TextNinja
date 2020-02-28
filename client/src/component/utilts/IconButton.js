@@ -23,21 +23,21 @@ var useStyles = makeStyles({
 
 
 function IconButton(props){
-    let classes = useStyles();
+    const classes = useStyles();
     const [state, setState] = React.useState({
         input: props.children
     });
-    let handleOnMouseOver = () =>{
+    const handleOnMouseOver = () =>{
         if(props.onMouseOver){
             props.onMouseOver();
         }
     };
-    let handleOnBlur = () =>{
+    const handleOnBlur = () =>{
         if(props.onMouseOut){
             props.onMouseOut();
         }
     };
-    let handleOnClick = () =>{
+    const handleOnClick = () =>{
         if(props.onClick){
             props.onClick();
         }

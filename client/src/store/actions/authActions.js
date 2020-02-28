@@ -20,7 +20,7 @@ export const loadUser = (token) => (dispatch, getState) =>{
     .then(res => {
         dispatch({
             type: USER_LOADED,
-            payload: res.data
+            payload: res.data.user
         });
     })
     .catch(err => {
@@ -98,8 +98,7 @@ export const loginWith =(token) => dispatch => {
         .then(res => {
             dispatch({
                 type: LOGIN_SUCCESS,
-                payload: res.data,
-                token: token
+                payload: {user: res.data.user, token},
             });
         })
         .catch(err => {
@@ -108,6 +107,7 @@ export const loginWith =(token) => dispatch => {
                 type: AUTH_ERROR
             });
         });
+
 };
 
 // Setup config/headers and token

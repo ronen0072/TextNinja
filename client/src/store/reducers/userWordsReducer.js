@@ -36,21 +36,19 @@ const wordReducer = (state = initState, action)=>{
                 userWords:userWords
             };
         }
+        case 'DECREASE_WORD_DIFFICULTY':
         case 'INCREASE_WORD_DIFFICULTY':{
-            console.log('INCREASE_WORD_DIFFICULTY', action);
             let userWords = state.userWords;
-            userWords = userWords.map((wordObj)=>{
-                if(action.wordID === wordObj._id)
-                    wordObj.difficulty = action.difficulty;
+            userWords = userWords.map((wordObj)=> {
+                if (action.payload.wordID === wordObj._id)
+                    wordObj.difficulty = action.payload.difficulty;
+                return wordObj;
             });
             return {
                 ...state,
-                userWords:userWords
+                userWords: userWords
             };
         }
-        case 'DECREASE_WORD_DIFFICULTY':
-            console.log('DECREASE_WORD_DIFFICULTY', action.err);
-            return state;
         default:
             return state;
     }

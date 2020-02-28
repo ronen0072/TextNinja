@@ -1,8 +1,10 @@
 
-import React, {Component} from 'react';
+import React, {Fragment, Component} from 'react';
 import { connect } from 'react-redux';
 import { getWord } from '../../store/actions/wordActions';
 import { addUserWords } from '../../store/actions/userWordsActions';
+import WordMenu from "./WordMenu";
+import {MenuItem, MenuList} from "@material-ui/core";
 
 String.prototype.replaceAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
@@ -20,8 +22,9 @@ class Word extends Component{
         display: "",
         styles: this.wordStyle(this.props.fontSize),
         wordPadding: {},
-        wordObj: {}
-
+        wordObj: {},
+        menuOpenPosition: null,
+        menuOpen: false,
     };
 
     componentDidMount = ()=>{
@@ -48,6 +51,17 @@ class Word extends Component{
                 styles: this.wordStyle(this.props.fontSize)
             });
         }
+        const wordObj = this.props.words.find((wordObj) => {return wordObj._id === this.state.wordObj._id});
+        if(wordObj && (wordObj.updateIn && !this.state.wordObj.updateIn) &&  (wordObj.updateIn > !this.state.wordObj.updateIn)) {
+            this.updateWordObj(wordObj);
+            this.createSyllables(wordObj);
+        }
+    }
+
+    updateWordObj(wordObj){
+        this.setState({
+            wordObj:wordObj,
+        });
     }
 
     wordPadding(){
@@ -125,7 +139,7 @@ class Word extends Component{
         var word = this.state.word;
         var i,j;
         for(i = 0, j = 0; i<syllables.length; i++, j++){
-            if((syllables.charAt(i) === '*') && !(word.charAt(j) === '*')) {
+            if((syllables.charAt(i) === '•') && !(word.charAt(j) === '•')) {
                 i++;
             }
             if(syllables.charAt(i).toUpperCase() === word.charAt(j)){
@@ -143,7 +157,7 @@ class Word extends Component{
         var syllables = '';
         console.log('createSyllables',data);
         for (var i = 0; i < data.syllables.count - 1; i++)
-            syllables += data.syllables.list[i] + "*";
+            syllables += data.syllables.list[i] + "•";
         syllables += data.syllables.list[data.syllables.count - 1];
         this.setSyllables(this.switchBack(syllables), data.syllables.count);
     }
@@ -155,7 +169,6 @@ class Word extends Component{
         let word = this.props.words[this.props.words.findIndex( (element) => element.wordID === this.state.word)];
         if(!word)
             word = this.props.userWords[this.props.userWords.findIndex( (element) => element.wordID === this.state.word)];
-
 
         //if the word already exists?
         if(word){
@@ -171,7 +184,6 @@ class Word extends Component{
                     this.setState({
                        wordObj: wordObj
                     });
-                    console.log('getWord?: ',wordObj);
                     this.createSyllables(wordObj);
                     this.createSoundURL(wordObj);
                 }
@@ -187,12 +199,14 @@ class Word extends Component{
             this.setDisplay(true)
         }
         this.setStyles(true);
-
     };
 
     handleOnBlur = () => {
         this.setDisplay(false);
         this.setStyles(false);
+        this.setState({
+            menuOpen: false
+        });
     };
 
     handleOnClick = () => {
@@ -200,18 +214,40 @@ class Word extends Component{
         this.props.addUserWords(this.state.wordObj);
     };
 
+    handleOnContextMenu = (e) => {
+        e.preventDefault();
+
+        this.setState({
+            menuOpenPosition: {
+                mouseX: e.clientX - 60,
+                mouseY: e.clientY + 10,
+            },
+            menuOpen: true
+        });
+        console.log('handleOnContextMenu: ', window.getSelection().toString().replace(/\•/g, ""));
+    };
+
     render(){
         return (
-            <b
-                onMouseOver={this.handleOnMouseOver}
-                onTouchStart={this.handleOnMouseOver}
-                onMouseOut={this.handleOnBlur}
-                onTouchEnd={this.handleOnBlur}
-                onClick={this.handleOnClick}
-                style={{...this.state.wordPadding ,...this.state.styles}}
-            >
-                {this.state.display + " "}
-            </b>
+            <Fragment>
+                <b
+                    onMouseOver={this.handleOnMouseOver}
+                    onTouchStart={this.handleOnMouseOver}
+                    onMouseOut={this.handleOnBlur}
+                    onTouchEnd={this.handleOnBlur}
+                    onClick={this.handleOnClick}
+                    onContextMenu={this.handleOnContextMenu}
+                    style={{...this.state.wordPadding ,...this.state.styles}}
+                >
+                    {this.state.display + " "}
+                </b>
+                <WordMenu
+                    open={this.state.menuOpen}
+                    openPosition={this.state.menuOpenPosition}
+                    word={this.state.wordObj.wordID}
+                    word_id={this.state.wordObj._id}
+                />
+            </Fragment>
         );
     }
 }

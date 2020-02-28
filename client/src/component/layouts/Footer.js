@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, BottomNavigation, BottomNavigationAction} from '@material-ui/core';
+import {Button, BottomNavigation, BottomNavigationAction, Hidden} from '@material-ui/core';
 
 
 const useStyles = makeStyles({
@@ -22,12 +22,14 @@ export default function Footer() {
     const classes = useStyles();
 
     return (
-        <BottomNavigation
-            className={classes.footer}
-        >
-            <NavLink to='/' ><Button color={"inherit"} >Home</Button></NavLink>
-            <NavLink to='/About' ><Button color={"inherit"}>About</Button ></NavLink>
-            <NavLink to='/Contact' ><Button  color={"inherit"}>Contact Us</Button ></NavLink>
-        </BottomNavigation>
+        <Hidden xsDown>
+            <BottomNavigation
+                className={classes.footer}
+            >
+                <NavLink to='/' ><Button color={"inherit"} >Home</Button></NavLink>
+                <NavLink to='/About' ><Button color={"inherit"}>About</Button ></NavLink>
+                <NavLink to='/Contact' ><Button  color={"inherit"}>Contact Us</Button ></NavLink>
+            </BottomNavigation>
+        </Hidden>
     );
 }

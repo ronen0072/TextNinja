@@ -66,7 +66,7 @@ export default function Minimize(props) {
             <Hidden mdUp>
                 <Icon title= {props.mod? 'open' : 'close'}
                       fontSize="large"
-                      className={"toolsIcon "+ iconStyle +' '+(props.mod? classes.up : classes.down) }
+                      className={"toolsIcon "+ iconStyle +' '+(props.mod? classes.down : classes.up ) }
                 >
                     arrow_forward_ios
                 </Icon>

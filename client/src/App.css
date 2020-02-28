@@ -43,15 +43,20 @@ a:-webkit-any-link {
 .inputWrap{
     height: 35%;
 }
-.wikiContent, .content, .textNinjaInput{
-    border-radius: 0 0 15px 15px;
-    border: 2px solid #e1e1e1;
-    border-top: 0;
-    margin: 0 auto !important;
-    margin-bottom: 2px !important;
-    padding: 10px;
-    height: 100%;
+.textareaWrap{
+    height: calc(100% - 40px)
 }
+.wikiContent, .content, .textNinjaInput{
+     border-radius: 0 0 15px 15px;
+     border: 2px solid #e1e1e1;
+     border-top: 0;
+     margin: 0 auto !important;
+     margin-bottom: 80px !important;
+     padding: 10px;
+     height: 100%;
+     cursor: pointer;
+ }
+
 .textNinjaInput:hover, .textNinjaInput:focus-within{
     border: 2px solid var(--blue);
     border-top: 0;
@@ -126,25 +131,37 @@ button.social-login.google {
     height: 100%;
     backgroundColor: #fff212;
 }
-#delete{
+#delete, #next, #submit{
     /*  cursor: pointer;
       font-weight: bold;*/
-    padding-left: 25px;
-    padding-right: 25px;
     margin-top: 20px;
     float: bottom;
 }
+#next, #submit{
+    margin-left: 5%;
+}
+#submit:hover{
+    background-color: var(--blue) !important;
+    border: 1px solid  var(--blue) !important;
+}
+#next:hover{
+    background-color: var(--purple) !important;
+    border: 1px solid  var(--purple) !important;
+}
 #delete:hover{
-    background-color: var(--red);
+    background-color: var(--red) !important;
+    border: 1px solid  var(--red) !important;
 }
 .choose{
     cursor: pointer;
     font-weight: bold;
     padding: 10px;
     /*  padding-top: 4px;*/
+    border: 1px solid var(--light-gray) !important;
     border-radius: 25px;
     display: inline-block;
-    background-color: var(--light-gray);;
+    background-color: var(--white) !important;
+    box-shadow: none !important;
 
 }
 .choose:hover {
@@ -154,23 +171,30 @@ button.social-login.google {
     padding-left: 9px;
     padding-right: 9px;
     color: var(--yes);
+    margin: 5px 8px;
 }
 #yes:hover{
-    background-color: var(--yes);
+    background-color: var(--yes)!important;
+    border: 1px solid  var(--yes) !important;
     color: var(--white);
 }
 #no:hover{
-    background-color: var(--red);
+    background-color: var(--red)!important;
+    border: 1px solid  var(--red) !important;
     color: var(--white);
 }
 #no{
     padding-left: 12px;
     padding-right: 12px;
     color: var(--red);
+    margin: 5px 8px;
 }
 @media only screen and (min-width: 960px) {
     .inputWrap{
         height: 100%;
+    }
+    .textareaWrap{
+        height: 100%
     }
     .textNinjaInput {
         float: left;
@@ -192,12 +216,12 @@ button.social-login.google {
         margin-top: 25px !important;
         height: auto;
         padding: 10px 7px 10px 20px !important;
+        width: 100%;
     }
     .textNinjaWrap{
-        /*margin-left: 40px;*/
-        /*padding: 10px 7px 10px 20px !important;*/
-        width: 100%;
-        position: relative;
+        width: 46%;
+        height: 83%;
+        position: absolute;
     }
     .toolsIcon{
         display: block !important;

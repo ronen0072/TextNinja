@@ -69,16 +69,18 @@ router.get('/words/:word', function  (req,res) {
 // @desc get word and new syllables to update the word syllables in the DB.
 // @access public
 router.put('/words/syllables', function(req,res){
-    var req_word = req.body;
-    //var wordO = new Word(req_word);
-    Word_db.findOneAndUpdate({wordID: req_word.wordID},{syllables:req_word.syllables}).then((result)=>{
-        //console.log('the word is already exists');
-        res.send({type: 'PUT', wordID: result.wordID, syllables: result.syllables, soundURL: result.soundURL});
+    var {wordObj} = req.body;
+    //var wordO = new Word(wordObj);
+    console.log('/words/syllables: wordObj', wordObj);
+    Word_db.updateOne({wordID: wordObj.wordID},{syllables:wordObj.syllables}).then((result)=>{
+        console.log('/words/syllables: result', result);
+        res.send({type: 'PUT', wordID: wordObj.wordID, syllables: wordObj.syllables, soundURL: wordObj.soundURL});
 
-    });
-    res.send({type:'PUT' , word:req_word});
+    }).catch(()=> res.send({type:'ERROR' , wordID: wordObj.wordID}));//TODO send error
 
 });
+
+
 
 // @route GET api/user/details
 // @desc Get user data.
@@ -183,41 +185,13 @@ router.delete('/user/words/:words', auth, function(req,res){
     })
 });
 
-// @route GET api/word/wiki/:word
-// @desc response info from words from wikipedia about the word.
-// @access public
-router.get('/word/wiki/:word', function(req,res){
-    let word = req.params.word;
-    let options = {
-        method: 'GET',
-        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles='+word,
-    };
-    return requestPromise(options).then(function (body) {
-        let jOb = JSON.parse(body);
-        let wiki = jOb.query.pages;
-        if(!(wiki[Object.keys(wiki)[0]].pageid === undefined)) {
-            let title =  wiki[Object.keys(wiki)[0]].title;
-            let wikiInfo =  clearWiki(wiki[Object.keys(wiki)[0]].extract);
-            res.send({type: 'GET', wiki:{title: title, info: wikiInfo}});
-        }
-        else{
-            res.send({type: 'GET', wiki: 'not-exists'});
-
-        }
-    })
-    .catch(function (err) {
-        console.log(err);
-    });
-});
-
 // @route PUT api/user/words/difficulty/:wordID/:method
 // @desc update the word difficulty
 // @access Registered users who are logged in
 router.put('/user/words/difficulty/:wordID/:method', auth, function(req,res){
-
     let wordID = req.params.wordID;
     let method = req.params.method;
-    console.log('difficulty update: '+ wordID+', method: '+method)
+    console.log('difficulty update: '+ wordID+', method: '+method);
     let user = req.user;
     User.findById(user.id).then((record) => {
         let words = record.words;
@@ -234,22 +208,51 @@ router.put('/user/words/difficulty/:wordID/:method', auth, function(req,res){
                 }
             }
         );
-        //console.log(exist);
-        if (exist) {
-            User.update(
-                {'_id': user.id,'words.wID': wordID},
-                {'$set': {'words.$.difficulty': difficulty}},
-                function(err) {if(err) console.log('err: '+err);}
-            )
+        User.updateOne(
+            {'_id': user.id,'words.wID': wordID},
+            {'$set': {'words.$.difficulty': difficulty}},
+            function(err) {if(err) console.log('err: '+err);}
+        )
             .then(() => {
-                res.send({type: 'PUT', username: record.username, wordID: wordID, difficulty: difficulty});
+                console.log('difficulty: ',difficulty);
+                return res.send({type: 'PUT', username: record.username, wordID: wordID, difficulty: difficulty});
+            })
+            .catch((err)=>{
+                console.log(err);
+                return res.send({type: 'ERROR', username: record.username, wordID: wordID});
             });
 
+    });
+});
+
+// @route GET api/word/wiki/:word
+// @desc response info from words from wikipedia about the word.
+// @access public
+router.get('/word/wiki/:word', function(req,res){
+    let word = req.params.word;
+    console.log('/word/wiki/:word: ',word);
+    let options = {
+        method: 'GET',
+        url: 'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles='+word,
+    };
+    return requestPromise(options).then(function (body) {
+        let jOb = JSON.parse(body);
+        let wiki = jOb.query.pages;
+        console.log('/word/wiki/:word: body ',body);
+        if(!(wiki[Object.keys(wiki)[0]].pageid === undefined)) {
+            let title =  wiki[Object.keys(wiki)[0]].title;
+            let wikiInfo =  clearWiki(wiki[Object.keys(wiki)[0]].extract);
+            console.log('/word/wiki/:word: wikiInfo ',wikiInfo);
+            res.send({type: 'GET', wiki:{title: title, info: wikiInfo}});
         }
         else{
-            res.send({type: 'ERROR', username: record.username, wordID: wordID});
+            res.send({type: 'GET', wiki: 'not-exists'});
+
         }
-    });
+    })
+        .catch(function (err) {
+            console.log(err);
+        });
 });
 
 function clearWiki(wikiInput){
@@ -258,7 +261,12 @@ function clearWiki(wikiInput){
         if(wikiInput.charAt(i) === '<'){
             for(let j = 0; j < wikiInput.length; j++){
                 let tag =  wikiInput.substring(i,j+1);
-                if(toClaer || (tag = '<b') || (tag = '</b') ||(tag = '<p') || (tag = '</p') || (tag = '<span') || (tag = '</span')|| (tag = '<ul') || (tag = '</ul')|| (tag = '<li') || (tag = '</li')){
+                if(!toClaer && (
+                    (tag = '<b') || (tag = '</b') ||
+                    (tag = '<p') || (tag = '</p') ||
+                    (tag = '<span') || (tag = '</span')||
+                    (tag = '<ul') || (tag = '</ul')||
+                    (tag = '<li') || (tag = '</li'))){
                     toClaer = true;
                 }
                 if (toClaer && (wikiInput.charAt(j) === '>')){
@@ -272,9 +280,9 @@ function clearWiki(wikiInput){
     }
     let startIndex;
     let endIndex;
-    for(startIndex = 0;  ((i < wikiInput.length) && (wikiInput.charAt(startIndex) === '\n')); startIndex++){}
-    for(endIndex = wikiInput.length;  ((endIndex > 0) && (wikiInput.charAt(j) === '\n')); endIndex--){}
-    wikiInput = wikiInput.substring(startIndex,j);
+    for(startIndex = 0;  ((startIndex < wikiInput.length) && (wikiInput.charAt(startIndex) === '\n')); startIndex++){}
+    for(endIndex = wikiInput.length;  ((endIndex > 0) && (wikiInput.charAt(endIndex) === '\n')); endIndex--){}
+    wikiInput = wikiInput.substring(startIndex,endIndex);
     return wikiInput;
 }
 

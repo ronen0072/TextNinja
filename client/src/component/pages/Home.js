@@ -21,7 +21,7 @@ var useStyles = makeStyles({
 
     },
     wrap90Height:{
-        height: '88%',
+        height: '85%',
         display: 'inlineBlock'
 
     },
@@ -90,7 +90,7 @@ function Home(props){
                         <Grid container className={"textNinjaInput "+ ((fileMod || minimizeMod)? classes.readFileModOpen: '')} id='textNinjaInput' onClick={openInput}>
                             {minimizeMod?
                                 null :
-                                <Grid item xs={12} md={minimizeMod? 0 : 11} className={fileMod?  classes.readFileModOpen : classes.wrap90Height} >
+                                <Grid item xs={12} md={minimizeMod? 0 : 11} className={fileMod?  classes.readFileModOpen : 'textareaWrap'} >
                                     {fileMod?
                                         <FileUpload setInput={setInput}/>
                                         :

@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useRef, useState} from 'react';
-import {Container, Grid, Checkbox} from "@material-ui/core";
+import {Container, Grid, Checkbox, Fab} from "@material-ui/core";
 import Send from '@material-ui/icons/Send';
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
@@ -10,33 +10,16 @@ import Word from "../textNinja tool/Word";
 import Icon from "@material-ui/core/Icon";
 const useStyles = makeStyles(theme => ({
     error: {
-        height: '50px',
+        height: '60px',
     },
     icon: {
         marginBottom: '-5px',
     },
-    sendButton: {
-        marginLeft: 'calc(50% - 40px)',
-    },
-    userMessage: {
-        marginTop: '40px',
-        marginBottom: '40px',
-        width: '100%',
-        height:'200px',
-        fontSize: 'inherit'
-    },
-    input: {
-        width: '100%',
-        fontSize: 'inherit'
-    },
-    innerContent: {
-        margin: '30px',
-        width: 'auto'
-    }
 }));
 
 function WordsList(props){
     const classes = useStyles();
+    const [wordsToPractice, setWordsToPractice] = useState([]);
     const [deleteBtn, setDeleteBtn] = useState(false);
     const [wordsToDelete, setWordsToDelete] = useState([]);
     const addToWordsToDelete = (id) =>{
@@ -53,10 +36,11 @@ function WordsList(props){
         },
         []
     );
-    // useEffect(()=>{
-    //         console.log('props.userWords: ',props.userWords);
-    //     },
-    // );
+    useEffect(()=>{
+            if(wordsToPractice !== props.userWords)
+                setWordsToPractice(props.userWords);
+        }
+    );
     const handleChange = (e) =>{
       if(e.target.checked){
           addToWordsToDelete(e.target.id);
@@ -66,75 +50,91 @@ function WordsList(props){
       }
     };
     const displayWords = () => {
-        //console.log('displayWords: ',props.userWords);
         return (
             <span>
-                    {props.userWords && props.userWords.map( (word, index)=>{
-                        return(
-                            <div key={word._id}>
-                                <Checkbox
-                                    id={word._id}
-                                    onChange={handleChange}
-                                />
-                                <Word
-                                    chapterToSyllables={props.chapterToSyllables}
-                                    markWord={props.markWord}
-                                    fontSize={props.fontSize}
-                                    onWordClick = {props.playFun}
-                                >
-                                    {word.wordID}
-                                </Word>  <br/>
-                            </div>
-                        )
-                    })}
+                {wordsToPractice && wordsToPractice.map( (word, index)=>{
+                    return(
+                        <div key={word._id}>
+                            <Checkbox
+                                id={word._id}
+                                onChange={handleChange}
+                            />
+                            <Word
+                                chapterToSyllables={props.chapterToSyllables}
+                                markWord={props.markWord}
+                                fontSize={props.fontSize}
+                                onWordClick = {props.playFun}
+                            >
+                                {word.wordID}
+                            </Word>  <br/>
+                        </div>
+                    )
+                })}
             </span>
+        );
+    };
+    const deleteButton = () =>{
+        return (
+            <Fragment>
+                {!deleteBtn && (
+                    <span
+                        className='choose'
+                        id='delete'
+                        title= 'delete'
+                        onClick={()=>setDeleteBtn(true)}>
+                       <Icon
+                           className={classes.icon}
+                       >delete
+                       </Icon>delete
+                    </span>)
+                }
+                {(deleteBtn && wordsToDelete.length > 0) && (
+                    <span
+                        id="checkIfSafe"
+                    >
+                        Are you sure you want to delete?
+                       <Fab
+                               id='yes'
+                               className='choose'
+                               title='Yes'
+                               aria-label="Yes"
+                               onClick={()=>{
+                               props.deleteUserWords(wordsToDelete);
+                               setDeleteBtn(false);}}>
+                               <b>Yes</b>
+                        </Fab>
+                        <Fab
+                            id='no'
+                            className='choose'
+                            title='No'
+                            aria-label="No"
+                            onClick={()=>setDeleteBtn(false)}>
+                            <b>no</b>
+                        </Fab>
+                    </span>
+                )}
+                {(deleteBtn && wordsToDelete.length === 0)? //error msg
+                    <div className={classes.error}>
+                        <Alert severity="error"> you need to choose at least ono word</Alert>
+                    </div>
+                    : null
+                }
+            </Fragment>
         )
     };
-    const deleteWords = () =>{
-
-    };
-
+///   deleteButton();
     return (
         <Container maxWidth="xl">
             <div className={'content'}>
                 <h3 className="title">Words List</h3>
-                {displayWords()}
-                {(deleteBtn && wordsToDelete.length > 0) && (
-                <span
-                    id="checkIfSafe"
-                >
-                    Are you sure you want to delete?
-                    <span
-                        className="choose"
-                        id='yes'
-                        title='Yes'
-                        onClick={()=>{
-                            props.deleteUserWords(wordsToDelete);
-                            setDeleteBtn(false);
-                        }}>
-                        Yes
-                    </span>
-                    <span
-                        className='choose'
-                        id='no'
-                        title='No'
-                        onClick={()=>setDeleteBtn(false)}>
-                        No
-                    </span>
-                </span>
-                )}
-                { !deleteBtn && (
-                    <span
-                    className='choose'
-                    id='delete'
-                    title= 'delete'
-                    onClick={()=>setDeleteBtn(true)}>
-                   <Icon
-                         className={classes.icon}
-                   >delete
-                   </Icon>delete
-                </span>)}
-                {(deleteBtn && wordsToDelete.length === 0)? <Alert severity="error"> you need to choose at least ono word</Alert> : null}
+                {(wordsToPractice.length > 0)?
+                    <Fragment>
+                        {displayWords()}
+                        {deleteButton()}
+                    </Fragment>
+                :
+                   <Alert severity="info">There are currently no words to practice!</Alert>
+                }
             </div>
         </Container>
     );

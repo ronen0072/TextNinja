@@ -19,8 +19,9 @@ function About(props){
                     fontSize = {props.fontSize}
                     outputClassName={''}
                 >
-                    is a tool designed to help people with dyslexic to improve their reading abilities.
-                    Features such as automatic row highlighting, word parsing by syllables and text to speech etc.
+                    gool is to teach and improve children's reading abilities.Using features like such as automatic row highlighting,
+                    word parsing by syllables and text-to-speech etc.
+                    Registered users can practice words they have difficulty with
                 </TextNinjaTool>
             </div>
         </div>

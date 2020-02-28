@@ -5,7 +5,7 @@ import {
     ADD_USER_WORD,
     DELETE_USER_WORDS,
     INCREASE_WORD_DIFFICULTY,
-    DECREASE_WORD_DIFFICULTY, GET_WORD
+    DECREASE_WORD_DIFFICULTY,
 } from './types';
 import {tokenConfig} from "./authActions";
 // import { tokenConfig } from './authActions';
@@ -60,16 +60,22 @@ export const addUserWords = (wordObj) => (dispatch, getState) =>{
 
 export const incDifficultyUserWords = (wordObj) => (dispatch, getState) =>{
     let word_id = wordObj._id;
-    const body = JSON.stringify({ wordObj });
-    axios.put(`/user/words/difficulty/${word_id}/inc`, body, tokenConfig(getState().auth.token))
+    setDifficultyUserWords(word_id, 'inc', dispatch, getState);
+};
+export const decDifficultyUserWords = (wordObj) => (dispatch, getState) =>{
+    let word_id = wordObj._id;
+    setDifficultyUserWords(word_id, 'dec', dispatch, getState);
+};
+const setDifficultyUserWords = (word_id, method, dispatch, getState) =>{
+    console.log('setDifficultyUserWords: ', word_id, method);
+    axios.put(`/api/user/words/difficulty/${word_id}/${method}`, null, tokenConfig(getState().auth.token))
         .then((res) => {
             dispatch({
-                type: INCREASE_WORD_DIFFICULTY,
-                ...res.data
+                type: ((method === 'inc')? INCREASE_WORD_DIFFICULTY : DECREASE_WORD_DIFFICULTY),
+                payload: res.data,
             });
         })
         .catch(error => {
             console.log(error);
-
         })
 };
