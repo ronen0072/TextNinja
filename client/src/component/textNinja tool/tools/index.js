@@ -6,6 +6,7 @@ import Volume from './Volume';
 import Clear from './Clear';
 import AttachFile from './AttachFile';
 import Mininize from './Mininize';
+import TextNinjaHOC from "../TextNinjaHOC";
 
 var useStyles = makeStyles({
     root: {
@@ -28,19 +29,28 @@ function Tools(props){
     return(
         <Grid className={classes.wrap}>
             <Settings
+                {...props.settingsOptions}
                 toggleChapterToSyllables = {props.toggleChapterToSyllables}
                 toggleMarkWord = {props.toggleMarkWord}
                 toggleMarkLine = {props.toggleMarkLine}
                 setFontSize = {props.setFontSize}
+                changeOrder = {props.changeOrder}
             />
-            <AttachFile
-                readFromFileModToggle={props.readFromFileModToggle}
-                openInput={props.openInput}
-            />
-            <Volume mutedFun={props.mutedFun}/>
-            <Clear  clearFun={()=>props.setInput('')} openInput={props.openInput}/>
-
-            <Mininize mod = {props.minimizeMod} toggle={props.toggleMinimizeMod}/>
+            {props.fileOption &&
+                <AttachFile
+                    readFromFileModToggle={props.readFromFileModToggle}
+                    openInput={props.openInput}
+                />
+            }
+            {props.volumeOption &&
+               <Volume mutedFun={props.mutedFun}/>
+            }
+            {props.ClearOption &&
+                <Clear clearFun={() => props.setInput('')} openInput={props.openInput}/>
+            }
+            {props.MinimizeOption &&
+                <Mininize mod = {props.minimizeMod} toggle={props.toggleMinimizeMod}/>
+            }
         </Grid>
 
     )

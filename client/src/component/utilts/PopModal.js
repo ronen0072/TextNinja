@@ -29,7 +29,6 @@ const useStyles = makeStyles(theme => ({
         boxShadow: theme.shadows[5],
         width: 'calc(150px + 40%)',
         minWidth: '200px',
-        outline: 'none',
 
     },
     title:{

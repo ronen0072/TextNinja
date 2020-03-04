@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {Container, Button, Fab} from "@material-ui/core";
+import {Container, Button, Fab, Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {getUserWords, deleteUserWords, incDifficultyUserWords, decDifficultyUserWords} from "../../store/actions/userWordsActions";
@@ -7,6 +7,7 @@ import Alert from "@material-ui/lab/Alert/Alert";
 import TextNinjaHOC from "../textNinja tool/TextNinjaHOC";
 import WordDivision from "../utilts/WordDivision";
 import Icon from "@material-ui/core/Icon";
+import Tools from "../textNinja tool/tools";
 const useStyles = makeStyles(theme => ({
     root:{
       height: '75vh',
@@ -79,6 +80,8 @@ function DivideWords(props){
                 onChange={setWordDivision}
                 fontSize={props.fontSize}
                 word =  {word.wordID}
+                audioURL = {word.soundURL}
+                onClick = {props.playFun}
             />
         );
     };
@@ -134,38 +137,53 @@ function DivideWords(props){
     };
 
     return (
-        <Container maxWidth="xl" className={classes.root}>
-            <div className={'content'}>
-                <h3 className="title">Divide Words</h3>
-                {(wordsToPractice.length > 0)?
-                    <div align="center">
-                        <div className={classes.msg}>
-                            {successMsg && <Alert severity="success">You're right, well done!!!</Alert>}
-                            {failMsg && <Alert severity="error">You are wrong. Keep practice!</Alert>}
+        <Container maxWidth="xl">
+            <Grid container className={'content'}>
+                <h3 className='title'>Divide Words</h3>
+                <Grid item className='inner-content'>
+                    {(wordsToPractice.length > 0)?
+                        <div align="center">
+                            <div className={classes.msg}>
+                                {successMsg && <Alert severity="success">You're right, well done!!!</Alert>}
+                                {failMsg && <Alert severity="error">You are wrong. Keep practice!</Alert>}
+                            </div>
+                            {displayWord()}
+                            {deleteButton()}
+                            <Button
+                                className='choose'
+                                id='submit'
+                                title= 'submit'
+                                onClick={()=>{handleSubmit()}}>
+                                submit
+                            </Button>
+                            <Button
+                                className='choose'
+                                id='next'
+                                title= 'next'
+                                onClick={()=>{setWordIndex(wordIndex + 1)}}>
+                                next
+                                <Icon>forward</Icon>
+                            </Button>
                         </div>
-                        {displayWord()}
-                        {deleteButton()}
-                        <Button
-                            className='choose'
-                            id='submit'
-                            title= 'submit'
-                            onClick={()=>{handleSubmit()}}>
-                            submit
-                        </Button>
-                        <Button
-                            className='choose'
-                            id='next'
-                            title= 'next'
-                            onClick={()=>{setWordIndex(wordIndex + 1)}}>
-                            next
-                            <Icon>forward</Icon>
-                        </Button>
-                    </div>
-                    :
-                    <Alert severity="info">There are currently no words to practice!</Alert>
-                }
+                        :
+                        <Alert severity="info">There are currently no words to practice!</Alert>
+                    }
 
-            </div>
+                </Grid>
+                <Grid item className='wrap-settings'>
+                    <Tools
+                        settingsOptions = {{
+                            order: true,
+                        }}
+                        volumeOption={true}
+                        mutedFun={props.mutedFun}
+                        toggleChapterToSyllables={props.toggleChapterToSyllables}
+                        toggleMarkWord = {props.toggleMarkWord}
+                        toggleMarkLine = {props.toggleMarkLine}
+                        setFontSize = {props.setFontSize}
+                    />
+                </Grid>
+            </Grid>
         </Container>
     );
 }

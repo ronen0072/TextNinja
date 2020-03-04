@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {Container, Checkbox, Fab} from "@material-ui/core";
+import {Container, Checkbox, Fab, Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {getUserWords, deleteUserWords} from "../../store/actions/userWordsActions";
@@ -7,6 +7,19 @@ import Alert from "@material-ui/lab/Alert/Alert";
 import TextNinjaHOC from "../textNinja tool/TextNinjaHOC";
 import Word from "../textNinja tool/Word";
 import Icon from "@material-ui/core/Icon";
+import Tools from "../textNinja tool/tools";
+
+
+function compare( a, b ) {
+    if ( a.difficulty < b.difficulty ){
+        return -1;
+    }
+    if ( a.difficulty > b.difficulty ){
+        return 1;
+    }
+    return 0;
+}
+
 const useStyles = makeStyles(theme => ({
     error: {
         height: '60px',
@@ -19,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 function WordsList(props){
     const classes = useStyles();
     const [wordsToPractice, setWordsToPractice] = useState([]);
+    const [order, setOrder] = useState('time');
     const [deleteBtn, setDeleteBtn] = useState(false);
     const [wordsToDelete, setWordsToDelete] = useState([]);
     const addToWordsToDelete = (id) =>{
@@ -40,6 +54,21 @@ function WordsList(props){
                 setWordsToPractice(props.userWords);
         }
     ,[wordsToPractice, props.userWords]);
+    const handleChangeOrder = (e) =>{
+        if(order !== e.target.value){
+            localStorage.setItem('orderBy', e.target.value);
+            setOrder(e.target.value);
+            let newWordsToPractice = wordsToPractice;
+            if(e.target.value === 'difficulty'){
+                newWordsToPractice.sort(compare);
+                setWordsToDelete(newWordsToPractice);
+            }
+            else{
+                props.getUserWords();
+            }
+        }
+
+    };
     const handleChange = (e) =>{
       if(e.target.checked){
           addToWordsToDelete(e.target.id);
@@ -48,6 +77,7 @@ function WordsList(props){
           removeFromWordsToDelete(e.target.id);
       }
     };
+
     const displayWords = () => {
         return (
             <span>
@@ -123,17 +153,36 @@ function WordsList(props){
     };
     return (
         <Container maxWidth="xl">
-            <div className={'content'}>
-                <h3 className="title">Words List</h3>
-                {(wordsToPractice.length > 0)?
-                    <Fragment>
-                        {displayWords()}
-                        {deleteButton()}
-                    </Fragment>
-                :
-                   <Alert severity="info">There are currently no words to practice!</Alert>
-                }
-            </div>
+            <Grid container className={'content'}>
+                <h3 className='title'>Words List</h3>
+                <Grid item className='inner-content'>
+                    {(wordsToPractice.length > 0)?
+                        <Fragment>
+                            {displayWords()}
+                            {deleteButton()}
+                        </Fragment>
+                        :
+                        <Alert severity="info">There are currently no words to practice!</Alert>
+                    }
+                </Grid>
+                <Grid item className='wrap-settings'>
+                    <Tools
+                        settingsOptions = {{
+                            fontSizeOption: true,
+                            syllablesOption: true,
+                            markWordOption: true,
+                            orderOption: true,
+                        }}
+                        changeOrder = {handleChangeOrder}
+                        volumeOption={true}
+                        mutedFun={props.mutedFun}
+                        toggleChapterToSyllables={props.toggleChapterToSyllables}
+                        toggleMarkWord = {props.toggleMarkWord}
+                        toggleMarkLine = {props.toggleMarkLine}
+                        setFontSize = {props.setFontSize}
+                    />
+                </Grid>
+            </Grid>
         </Container>
     );
 }

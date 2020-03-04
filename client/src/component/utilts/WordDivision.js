@@ -1,5 +1,5 @@
 
-import React, {Fragment, useEffect, useRef} from 'react';
+import React, {Fragment, useState, useEffect, useRef} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Separator from './Separator';
 
@@ -20,9 +20,9 @@ var useStyles = makeStyles({
 
 function WordDivision(props){
     let classes = useStyles();
-    const [word, setWord] = React.useState([]);
-    const [ArrayWord, setArrayWord] = React.useState([]);
-    const [separators, setSeparators] = React.useState([]);
+    const [word, setWord] = useState([]);
+    const [ArrayWord, setArrayWord] = useState([]);
+    const [separators, setSeparators] = useState([]);
     const toggleSeparators = (index) =>{
         let newSeparators = separators;
         newSeparators[index] = !newSeparators[index];
@@ -69,7 +69,7 @@ function WordDivision(props){
             {ArrayWord.map((char, index)=>{
                 return(
                     <Fragment key={index}>
-                        {char}
+                        <b onClick={()=>props.onClick(props.audioURL)}>{char}</b>
                         {(index < ArrayWord.length -1)?<Separator onClick={toggleSeparators} index={index} key={word+index}/> : null}
                     </Fragment>
                 )

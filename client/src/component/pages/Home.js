@@ -5,6 +5,7 @@ import Tools from '../textNinja tool/tools';
 import FileUpload from '../textNinja tool/tools/FileUpload';
 import TextNinjaTool from '../textNinja tool';
 import TextNinjaHOC from '../textNinja tool/TextNinjaHOC'
+import Settings from "../textNinja tool/tools/Settings";
 
 var useStyles = makeStyles({
     root: {
@@ -98,6 +99,16 @@ function Home(props){
                             }
                             <Grid item xs={12} md={minimizeMod? 12 : 1} id='textNinjaTool' onClick={openInput}>
                                 <Tools
+                                    settingsOptions = {{
+                                        fontSizeOption: true,
+                                        syllablesOption: true,
+                                        markWordOption: true,
+                                        markLineOption: true,
+                                    }}
+                                    ClearOption={true}
+                                    MinimizeOption={true}
+                                    volumeOption={true}
+                                    fileOption={true}
                                     mutedFun={props.mutedFun}
                                     toggleChapterToSyllables={props.toggleChapterToSyllables}
                                     toggleMarkWord = {props.toggleMarkWord}

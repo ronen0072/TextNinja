@@ -9,7 +9,6 @@ const TextNinjaHOC = (WrappedComponent)=>{
             markLine: true,
         };
         componentDidMount() {
-            document.getElementById('sound').muted  = (sessionStorage.sound === 'true');
             this.setState({
                 ...this.state,
                 muted: sessionStorage.sound? (sessionStorage.sound === 'true') : true,
@@ -22,9 +21,8 @@ const TextNinjaHOC = (WrappedComponent)=>{
 
         mutedFun = ()=>{
             // console.log('muted: ',sessionStorage.sound);
-            // console.log('state.muted: ',this.state.muted);
+            console.log('state.muted: ',!this.state.muted);
             sessionStorage.setItem('sound', !this.state.muted);
-            document.getElementById('sound').muted = !this.state.muted;
             this.setState({
                 ...this.state,
                 muted: !this.state.muted
@@ -32,18 +30,12 @@ const TextNinjaHOC = (WrappedComponent)=>{
         };
 
         playFun = (src)=>{
-            // console.log('play muted: ',document.getElementById('sound').muted);
-            // console.log('sessionStorage.sound : ',sessionStorage.sound);
-            if (this.state.src !== src) {
-                this.setState({
-                    ...this.state,
-                    src: src
-                });
-            } else {
-                if(src && src !== '') {
-                    document.getElementById('sound').currentTime = 0;
-                    document.getElementById('sound').play();
-                }
+            console.log('sessionStorage.sound : ', sessionStorage.sound);
+            console.log('this.state.muted.sound : ', this.state.muted);
+            if(!this.state.muted){
+                const audio = new Audio(src);
+                audio.currentTime = 0;
+                audio.play();
             }
         };
 
@@ -138,12 +130,6 @@ const TextNinjaHOC = (WrappedComponent)=>{
                         setFontSize = {this.setFontSize}
                         fontSize = {this.state.fontSize}
                     />
-                    <audio
-                        id="sound"
-                        src = {this.state.src}
-                        autoPlay>
-                        Your browser does not support the <code>audio</code> element.
-                    </audio>
                 </Fragment>
             )
         }

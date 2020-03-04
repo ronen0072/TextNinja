@@ -20,11 +20,13 @@ body{
     height: 100%;
 }
 .title{
+    display: block;
+    width: 100%;
     background-color: var(--gray);
     font-size: 200%;
     color:var(--white);
     letter-spacing: -2px;
-    margin: 20px calc(-23px - 1.7%);
+    margin: 20px calc(-18px - 0.6%);
     padding: 10px 5% 5px;
 }
 .smallLogo{
@@ -56,10 +58,14 @@ a:-webkit-any-link {
      height: 100%;
      cursor: pointer;
  }
-.wikiContent, .content{
-    padding: calc(15px + 1%);
+.inner-content{
+    display: inline-block;
+    padding: 0 0 15px  calc(15px + 1%) ;
+    width: calc(100% - 45px);
 }
-
+.wrap-settings{
+    display: inline-block;
+}
 .textNinjaInput:hover, .textNinjaInput:focus-within{
     border: 2px solid var(--blue);
     border-top: 0;
@@ -218,13 +224,12 @@ button.social-login.google {
     .textNinjaTool{
         margin-top: 25px !important;
         height: auto;
-        padding: 10px 7px 10px 20px !important;
+        padding: 10px 20px 10px 20px !important;
         width: 100%;
     }
     .textNinjaWrap{
-        width: 46%;
+        width: auto;
         height: 83%;
-        position: absolute;
     }
     .toolsIcon{
         display: block !important;
