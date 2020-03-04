@@ -24,7 +24,7 @@ body{
     font-size: 200%;
     color:var(--white);
     letter-spacing: -2px;
-    margin: 20px -3% 15px;
+    margin: 20px calc(-23px - 1.7%);
     padding: 10px 5% 5px;
 }
 .smallLogo{
@@ -56,6 +56,9 @@ a:-webkit-any-link {
      height: 100%;
      cursor: pointer;
  }
+.wikiContent, .content{
+    padding: calc(15px + 1%);
+}
 
 .textNinjaInput:hover, .textNinjaInput:focus-within{
     border: 2px solid var(--blue);
