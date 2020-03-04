@@ -24,7 +24,6 @@ const wordReducer = (state = initState, action)=>{
                 ...state,
                 words: [{...wordObj,  updateIn: new Date()}, ...newWords],
             };
-            return state;
         case 'SET_SYLLABLES_ERROR':
             console.log('set syllables error', action.err);
             return state;

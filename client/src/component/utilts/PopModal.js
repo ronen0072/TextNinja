@@ -1,8 +1,6 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, {useState, Fragment} from 'react';
 import {Modal, Backdrop, Grid, Icon, Fade} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
-import {element} from "prop-types";
-import index from "../../store/reducers";
 
 const useStyles = makeStyles(theme => ({
     root:{
@@ -31,6 +29,7 @@ const useStyles = makeStyles(theme => ({
         boxShadow: theme.shadows[5],
         width: 'calc(150px + 40%)',
         minWidth: '200px',
+        outline: 'none',
 
     },
     title:{
@@ -95,8 +94,4 @@ function PopModal(props) {
         </Fragment>
     );
 }
-const mapStateToProps = (state) => ({
-    // error: state.error,
-    words: state.word.words,
-});
 export default PopModal;

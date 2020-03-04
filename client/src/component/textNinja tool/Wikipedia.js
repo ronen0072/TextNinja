@@ -1,8 +1,7 @@
-import React, {useEffect, useState, Fragment} from 'react';
-import {Backdrop, Grid, Icon, FormControl, Select, Input, Container, Button,} from '@material-ui/core';
+import React, {useState} from 'react';
+import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import PopModal from '../utilts/PopModal';
-import {connect} from "react-redux";
 import TextNinjaHOC from "./TextNinjaHOC";
 import Alert from "@material-ui/lab/Alert/Alert";
 import axios from "axios";
@@ -65,8 +64,4 @@ function Wikipedia(props) {
         </PopModal>
     );
 }
-const mapStateToProps = (state) => ({
-    // error: state.error,
-    words: state.word.words,
-});
-export default connect(mapStateToProps, null )(TextNinjaHOC(Wikipedia));
+export default TextNinjaHOC(Wikipedia);

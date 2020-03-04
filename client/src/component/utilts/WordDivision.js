@@ -1,8 +1,6 @@
 
 import React, {Fragment, useEffect, useRef} from 'react';
-import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
 import Separator from './Separator';
 
 var useStyles = makeStyles({
@@ -34,7 +32,6 @@ function WordDivision(props){
     };
     const ref = useRef();
     useEffect(()=>{
-        const { error } = props;
         const prevProps = ref.current;
         ref.current = props;
         //console.log(props.word.split(''));
@@ -51,7 +48,7 @@ function WordDivision(props){
             }
 
         }
-    });
+    },[props, word, separators]);
     const createSyllables =  () => {
         let syllables = [];
         let lastSeparators = 0;
@@ -65,13 +62,6 @@ function WordDivision(props){
         }
         syllables.push(word.toString().substring(lastSeparators,word.length));
         props.onChange({count: count, list:syllables});
-    };
-
-
-    const handleOnClick = () =>{
-        if(props.onClick){
-            props.onClick();
-        }
     };
 
     return(

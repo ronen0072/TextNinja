@@ -19,7 +19,6 @@ const wordReducer = (state = initState, action)=>{
                 ...state,
                 userWords: exist? [...state.userWords, action.wordObj] : state.userWords
             };
-            return state;
         case 'DELETE_USER_WORDS':{
             let wordsToDelete = action.wordsToDelete;
             console.log('delete words', wordsToDelete);

@@ -87,13 +87,6 @@ export const login =({ email, password }) => dispatch => {
 };
 // Login User
 export const loginWith =(token) => dispatch => {
-    // Headers
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-
     axios.get('/auth/user', tokenConfig(token))
         .then(res => {
             dispatch({

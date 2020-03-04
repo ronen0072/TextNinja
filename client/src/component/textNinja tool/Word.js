@@ -1,10 +1,8 @@
-
 import React, {Fragment, Component} from 'react';
 import { connect } from 'react-redux';
 import { getWord } from '../../store/actions/wordActions';
 import { addUserWords } from '../../store/actions/userWordsActions';
 import WordMenu from "./WordMenu";
-import {MenuItem, MenuList} from "@material-ui/core";
 
 String.prototype.replaceAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
@@ -155,7 +153,6 @@ class Word extends Component{
 
     createSyllables(data){
         var syllables = '';
-        console.log('createSyllables',data);
         for (var i = 0; i < data.syllables.count - 1; i++)
             syllables += data.syllables.list[i] + "•";
         syllables += data.syllables.list[data.syllables.count - 1];
@@ -224,7 +221,6 @@ class Word extends Component{
             },
             menuOpen: true
         });
-        console.log('handleOnContextMenu: ', window.getSelection().toString().replace(/\•/g, ""));
     };
 
     render(){

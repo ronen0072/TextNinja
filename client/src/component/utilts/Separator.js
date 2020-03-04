@@ -1,8 +1,6 @@
 
-import React, {Component, Fragment} from 'react';
-import {Grid} from '@material-ui/core';
+import React, { useState } from 'react';
 import {makeStyles} from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
 
 
 var useStyles = makeStyles({
@@ -29,8 +27,8 @@ var useStyles = makeStyles({
 
 function Separator(props){
     const classes = useStyles();
-    const [state, setState] = React.useState(false);
-    const [MouseOver, setMouseOver] = React.useState(false);
+    const [state, setState] = useState(false);
+    const [MouseOver, setMouseOver] = useState(false);
     const handleOnMouseOver = () =>{
         setMouseOver(true);
     };

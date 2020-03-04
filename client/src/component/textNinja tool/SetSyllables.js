@@ -1,5 +1,5 @@
-import React, {useEffect, useState, Fragment} from 'react';
-import {Backdrop, Grid, Icon, FormControl, Select, Input, Container, Button,} from '@material-ui/core';
+import React, {useEffect, useState} from 'react';
+import {Grid, Button,} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import PopModal from '../utilts/PopModal';
 import WordDivision from '../utilts/WordDivision'
@@ -8,14 +8,13 @@ import { setWordSyllables } from "../../store/actions/wordActions";
 import TextNinjaHOC from "./TextNinjaHOC";
 import Alert from "@material-ui/lab/Alert/Alert";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     wrapper:{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
     },
-
-}));
+});
 
 function SetSyllables(props) {
     const classes = useStyles();
@@ -23,11 +22,10 @@ function SetSyllables(props) {
     const [wordObj, setWordObj] = useState({});
 
     useEffect(()=>{
-    }, []);
-    useEffect(()=>{
         if(!wordObj || wordObj._id !== props.word_id)
             setWordObj(props.words.find(wordObj => (wordObj._id === props.word_id)));
-    });
+    },
+        [wordObj, props.word_id, props.words] );
     const CreateNewWordObj = () =>{
        return new Promise(function(resolve, reject) {
             let newWordObj = wordObj;

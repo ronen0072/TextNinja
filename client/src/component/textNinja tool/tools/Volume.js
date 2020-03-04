@@ -39,7 +39,7 @@ export default function Volume(props) {
                 iconName: 'volume_up'
             });
         }
-    }, []);
+    }, [classes.iconOff, classes.iconOn]);
 
 
     const handleOnClick = () =>{

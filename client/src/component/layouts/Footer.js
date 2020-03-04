@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, BottomNavigation, BottomNavigationAction, Hidden} from '@material-ui/core';
+import {Button, BottomNavigation, Hidden} from '@material-ui/core';
 
 
 const useStyles = makeStyles({

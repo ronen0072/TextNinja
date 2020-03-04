@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Container, Grid, Fab, TextField} from "@material-ui/core";
 import Send from '@material-ui/icons/Send';
 import {makeStyles} from "@material-ui/core/styles";
@@ -83,7 +83,7 @@ function Contact(props){
                 });
             }
         }
-    });
+    },[props, state]);
     const handleChange = (e) => {
         setState({ ...state,
             [e.target.id]: e.target.value

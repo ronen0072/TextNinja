@@ -1,9 +1,6 @@
 
 import axios from 'axios';
 import {ADD_USER_WORD, GET_WORD, SET_WORD_SYLLABLES} from './types';
-import {tokenConfig} from "./authActions";
-// import { tokenConfig } from './authActions';
-// import { returnErrors } from './errorActions';
 
 export const getWord = word => (dispatch, getState) =>{
     return new Promise(function(resolve, reject) {

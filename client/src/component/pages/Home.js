@@ -5,8 +5,6 @@ import Tools from '../textNinja tool/tools';
 import FileUpload from '../textNinja tool/tools/FileUpload';
 import TextNinjaTool from '../textNinja tool';
 import TextNinjaHOC from '../textNinja tool/TextNinjaHOC'
-import axios from 'axios';
-import AttachFile from "../textNinja tool/tools/AttachFile";
 
 var useStyles = makeStyles({
     root: {

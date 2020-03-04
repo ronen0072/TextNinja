@@ -3,7 +3,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import SetSyllables from "./SetSyllables";
 import Wikipedia from "./Wikipedia";
-import Typography from '@material-ui/core/Typography';
 
 const initialState = {
     mouseX: null,
@@ -12,12 +11,9 @@ const initialState = {
 
 export default function WordMenu(props) {
     const [position, setPosition] = useState(initialState);
-    const [open, setOpen] = useState(false);
-
 
     const ref = useRef();
     useEffect(()=>{
-        const { error } = props;
         const prevProps = ref.current;
         ref.current = props;
 
@@ -36,7 +32,7 @@ export default function WordMenu(props) {
         getWhatToSearch();
     };
     const getWhatToSearch = () => {
-        let whatToSearch = window.getSelection().toString().replace(/\•/g, "");
+        let whatToSearch = window.getSelection().toString().replace(/•/g, "");
         if(whatToSearch === '')
             whatToSearch = props.word;
         return whatToSearch;

@@ -28,7 +28,6 @@ const FileUpload = (props) => {
     let classes = useStyles();
     const [file, setFile] = useState('');
     const [filename, setFilename] = useState('Choose File');
-    const [uploadedFile, setUploadedFile] = useState({});
     const [message, setMessage] = useState(null);
     const [uploadPercentage, setUploadPercentage] = useState(-1);
 
@@ -39,38 +38,44 @@ const FileUpload = (props) => {
 
     const onSubmit = e => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append('file', file);
-        console.log('formData: ',formData);
-        try {
-            const res =  axios.post('/api/get-file-content', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                onUploadProgress: progressEvent => {
-                    setUploadPercentage(
-                        parseInt(
-                            Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                        )
-                    );
+        if(file !== ''){
+            const formData = new FormData();
+            formData.append('file', file);
+            console.log('formData: ',formData);
+            try {
+                axios.post('/api/get-file-content', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    onUploadProgress: progressEvent => {
+                        setUploadPercentage(
+                            parseInt(
+                                Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                            )
+                        );
 
-                    // Clear percentage
-                    setTimeout(() => setUploadPercentage(-1), 10000);
+                        // Clear percentage
+                        setTimeout(() => setUploadPercentage(-1), 10000);
+                        setTimeout(() => setMessage(null), 10000);
+                    }
+                }).then((res)=>{
+                    props.setInput(res.data.text);
+                    setMessage({status: 200, msg: 'File Uploaded'});
+                    setTimeout(() => setMessage(null), 10000);
+                });
+            } catch (err) {
+                if (err.response.status === 500) {
+                    setMessage({status: 500, msg: 'There was a problem with the server'});
+                    setTimeout(() => setMessage(null), 10000);
+                } else {
+                    setMessage({status: 400, msg: err.response.data.msg});
                     setTimeout(() => setMessage(null), 10000);
                 }
-            }).then((res)=>{
-                props.setInput(res.data.text);
-                setMessage({status: 200, msg: 'File Uploaded'});
-            });
-
-
-
-        } catch (err) {
-            if (err.response.status === 500) {
-                setMessage({status: 500, msg: 'There was a problem with the server'});
-            } else {
-                setMessage({status: 400, msg: err.response.data.msg});
             }
+        }
+        else{
+            setMessage({status: 400, msg: 'You must select a file!!!'});
+            setTimeout(() => setMessage(null), 10000);
         }
     };
 
@@ -104,9 +109,6 @@ const FileUpload = (props) => {
                 <div className={classes.progressWrap}>
                     {uploadPercentage > -1? <LinearProgress variant="determinate" value={uploadPercentage} /> : null}
                 </div>
-
-
-
             </form>
         </Fragment>
     );

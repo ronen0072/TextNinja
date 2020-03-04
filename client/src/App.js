@@ -32,7 +32,8 @@ const theme = createMuiTheme({
 });
 
 class App extends Component{
-    static getDerivedStateFromProps(props, state){
+    state = {};
+    static getDerivedStateFromProps(){
         var token = queryString.parse(window.location.search).token;
 
         if(token){
@@ -43,6 +44,7 @@ class App extends Component{
         else {
             store.dispatch(loadUser());
         }
+        return null;
     }
     render(){
         return (

@@ -1,6 +1,5 @@
-import React, {Fragment, useEffect, useRef, useState} from 'react';
-import {Container, Grid, Button, Fab} from "@material-ui/core";
-import Send from '@material-ui/icons/Send';
+import React, {Fragment, useEffect, useState} from 'react';
+import {Container, Button, Fab} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {getUserWords, deleteUserWords, incDifficultyUserWords, decDifficultyUserWords} from "../../store/actions/userWordsActions";
@@ -49,7 +48,7 @@ function DivideWords(props){
         }
     );
 
-    const handleSubmit = (syllables) =>{
+    const handleSubmit = () =>{
         let word = wordsToPractice[wordIndex];
         console.log('wordDivision: ', wordDivision);
         console.log('word.syllables: ', word.syllables);

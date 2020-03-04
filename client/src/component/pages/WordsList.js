@@ -1,6 +1,5 @@
-import React, {Fragment, useEffect, useRef, useState} from 'react';
-import {Container, Grid, Checkbox, Fab} from "@material-ui/core";
-import Send from '@material-ui/icons/Send';
+import React, {Fragment, useEffect, useState} from 'react';
+import {Container, Checkbox, Fab} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {getUserWords, deleteUserWords} from "../../store/actions/userWordsActions";
@@ -40,7 +39,7 @@ function WordsList(props){
             if(wordsToPractice !== props.userWords)
                 setWordsToPractice(props.userWords);
         }
-    );
+    ,[wordsToPractice, props.userWords]);
     const handleChange = (e) =>{
       if(e.target.checked){
           addToWordsToDelete(e.target.id);
@@ -52,7 +51,7 @@ function WordsList(props){
     const displayWords = () => {
         return (
             <span>
-                {wordsToPractice && wordsToPractice.map( (word, index)=>{
+                {wordsToPractice && wordsToPractice.map( (word)=>{
                     return(
                         <div key={word._id}>
                             <Checkbox
@@ -122,7 +121,6 @@ function WordsList(props){
             </Fragment>
         )
     };
-///   deleteButton();
     return (
         <Container maxWidth="xl">
             <div className={'content'}>

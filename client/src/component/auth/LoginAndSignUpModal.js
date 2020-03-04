@@ -102,7 +102,7 @@ function LoginAndSignUpModal(props) {
                     <Grid container className={classes.paper}>
                         <Grid item xs={12} sm={6} md={6} className={classes.local}>
                             {state.loginMod? <Login/> : <SignUp/>}
-                            Already have an account?<Button onClick={toggleMod} color="primary"> { state.loginMod? 'Sign Up' : 'Login' } </Button>
+                            { state.loginMod? 'Not registered? sign up now!' : 'Already have an account?' } <Button onClick={toggleMod} color="primary"> { state.loginMod? 'Sign Up' : 'Login' } </Button>
                         </Grid>
                         <Grid item xs={12} sm={6} md={6}>
                             <AuthWith/>

@@ -1,9 +1,9 @@
-import React, {useEffect, useState, Fragment} from 'react';
-import { Modal, Backdrop, Grid, Icon, Fade, FormControl, Select, Input,  } from '@material-ui/core';
+import React, {useEffect, useState} from 'react';
+import { Grid, Icon, FormControl, Select, Input } from '@material-ui/core';
 import PopModal from '../../utilts/PopModal';
 import {makeStyles} from "@material-ui/core/styles";
 import { SketchPicker } from 'react-color';
-import Switcher from './Switcher';
+import Switcher from '../../utilts/Switcher';
 
 
 const useStyles = makeStyles(theme => ({

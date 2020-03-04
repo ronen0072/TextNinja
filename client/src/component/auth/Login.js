@@ -41,10 +41,6 @@ function Login(props) {
         msg: null
     });
 
-    // useEffect(()=>{
-    //
-    // }, []);
-
     const ref = useRef();
     useEffect(()=>{
         const { error } = props;
@@ -53,7 +49,6 @@ function Login(props) {
 
         if(prevProps && error !== prevProps.error){
             // Check for sign up error
-
             if(error.id === 'LOGIN_FAIL'){
                 console.log('Error: ', error);
                 setState({
@@ -67,7 +62,7 @@ function Login(props) {
                 });
             }
         }
-    });
+    },[props, state]);
 
     const handleChange = (e) => {
         setState({ ...state,
@@ -99,9 +94,6 @@ function Login(props) {
         console.log('new user: ', newUser);
         // Attempt to sign up
         props.login(newUser);
-
-        // Close the modal
-        //handleClose();
     };
     return (
         <Fragment>

@@ -42,10 +42,6 @@ function SignUp(props) {
         msg: null
     });
 
-    // useEffect(()=>{
-    //
-    // }, []);
-
     const ref = useRef();
     useEffect(()=>{
         const { error } = props;
@@ -67,7 +63,7 @@ function SignUp(props) {
                 });
             }
         }
-    });
+    },[props, state]);
 
     const handleChange = (e) => {
         setState({ ...state,

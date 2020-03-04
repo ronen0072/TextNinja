@@ -12,7 +12,10 @@ const messagesReducer = (state = initialState, action)=>{
             };
         case 'SEND_MESSAGE_FAIL':
             console.log('failed to send the message', action.project);
-            return state;
+            return{
+                msg:action.payload.msg,
+                status: action.payload.status,
+            };
         default:
             return state;
     }

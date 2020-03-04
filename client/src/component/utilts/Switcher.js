@@ -18,14 +18,12 @@ const useStyles = makeStyles ({
 
 export default function Switcher(props) {
     const classes = useStyles();
-    const [state, setState] = useState({
-        switcherState: sessionStorage.getItem(props.name) === 'true'
-    });
+    const [state, setState] = useState(false);
     useEffect(()=>{
         setState({
             switcherState: sessionStorage.getItem(props.name) === 'true'
         });
-    }, []);
+    }, [props.name]);
     
     const handleChange = () =>{
         setState({
