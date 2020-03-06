@@ -8,9 +8,11 @@ const useStyles = makeStyles({
         marginLeft: 'auto',
     },
     iconOn: {
+        display: 'block',
         color: '#59beee'
     },
     iconOff: {
+        display: 'block',
         color: '#d9dad6'
     }
 });
@@ -59,11 +61,12 @@ export default function Volume(props) {
         }
         props.mutedFun();
     };
+    console.log('displayinline: ',props.displayInline);
     return (
         <Icon
             title={'volume '+ state.volumeState}
             fontSize="large"
-            className={"toolsIcon "+ state.iconStyle}
+            className={state.iconStyle + (props.displayInline? ' toolsIcon' : '')}
             onClick={handleOnClick}
         >
             {state.iconName}

@@ -6,7 +6,6 @@ import Volume from './Volume';
 import Clear from './Clear';
 import AttachFile from './AttachFile';
 import Mininize from './Mininize';
-import TextNinjaHOC from "../TextNinjaHOC";
 
 var useStyles = makeStyles({
     root: {
@@ -35,6 +34,7 @@ function Tools(props){
                 toggleMarkLine = {props.toggleMarkLine}
                 setFontSize = {props.setFontSize}
                 changeOrder = {props.changeOrder}
+                displayInline = {props.displayInline}
             />
             {props.fileOption &&
                 <AttachFile
@@ -43,7 +43,10 @@ function Tools(props){
                 />
             }
             {props.volumeOption &&
-               <Volume mutedFun={props.mutedFun}/>
+               <Volume
+                   mutedFun={props.mutedFun}
+                   displayInline = {props.displayInline}
+               />
             }
             {props.ClearOption &&
                 <Clear clearFun={() => props.setInput('')} openInput={props.openInput}/>

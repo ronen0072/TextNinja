@@ -27,9 +27,11 @@ const useStyles = makeStyles(theme => ({
         minWidth: '250px'
     },
     iconOnOver: {
+        display: 'block',
         color: '#59beee'
     },
     iconOnLeave: {
+        display: 'block',
         color: '#d9dad6'
     },
     subTitle:{
@@ -90,7 +92,7 @@ export default function Settings(props) {
             <Icon
                 title={'settings'}
                 fontSize="large"
-                className={"toolsIcon " + state.iconStyle}
+                className={state.iconStyle + (props.displayInline? ' toolsIcon' : '')}
                 onMouseOver={handleOnMouseOver}
                 onMouseLeave={handleOnMouseLeave}
             >

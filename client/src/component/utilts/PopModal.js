@@ -19,20 +19,22 @@ const useStyles = makeStyles(theme => ({
 
     },
     paper: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: theme.palette.background.paper,
         borderRadius:'15px',
         border:' 2px solid #e1e1e1',
-        margin: '0 auto !important',
         marginBottom: '2px !important',
         padding: '10px',
         cursor: 'pointer',
         boxShadow: theme.shadows[5],
         width: 'calc(150px + 40%)',
         minWidth: '200px',
-
+        outline: 'none',
     },
     title:{
-        marginTop: '5px'
+        marginTop: '5px',
     },
     wrapper:{
         display: 'flex',
@@ -81,13 +83,14 @@ function PopModal(props) {
                             className={classes.close}>
                             close
                         </Icon>
-                        <Grid item md={12}>
+                        <Grid item xs={12}>
                             <h3 className={classes.title +" title"}>{props.title}</h3>
                         </Grid>
                         {props.children.filter((element, index) =>{
                             return index > 0;
                         })}
                     </Grid>
+
                 </Fade>
             </Modal>
         </Fragment>

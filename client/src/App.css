@@ -27,7 +27,7 @@ body{
     color:var(--white);
     letter-spacing: -2px;
     margin: 20px calc(-18px - 0.6%);
-    padding: 10px 5% 5px;
+    padding: 10px 5% 5px 5%;
 }
 .smallLogo{
     padding-right: 10px;

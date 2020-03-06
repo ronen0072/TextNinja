@@ -119,6 +119,7 @@ function Home(props){
                                     minimizeMod = {minimizeMod}
                                     openInput = {openInput}
                                     setInput = {setInput}
+                                    displayInline = {true}
                                 />
                             </Grid>
                         </Grid>
