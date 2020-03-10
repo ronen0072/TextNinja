@@ -29,10 +29,6 @@ function Tools(props){
         <Grid className={classes.wrap}>
             <Settings
                 {...props.settingsOptions}
-                toggleChapterToSyllables = {props.toggleChapterToSyllables}
-                toggleMarkWord = {props.toggleMarkWord}
-                toggleMarkLine = {props.toggleMarkLine}
-                setFontSize = {props.setFontSize}
                 changeOrder = {props.changeOrder}
                 displayInline = {props.displayInline}
             />
@@ -44,7 +40,6 @@ function Tools(props){
             }
             {props.volumeOption &&
                <Volume
-                   mutedFun={props.mutedFun}
                    displayInline = {props.displayInline}
                />
             }

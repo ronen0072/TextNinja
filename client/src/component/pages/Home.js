@@ -4,8 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Tools from '../textNinja tool/tools';
 import FileUpload from '../textNinja tool/tools/FileUpload';
 import TextNinjaTool from '../textNinja tool';
-import TextNinjaHOC from '../textNinja tool/TextNinjaHOC'
-import Settings from "../textNinja tool/tools/Settings";
+import {connect} from "react-redux";
 
 var useStyles = makeStyles({
     root: {
@@ -109,11 +108,6 @@ function Home(props){
                                     MinimizeOption={true}
                                     volumeOption={true}
                                     fileOption={true}
-                                    mutedFun={props.mutedFun}
-                                    toggleChapterToSyllables={props.toggleChapterToSyllables}
-                                    toggleMarkWord = {props.toggleMarkWord}
-                                    toggleMarkLine = {props.toggleMarkLine}
-                                    setFontSize = {props.setFontSize}
                                     readFromFileModToggle = {readFromFileModToggle}
                                     toggleMinimizeMod={ toggleMinimizeMod }
                                     minimizeMod = {minimizeMod}
@@ -126,11 +120,6 @@ function Home(props){
                     </Grid>
                     <Grid item xs={12} md={minimizeMod? 11 : 6} className={'textNinjaTool'}>
                         <TextNinjaTool
-                            onWordClick = {props.playFun}
-                            chapterToSyllables = {props.chapterToSyllables}
-                            markWord = {props.markWord}
-                            markLineEvent = {props.markLineEvent}
-                            fontSize = {props.fontSize}
                             outputClassName={'textNinjaWrap'}
                         >
                             {input}
@@ -141,5 +130,10 @@ function Home(props){
         </Grid>
     );
 }
+const mapStateToProps = (state) =>{
+    return{
+        fontSize: state.preferences.fontSize,
+    };
+};
 
-export default TextNinjaHOC(Home);
+export default connect(mapStateToProps,null)(Home);

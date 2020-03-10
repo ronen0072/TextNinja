@@ -4,6 +4,16 @@ import PopModal from '../../utilts/PopModal';
 import {makeStyles} from "@material-ui/core/styles";
 import { SketchPicker } from 'react-color';
 import Switcher from '../../utilts/Switcher';
+import {connect} from "react-redux";
+import {
+    toggleBreakDownToSyllables,
+    toggleMarkWord,
+    toggleMarkLine,
+    setFontSize,
+    setLineColor,
+    setWordsListOrder,
+    setDivideWordsOrder
+} from "../../../store/actions/preferencesActions";
 
 
 const useStyles = makeStyles(theme => ({
@@ -51,19 +61,17 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function Settings(props) {
+function Settings(props) {
     const classes = useStyles();
     const [state, setState] = useState({
         iconStyle: classes.iconOnLeave,
         lineColor: '#ffffff'
     });
+    const [divideWordsOrderDefaultValue, setDivideWordsOrderDefaultValue] = useState('time');
+    const [wordsListOrderDefaultValue, setWordsListOrderDefaultValue] = useState('time');
     useEffect(()=>{
-        let fontSize = sessionStorage.getItem('fontSize');
-        //console.log('sessionStorage.fontSize: ',fontSize);
-        fontSize = (fontSize !== undefined)? fontSize : 18;
-        setState({
-            fontSize: fontSize
-        });
+        setWordsListOrderDefaultValue(props.wordsListOrder);
+        setDivideWordsOrderDefaultValue(props.divideWordsOrder);
     }, []);
 
     const handleOnMouseOver = () =>{
@@ -80,10 +88,8 @@ export default function Settings(props) {
     };
 
     const handleChangeComplete = (color) => {
-        sessionStorage.setItem('lineColor', color.hex);
-        console.log('lineColor: ',state.lineColor);
-        setState({ lineColor: color.hex });
-
+        console.log('lineColor: ',color.hex);
+        props.setLineColor(color.hex);
     };
 
 
@@ -99,22 +105,27 @@ export default function Settings(props) {
                 {'settings'}
             </Icon>
             <Grid item md={12}>
+
                 {props.syllablesOption &&
                      <Switcher
                          sx={12} sm={12} md={12}
-                         label="Chapter the word into syllables:"
-                         name="chapterToSyllables"
-                         onChange={props.toggleChapterToSyllables}
+                         label="break down the word into syllables:"
+                         name="breakDownToSyllables"
+                         checked={props.breakDownToSyllables}
+                         onChange={props.toggleBreakDownToSyllables}
                      />
                 }
+
                 {props.markWordOption &&
                     <Switcher
                         sx={12} sm={12} md={12}
                         label="Word reading highlight:"
                         name="markWord"
+                        checked={props.markWord}
                         onChange={props.toggleMarkWord}
                     />
                 }
+
                 {props.fontSizeOption &&
                     <Grid container className={classes.section}>
                         <Grid item sx={4} sm={4} md={4} className={classes.label}>
@@ -124,8 +135,8 @@ export default function Settings(props) {
                             <FormControl>
 
                                 {/*<InputLabel htmlFor="grouped-native-select">Grouping</InputLabel>*/}
-                                <Select native defaultValue={sessionStorage.getItem('fontSize')}
-                                        onChange={props.setFontSize} input={<Input id="grouped-native-select"/>}>
+                                <Select native defaultValue={props.fontSize}
+                                    onChange={(e)=>props.setFontSize(e.target.value)} input={<Input id="grouped-native-select"/>}>
                                     <option value={12}>12</option>
                                     <option value={14}>14</option>
                                     <option value={16}>16</option>
@@ -138,35 +149,78 @@ export default function Settings(props) {
                         </Grid>
                     </Grid>
                 }
+
                 {props.markLineOption &&
                     <Switcher
                         sx={12} sm={7} md={7}
                         label="Line reading highlight:"
                         name="markLine"
+                        checked={props.markLine}
                         onChange={props.toggleMarkLine}>
                         <Grid item sx={12} sm={5} md={5}>
-                            {' Pick color'}
+                            {'Pick color'}
                             <SketchPicker
                                 className={classes.sketchPicker}
-                                color={state.lineColor}
+                                color={props.lineColor}
                                 onChangeComplete={handleChangeComplete}
                             />
                         </Grid>
                     </Switcher>
                 }
 
-                {props.orderOption &&
+                {props.wordsListOrderOption &&
                     <Grid container className={classes.section}>
                         <FormControl component="fieldset" className={classes.label}>
                             <FormLabel component="legend">Order By</FormLabel>
-                            <RadioGroup aria-label="Order By" name="Order By" value={localStorage.getItem('orderBy')} onChange={props.changeOrder}>
+                            <RadioGroup
+                                aria-label="Order By"
+                                name="Order By"
+                                defaultValue={wordsListOrderDefaultValue}
+                                onChange={(e)=> props.setWordsListOrder(e.target.value)}
+                            >
                                 <FormControlLabel value="time" control={<Radio />} label="Time" />
                                 <FormControlLabel value="difficulty" control={<Radio />} label="Difficulty" />
                             </RadioGroup>
                         </FormControl>
                     </Grid>
                 }
+
+                {props.divideWordsOrderOption &&
+                <Grid container className={classes.section}>
+                    <FormControl component="fieldset" className={classes.label}>
+                        <FormLabel component="legend">Order By</FormLabel>
+                        <RadioGroup
+                            aria-label="Order By"
+                            name="Order By"
+                            defaultValue={divideWordsOrderDefaultValue}
+                            onChange={(e)=> props.setDivideWordsOrder(e.target.value)}
+                        >
+                            <FormControlLabel value="time" control={<Radio />} label="Time" />
+                            <FormControlLabel value="difficulty" control={<Radio />} label="Difficulty" />
+                            <FormControlLabel value="dynamic" control={<Radio />} label="Dynamic" />
+                            <FormControlLabel value="random" control={<Radio />} label="Random" />
+                        </RadioGroup>
+                    </FormControl>
+                </Grid>
+                }
             </Grid>
         </PopModal>
     );
 }
+const mapStateToProps = (state) => ({
+    muted: state.preferences.muted,
+    breakDownToSyllables: state.preferences.breakDownToSyllables,
+    markWord: state.preferences.markWord,
+    fontSize: state.preferences.fontSize,
+    wordsListOrder: state.preferences.wordsListOrder,
+    divideWordsOrder: state.preferences.divideWordsOrder,
+});
+export default connect(mapStateToProps,{
+    toggleBreakDownToSyllables,
+    toggleMarkWord,
+    toggleMarkLine,
+    setFontSize,
+    setLineColor,
+    setWordsListOrder,
+    setDivideWordsOrder,
+})(Settings);

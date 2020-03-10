@@ -39,7 +39,7 @@ export default function Switcher(props) {
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={sessionStorage.getItem(props.name) === 'true'}
+                            checked={props.checked}
                             onChange={handleChange}
                             value="checkedB"
                             color="primary"

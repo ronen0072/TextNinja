@@ -5,7 +5,6 @@ import PopModal from '../utilts/PopModal';
 import WordDivision from '../utilts/WordDivision'
 import {connect} from "react-redux";
 import { setWordSyllables } from "../../store/actions/wordActions";
-import TextNinjaHOC from "./TextNinjaHOC";
 import Alert from "@material-ui/lab/Alert/Alert";
 
 const useStyles = makeStyles({
@@ -56,8 +55,8 @@ function SetSyllables(props) {
             </Grid>
             <Grid item md={12} className={classes.wrapper}>
                 <WordDivision
+                    audioURL = {wordObj && wordObj.soundURL}
                     onChange={setWordDivision}
-                    fontSize={props.fontSize}
                     word = {props.word}
                 />
             </Grid>
@@ -78,4 +77,4 @@ const mapStateToProps = (state) => ({
     // error: state.error,
     words: state.word.words,
 });
-export default connect(mapStateToProps,{ setWordSyllables })(TextNinjaHOC(SetSyllables));
+export default connect(mapStateToProps,{ setWordSyllables })(SetSyllables);

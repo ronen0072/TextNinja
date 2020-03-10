@@ -81,7 +81,7 @@ class Word extends Component{
     }
 
     setDisplay(isOver) {
-        if(this.props.chapterToSyllables){
+        if(this.props.breakDownToSyllables){
             if(isOver) {
                 this.setState({
                     display: this.state.syllables,
@@ -207,7 +207,11 @@ class Word extends Component{
     };
 
     handleOnClick = () => {
-        this.props.onWordClick(this.state.soundURL);
+        if(!this.props.muted){
+            const audio = new Audio(this.state.soundURL);
+            audio.currentTime = 0;
+            audio.play();
+        }
         this.props.addUserWords(this.state.wordObj);
     };
 
@@ -252,6 +256,11 @@ const mapStateToProps = (state) =>{
     return{
         words: state.word.words,
         userWords: state.userWords.userWords,
+        muted: state.preferences.muted,
+        breakDownToSyllables: state.preferences.breakDownToSyllables,
+        markWord: state.preferences.markWord,
+        // markLine: state.preferences.markLine,
+        fontSize: state.preferences.fontSize,
     };
 };
 

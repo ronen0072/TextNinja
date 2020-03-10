@@ -5,7 +5,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {sendMessage} from "../../store/actions/messagesActions";
 import Alert from "@material-ui/lab/Alert/Alert";
-import TextNinjaHOC from "../textNinja tool/TextNinjaHOC";
 const useStyles = makeStyles(theme => ({
     error: {
         height: '50px',
@@ -179,6 +178,7 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
     error: state.error,
-    messages: state.messages
+    messages: state.messages,
+    fontSize: state.preferences.fontSize,
 });
-export default connect(mapStateToProps,{ sendMessage })(TextNinjaHOC(Contact));
+export default connect(mapStateToProps,{ sendMessage })(Contact);

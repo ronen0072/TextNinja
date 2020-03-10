@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Grid} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core/styles";
 import PopModal from '../utilts/PopModal';
-import TextNinjaHOC from "./TextNinjaHOC";
 import Alert from "@material-ui/lab/Alert/Alert";
 import axios from "axios";
 import TextNinjaTool from "./index";
@@ -51,11 +50,6 @@ function Wikipedia(props) {
                 <Grid item md={12} className={classes.wrapper}>
                     {!info && <Alert severity="error">{`No information on ${title} !`}</Alert>}
                     <TextNinjaTool
-                        onWordClick = {props.playFun}
-                        chapterToSyllables = {props.chapterToSyllables}
-                        markWord = {props.markWord}
-                        markLineEvent = {props.markLineEvent}
-                        fontSize = {props.fontSize}
                         outputClassName={''}
                     >
                     {info}
@@ -64,4 +58,4 @@ function Wikipedia(props) {
         </PopModal>
     );
 }
-export default TextNinjaHOC(Wikipedia);
+export default Wikipedia;

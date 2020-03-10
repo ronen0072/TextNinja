@@ -22,7 +22,7 @@ export default function Footer() {
     const classes = useStyles();
 
     return (
-        <Hidden xsDown>
+        <Hidden smDown>
             <BottomNavigation
                 className={classes.footer}
             >

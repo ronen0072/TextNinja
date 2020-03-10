@@ -4,10 +4,10 @@ import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {getUserWords, deleteUserWords} from "../../store/actions/userWordsActions";
 import Alert from "@material-ui/lab/Alert/Alert";
-import TextNinjaHOC from "../textNinja tool/TextNinjaHOC";
 import Word from "../textNinja tool/Word";
 import Icon from "@material-ui/core/Icon";
 import Tools from "../textNinja tool/tools";
+import {setWordsListOrder} from "../../store/actions/preferencesActions";
 
 
 function compare( a, b ) {
@@ -44,31 +44,27 @@ function WordsList(props){
         setWordsToDelete(newWordToDelete);
     };
     useEffect(()=>{
-            console.log('props.userWords: ',props.userWords);
             props.getUserWords();
         },
         []
     );
     useEffect(()=>{
-            if(wordsToPractice !== props.userWords)
-                setWordsToPractice(props.userWords);
-        }
-    ,[wordsToPractice, props.userWords]);
-    const handleChangeOrder = (e) =>{
-        if(order !== e.target.value){
-            localStorage.setItem('orderBy', e.target.value);
-            setOrder(e.target.value);
-            let newWordsToPractice = wordsToPractice;
-            if(e.target.value === 'difficulty'){
-                newWordsToPractice.sort(compare);
-                setWordsToDelete(newWordsToPractice);
+            if(props.userWords && (wordsToPractice.length !== props.userWords.length || props.wordsListOrder !== order)){
+                let newWordsToPractice = [...props.userWords];
+                if(props.wordsListOrder === 'difficulty'){
+                    newWordsToPractice.sort(compare);
+                    setWordsToPractice(newWordsToPractice);
+                }
+                setWordsToPractice(newWordsToPractice);
             }
-            else{
-                props.getUserWords();
+            if(props.wordsListOrder !== order) {
+                setOrder(props.wordsListOrder);
             }
         }
+    ,[props.userWords,props.wordsListOrder]
+    );
 
-    };
+
     const handleChange = (e) =>{
       if(e.target.checked){
           addToWordsToDelete(e.target.id);
@@ -88,12 +84,7 @@ function WordsList(props){
                                 id={word._id}
                                 onChange={handleChange}
                             />
-                            <Word
-                                chapterToSyllables={props.chapterToSyllables}
-                                markWord={props.markWord}
-                                fontSize={props.fontSize}
-                                onWordClick = {props.playFun}
-                            >
+                            <Word>
                                 {word.wordID}
                             </Word>  <br/>
                         </div>
@@ -171,15 +162,9 @@ function WordsList(props){
                             fontSizeOption: true,
                             syllablesOption: true,
                             markWordOption: true,
-                            orderOption: true,
+                            wordsListOrderOption: true,
                         }}
-                        changeOrder = {handleChangeOrder}
                         volumeOption={true}
-                        mutedFun={props.mutedFun}
-                        toggleChapterToSyllables={props.toggleChapterToSyllables}
-                        toggleMarkWord = {props.toggleMarkWord}
-                        toggleMarkLine = {props.toggleMarkLine}
-                        setFontSize = {props.setFontSize}
                     />
                 </Grid>
             </Grid>
@@ -192,6 +177,7 @@ const mapStateToProps = (state) => ({
     token: state.auth.token,
     userWords: state.userWords.userWords,
     error: state.error,
-    messages: state.messages
+    messages: state.messages,
+    wordsListOrder: state.preferences.wordsListOrder,
 });
-export default connect(mapStateToProps,{ getUserWords, deleteUserWords })(TextNinjaHOC(WordsList));
+export default connect(mapStateToProps,{ getUserWords, deleteUserWords, setWordsListOrder })(WordsList);

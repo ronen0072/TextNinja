@@ -4,6 +4,7 @@ import errorReducer from './errorReducer';
 import authReducer from './authReducer';
 import messagesReducer from './messagesReducer';
 import userWordsReducer from './userWordsReducer';
+import preferencesReducer from "./preferencesReducer";
 
 export default combineReducers({
     word: wordReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
     auth: authReducer,
     messages: messagesReducer,
     userWords: userWordsReducer,
+    preferences: preferencesReducer
 })

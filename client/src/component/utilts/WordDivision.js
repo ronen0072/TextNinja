@@ -2,6 +2,9 @@
 import React, {Fragment, useState, useEffect, useRef} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Separator from './Separator';
+import {connect} from "react-redux";
+import {getWord} from "../../store/actions/wordActions";
+import {addUserWords} from "../../store/actions/userWordsActions";
 
 var useStyles = makeStyles({
     root: {
@@ -49,6 +52,16 @@ function WordDivision(props){
 
         }
     },[props, word, separators]);
+
+    const handleOnClick = () => {
+        console.log('handleOnClick: ',!props.muted , props.audioURL);
+        if(!props.muted){
+            const audio = new Audio(props.audioURL);
+            audio.currentTime = 0;
+            audio.play();
+        }
+    };
+
     const createSyllables =  () => {
         let syllables = [];
         let lastSeparators = 0;
@@ -69,7 +82,7 @@ function WordDivision(props){
             {ArrayWord.map((char, index)=>{
                 return(
                     <Fragment key={index}>
-                        <b onClick={()=>props.onClick(props.audioURL)}>{char}</b>
+                        <b onClick={handleOnClick}>{char}</b>
                         {(index < ArrayWord.length -1)?<Separator onClick={toggleSeparators} index={index} key={word+index}/> : null}
                     </Fragment>
                 )
@@ -78,5 +91,15 @@ function WordDivision(props){
     )
 
 }
+const mapStateToProps = (state) =>{
+    return{
+        muted: state.preferences.muted,
+        // breakDownToSyllables: state.preferences.breakDownToSyllables,
+        // markWord: state.preferences.markWord,
+        // markLine: state.preferences.markLine,
+        // fontSize: state.preferences.fontSize,
+    };
+};
 
-export default WordDivision;
+export default connect(mapStateToProps,null)(WordDivision);
+

@@ -4,10 +4,21 @@ import {makeStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
 import {getUserWords, deleteUserWords, incDifficultyUserWords, decDifficultyUserWords} from "../../store/actions/userWordsActions";
 import Alert from "@material-ui/lab/Alert/Alert";
-import TextNinjaHOC from "../textNinja tool/TextNinjaHOC";
 import WordDivision from "../utilts/WordDivision";
 import Icon from "@material-ui/core/Icon";
 import Tools from "../textNinja tool/tools";
+import {MUTED_ON} from "../../store/actions/types";
+
+function compare( a, b ) {
+    if ( a.difficulty < b.difficulty ){
+        return -1;
+    }
+    if ( a.difficulty > b.difficulty ){
+        return 1;
+    }
+    return 0;
+}
+
 const useStyles = makeStyles(theme => ({
     root:{
       height: '75vh',
@@ -25,7 +36,11 @@ const useStyles = makeStyles(theme => ({
 
 function DivideWords(props){
     const classes = useStyles();
+    const [order, setOrder] = useState(null);
     const [wordIndex, setWordIndex] = useState(0);
+    const [lastIndex, setLastIndex] = useState(props.userWords && props.userWords.length);
+    const [indexUp, setIndexUp] = useState(null);
+    const [indexDown, setIndexDown] = useState(null);
     const [wordsToPractice, setWordsToPractice] = useState([]);
     const [deleteBtn, setDeleteBtn] = useState(false);
     const [wordsToDelete, setWordsToDelete] = useState([]);
@@ -43,11 +58,50 @@ function DivideWords(props){
         },
         []
     );
+
     useEffect(()=>{
-            if(wordsToPractice !== props.userWords)
-                setWordsToPractice(props.userWords);
+            if(props.userWords && (wordsToPractice.length !== props.userWords.length || props.divideWordsOrder !== order)){
+                let newWordsToPractice = [...props.userWords];
+                if(props.divideWordsOrder === 'difficulty' || props.divideWordsOrder === 'dynamic' ){
+                    newWordsToPractice.sort(compare);
+                    setWordsToPractice(newWordsToPractice);
+                    setToNextIndex();
+                }
+                setWordsToPractice(newWordsToPractice);
+                setLastIndex(newWordsToPractice.length-1);
+            }
+            if(props.divideWordsOrder !== order) {
+                setOrder(props.divideWordsOrder);
+            }
         }
+        ,[props.userWords,props.divideWordsOrder]
     );
+
+    const setToNextIndex = () =>{
+        switch(props.divideWordsOrder) {
+            case 'time':
+            case 'difficulty':{
+                if(!order)
+                    setWordIndex(0);
+                else
+                    setWordIndex(wordIndex+1);
+            }
+            case 'random':{
+                if(order){
+                    let newWordsToPractice = [...wordsToPractice];
+                    let tamp =  newWordsToPractice[wordIndex];
+                    newWordsToPractice[wordIndex] = newWordsToPractice[lastIndex];
+                    newWordsToPractice[lastIndex] = tamp;
+                    setWordsToPractice(newWordsToPractice);
+                    setLastIndex(lastIndex-1);
+                }
+                setWordIndex(Math.floor(Math.random() * lastIndex));
+            }
+            case 'dynamic':{
+
+            }
+        }
+    };
 
     const handleSubmit = () =>{
         let word = wordsToPractice[wordIndex];
@@ -78,10 +132,8 @@ function DivideWords(props){
         return (
             <WordDivision
                 onChange={setWordDivision}
-                fontSize={props.fontSize}
                 word =  {word.wordID}
                 audioURL = {word.soundURL}
-                onClick = {props.playFun}
             />
         );
     };
@@ -160,7 +212,7 @@ function DivideWords(props){
                                 className='choose'
                                 id='next'
                                 title= 'next'
-                                onClick={()=>{setWordIndex(wordIndex + 1)}}>
+                                onClick={setToNextIndex}>
                                 next
                                 <Icon>forward</Icon>
                             </Button>
@@ -173,14 +225,9 @@ function DivideWords(props){
                 <Grid item className='wrap-settings'>
                     <Tools
                         settingsOptions = {{
-                            order: true,
+                            divideWordsOrderOption: true,
                         }}
                         volumeOption={true}
-                        mutedFun={props.mutedFun}
-                        toggleChapterToSyllables={props.toggleChapterToSyllables}
-                        toggleMarkWord = {props.toggleMarkWord}
-                        toggleMarkLine = {props.toggleMarkLine}
-                        setFontSize = {props.setFontSize}
                     />
                 </Grid>
             </Grid>
@@ -193,6 +240,7 @@ const mapStateToProps = (state) => ({
     token: state.auth.token,
     userWords: state.userWords.userWords,
     error: state.error,
-    messages: state.messages
+    messages: state.messages,
+    divideWordsOrder: state.preferences.divideWordsOrder,
 });
-export default connect(mapStateToProps,{ getUserWords, deleteUserWords, incDifficultyUserWords, decDifficultyUserWords })(TextNinjaHOC(DivideWords));
+export default connect(mapStateToProps,{ getUserWords, deleteUserWords, incDifficultyUserWords, decDifficultyUserWords })(DivideWords);

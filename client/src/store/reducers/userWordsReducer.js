@@ -4,7 +4,6 @@ const initState = {
 const wordReducer = (state = initState, action)=>{
     switch(action.type){
         case 'GET_USER_WORDS':
-            console.log('GET_USER_WORDS', action.payload.words);
             return {
                 ...state,
                 userWords: [...action.payload.words]
@@ -22,7 +21,6 @@ const wordReducer = (state = initState, action)=>{
         case 'DELETE_USER_WORDS':{
             let wordsToDelete = action.wordsToDelete;
             console.log('delete words', wordsToDelete);
-
             let userWords = state.userWords.filter((wordObj)=>{
                 for(let i = 0; i < wordsToDelete.length; i++){
                     if(wordObj._id === wordsToDelete[i])
