@@ -6,20 +6,12 @@ const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth');
-const session = require('express-session');
-const {updateCurrentPageName} = require('../config/redirectBack');
 
 
 router.get('/logOut', (req, res) => {
     req.logout();
     res.redirect('/');
 });
-
-// router.get('/login', (req, res) => {
-//     req.pageID = 0;
-//     res.redirect('/');
-//
-// });
 
 // @desc return user & token
 function returnUserAndToken(user, res){

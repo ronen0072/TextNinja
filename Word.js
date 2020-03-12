@@ -1,7 +1,6 @@
 const oxford= require('oxford-dictionaries-api');
 const requestPromise = require('request-promise');
-const parseString  = require('xml2js');
-const parse = require('xml-parser');
+
 const config = require('config');
 
 class Word {

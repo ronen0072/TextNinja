@@ -3,7 +3,6 @@ import {BrowserRouter, Route} from "react-router-dom";
 import { Provider } from 'react-redux';
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import queryString from "query-string";
-
 import {loadUser, loginWith} from "./store/actions/authActions";
 import store from "./store/store";
 import {Header, Footer} from './component/layouts';
