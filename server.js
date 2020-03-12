@@ -8,7 +8,6 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const routesAPI = require('./routes/api');
 const routesAuth = require('./routes/auth');
-const routesPractice = require('./routes/practice');
 var session = require('express-session');
 const passportSetup = require('./config/passport-setup');
 const path = require('path');
@@ -52,10 +51,8 @@ mongoose.connect("mongodb://localhost/textNinja", {
 
 
 app.use(express.json());
-app.use('/', require('./routes/index.js'));
 app.use('/api', routesAPI);
 app.use('/auth', routesAuth);
-app.use('/practice', routesPractice);
 
 //static files
 app.use(express.static('./public'));
