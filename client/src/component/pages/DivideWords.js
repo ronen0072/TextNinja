@@ -39,14 +39,16 @@ function DivideWords(props){
     const [order, setOrder] = useState(null);
     const [wordIndex, setWordIndex] = useState(0);
     const [lastIndex, setLastIndex] = useState(props.userWords && props.userWords.length);
-    const [indexUp, setIndexUp] = useState(null);
-    const [indexDown, setIndexDown] = useState(null);
+    const [indexUp, setIndexUp] = useState(0);
+    const [indexDown, setIndexDown] = useState(0);
+    const [resetIndex, setResetIndex] = useState(false);
     const [wordsToPractice, setWordsToPractice] = useState([]);
     const [deleteBtn, setDeleteBtn] = useState(false);
     const [wordsToDelete, setWordsToDelete] = useState([]);
     const [wordDivision, setWordDivision] = useState({});
     const [failMsg, setFailMsg] = useState(false);
     const [successMsg, setSuccessMsg] = useState(false);
+
     const addToWordsToDelete = (id) =>{
         setWordsToDelete([...wordsToDelete, id]);
         setDeleteBtn(false);
@@ -60,44 +62,95 @@ function DivideWords(props){
     );
 
     useEffect(()=>{
+        console.log(props.userWords)
             if(props.userWords && (wordsToPractice.length !== props.userWords.length || props.divideWordsOrder !== order)){
                 let newWordsToPractice = [...props.userWords];
                 if(props.divideWordsOrder === 'difficulty' || props.divideWordsOrder === 'dynamic' ){
                     newWordsToPractice.sort(compare);
                     setWordsToPractice(newWordsToPractice);
-                    setToNextIndex();
+                    setResetIndex(true);
+                    setToNextIndex(true);
                 }
                 setWordsToPractice(newWordsToPractice);
                 setLastIndex(newWordsToPractice.length-1);
             }
             if(props.divideWordsOrder !== order) {
                 setOrder(props.divideWordsOrder);
+                setResetIndex(true);
+                console.log('setResetIndex: ',true);
+                setToNextIndex(true);
             }
         }
         ,[props.userWords,props.divideWordsOrder]
     );
 
-    const setToNextIndex = () =>{
+    const setToNextIndex = (reset) =>{
         switch(props.divideWordsOrder) {
             case 'time':
-            case 'difficulty':{
-                if(!order)
-                    setWordIndex(0);
-                else
-                    setWordIndex(wordIndex+1);
-            }
-            case 'random':{
-                if(order){
-                    let newWordsToPractice = [...wordsToPractice];
-                    let tamp =  newWordsToPractice[wordIndex];
-                    newWordsToPractice[wordIndex] = newWordsToPractice[lastIndex];
-                    newWordsToPractice[lastIndex] = tamp;
-                    setWordsToPractice(newWordsToPractice);
-                    setLastIndex(lastIndex-1);
-                }
-                setWordIndex(Math.floor(Math.random() * lastIndex));
-            }
+            case 'difficulty':
+                return simplePolicy(reset);
+            case 'random':
+                return randomPolicy(reset);
             case 'dynamic':{
+                return dynamicPolicy(reset);
+            }
+            default:
+                return simplePolicy(reset);
+        }
+    };
+    const simplePolicy = (reset = false)=>{
+        console.log('simplePolicy: ', props.divideWordsOrder);
+        console.log('resetIndex || reset: ', resetIndex || reset);
+        if(resetIndex || reset){
+            setWordIndex(0);
+            setResetIndex(false);
+            console.log('setResetIndex: ',false);
+        }
+        else
+            setWordIndex(wordIndex+1);
+    };
+    const randomPolicy = (reset = false)=>{
+        console.log('randomPolicy: ', props.divideWordsOrder);
+        if(resetIndex || reset){
+            let newWordsToPractice = [...props.userWords];
+            let tamp =  newWordsToPractice[wordIndex];
+            newWordsToPractice[wordIndex] = newWordsToPractice[lastIndex];
+            newWordsToPractice[lastIndex] = tamp;
+            setWordsToPractice(newWordsToPractice);
+            setLastIndex(lastIndex-1);
+            setResetIndex(false);
+            console.log('setResetIndex: ',false);
+        }
+        setWordIndex(Math.floor(Math.random() * lastIndex));
+    };
+    const dynamicPolicy = (reset = false)=>{
+        console.log('dynamicPolicy: ', props.divideWordsOrder);
+        if(resetIndex || reset){
+            const index = Math.floor(props.userWords.length/2);
+            setWordIndex(index);
+            setIndexUp(index+1);
+            setIndexDown(index-1);
+            setResetIndex(false);
+            console.log('setResetIndex: ',false);
+        }else{
+            if(successMsg){
+                setWordIndex(indexUp);
+                if (indexUp < props.userWords.length){
+                    setIndexUp(indexUp+1);
+                }
+                else {
+                    setIndexUp(0);
+                }
+            }
+            else{
+                setWordIndex(indexDown);
+                if(indexDown > 0){
+                    setIndexDown(indexDown-1);
+                }
+                else{
+                    setIndexDown(Math.floor(props.userWords.length/2));
+                }
+
 
             }
         }
@@ -129,13 +182,17 @@ function DivideWords(props){
     };
     const displayWord = () => {
         let word = wordsToPractice[wordIndex] ;
-        return (
-            <WordDivision
-                onChange={setWordDivision}
-                word =  {word.wordID}
-                audioURL = {word.soundURL}
-            />
-        );
+        console.log('wordsToPractice: ', wordsToPractice);
+        console.log(' word index: ', wordIndex);
+        console.log('word: ', word);
+        if(word)
+            return (
+                <WordDivision
+                    onChange={setWordDivision}
+                    word =  {word.wordID}
+                    audioURL = {word.soundURL}
+                />
+            );
     };
     const deleteButton = () =>{
         return (
