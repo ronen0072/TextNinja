@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Icon from "@material-ui/core/Icon";
 import {Hidden} from "@material-ui/core";
+import {connect} from "react-redux";
+import {toggleMinimizeMod} from "../../../store/actions/preferencesActions";
 
 
 const useStyles = makeStyles({
@@ -30,8 +32,7 @@ const useStyles = makeStyles({
     },
 
 });
-
-export default function Minimize(props) {
+function Minimize(props) {
     const classes = useStyles();
     const [iconStyle, setIconStyle] = useState( classes.iconOnLeave);
     const handleOnMouseOver = () =>{
@@ -46,7 +47,7 @@ export default function Minimize(props) {
         setTimeout(()=>{
             setIconStyle(classes.iconOnLeave);
         }, 300);
-        props.toggle();
+        props.toggleMinimizeMod();
     };
     return (
         <span
@@ -56,17 +57,17 @@ export default function Minimize(props) {
             onMouseLeave={handleOnMouseLeave}
         >
             <Hidden smDown>
-                <Icon title= {props.mod? 'open' : 'close'}
+                <Icon title= {props.minimizeMod? 'open' : 'close'}
                       fontSize="large"
-                      className={"toolsIcon "+ iconStyle +' '+(props.mod? '' : classes.back)}
+                      className={"toolsIcon "+ iconStyle +' '+(props.minimizeMod? '' : classes.back)}
                 >
                     arrow_forward_ios
                 </Icon>
             </Hidden>
             <Hidden mdUp>
-                <Icon title= {props.mod? 'open' : 'close'}
+                <Icon title= {props.minimizeMod? 'open' : 'close'}
                       fontSize="large"
-                      className={"toolsIcon "+ iconStyle +' '+(props.mod? classes.down : classes.up ) }
+                      className={"toolsIcon "+ iconStyle +' '+(props.minimizeMod? classes.down : classes.up ) }
                 >
                     arrow_forward_ios
                 </Icon>
@@ -75,3 +76,7 @@ export default function Minimize(props) {
 
     )
 }
+const mapStateToProps = (state) => ({
+    minimizeMod: state.preferences.minimizeMod,
+});
+export default connect(mapStateToProps,{ toggleMinimizeMod })(Minimize);

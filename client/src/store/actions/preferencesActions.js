@@ -13,7 +13,11 @@ import{
     SET_FONT_SIZE,
     SET_LINE_COLOR,
     SET_WORDS_LIST_ORDER,
-    SET_DIVIDE_WORDS_ORDER
+    SET_DIVIDE_WORDS_ORDER,
+    MINIMIZE_MOD_ON,
+    MINIMIZE_MOD_OFF,
+    FILE_MOD_ON,
+    FILE_MOD_OFF
 } from './types';
 
 // toggle muted
@@ -105,4 +109,33 @@ export const setDivideWordsOrder= (orderBy) => (dispatch) => {
         type: SET_DIVIDE_WORDS_ORDER,
         orderBy
     });
+};
+
+// toggle minimize mod
+export const toggleMinimizeMod= () => (dispatch, getState) =>{
+    const minimizeMod = getState().preferences.minimizeMod;
+    if(minimizeMod){
+        dispatch({
+            type: MINIMIZE_MOD_OFF
+        });
+    }
+    else {
+        dispatch({
+            type: MINIMIZE_MOD_ON,
+        });
+    }
+};
+// toggle file mod
+export const toggleFileMod= () => (dispatch, getState) =>{
+    const fileMod = getState().preferences.fileMod;
+    if(fileMod){
+        dispatch({
+            type: FILE_MOD_OFF
+        });
+    }
+    else {
+        dispatch({
+            type: FILE_MOD_ON,
+        });
+    }
 };

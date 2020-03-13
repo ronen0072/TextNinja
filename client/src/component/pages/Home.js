@@ -5,6 +5,7 @@ import Tools from '../textNinja tool/tools';
 import FileUpload from '../textNinja tool/tools/FileUpload';
 import TextNinjaTool from '../textNinja tool';
 import {connect} from "react-redux";
+import {toggleMinimizeMod} from "../../store/actions/preferencesActions";
 
 var useStyles = makeStyles({
     root: {
@@ -39,23 +40,18 @@ var useStyles = makeStyles({
     }
 });
 
-
 function Home(props){
     let classes = useStyles();
-    const [fileMod, setFileMod] = useState(false);
     const [input, setInput] = useState('');
-    const [minimizeMod, setMinimizeMod] = useState(false);
-    const toggleMinimizeMod = () => {
-        setMinimizeMod(!minimizeMod);
-    };
-    const openInput = (e, toOpen) =>{
-        if((e && (e.target.id === 'textNinjaInput' || e.target.id === 'textNinjaTool')) || toOpen){
-            setMinimizeMod(false);
+
+    const openInput = (e) =>{
+        if((props.minimizeMod && e && e.target.id === 'textNinjaInput')){
+                props.toggleMinimizeMod();
         }
     };
 
     useEffect(()=>{
-        if(!fileMod && !minimizeMod){
+        if(!props.fileMod && !props.minimizeMod){
             let inputSS =  sessionStorage.textNinjaInput?  sessionStorage.textNinjaInput : '';
             document.getElementById("input").value = inputSS;
             setInput(inputSS);
@@ -65,7 +61,7 @@ function Home(props){
     );
 
     useEffect(() => {
-        if(!fileMod && !minimizeMod){
+        if(!props.fileMod && !props.minimizeMod){
             sessionStorage.setItem('textNinjaInput', input);
             document.getElementById("input").value = input;
         }
@@ -75,29 +71,25 @@ function Home(props){
         setInput(document.getElementById("input").value)
     };
 
-    const readFromFileModToggle = () => {
-        setFileMod(!fileMod);
-    };
-
-
     return (
         <Grid container className={classes.root}>
             <Grid item xs={11} md={12} className={classes.root}>
                 <Grid container className={classes.wrap}>
-                    <Grid item  xs={12}  md={minimizeMod? 1 : 6} className={'inputWrap'}>
-                        <Grid container className={"textNinjaInput "+ ((fileMod || minimizeMod)? classes.readFileModOpen: '')} id='textNinjaInput' onClick={openInput}>
-                            {minimizeMod?
+                    <Grid item  xs={12}  md={props.minimizeMod? 1 : 6} className={'inputWrap'}>
+                        <Grid container className={"textNinjaInput "+ ((props.fileMod || props.minimizeMod)? classes.readFileModOpen: '')} id='textNinjaInput' onClick={openInput}>
+                            {props.minimizeMod?
                                 null :
-                                <Grid item xs={12} md={minimizeMod? 0 : 11} className={fileMod?  classes.readFileModOpen : 'textareaWrap'} >
-                                    {fileMod?
+                                <Grid item xs={12} md={props.minimizeMod? 0 : 11} className={props.fileMod?  classes.readFileModOpen : 'textareaWrap'} >
+                                    {props.fileMod?
                                         <FileUpload setInput={setInput}/>
                                         :
                                         <textarea id="input" placeholder="Insert text" onChange={handleChange} style={{fontSize: props.fontSize+'px'}}/>
                                     }
                                 </Grid>
                             }
-                            <Grid item xs={12} md={minimizeMod? 12 : 1} id='textNinjaTool' onClick={openInput}>
+                            <Grid item xs={12} md={props.minimizeMod? 12 : 1}  onClick={openInput}>
                                 <Tools
+                                    displayInline = {true}
                                     settingsOptions = {{
                                         fontSizeOption: true,
                                         syllablesOption: true,
@@ -108,17 +100,12 @@ function Home(props){
                                     MinimizeOption={true}
                                     volumeOption={true}
                                     fileOption={true}
-                                    readFromFileModToggle = {readFromFileModToggle}
-                                    toggleMinimizeMod={ toggleMinimizeMod }
-                                    minimizeMod = {minimizeMod}
-                                    openInput = {openInput}
                                     setInput = {setInput}
-                                    displayInline = {true}
                                 />
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} md={minimizeMod? 11 : 6} className={'textNinjaTool'}>
+                    <Grid item xs={12} md={props.minimizeMod? 11 : 6} className={'textNinjaTool'}>
                         <TextNinjaTool
                             outputClassName={'textNinjaWrap'}
                         >
@@ -133,7 +120,9 @@ function Home(props){
 const mapStateToProps = (state) =>{
     return{
         fontSize: state.preferences.fontSize,
+        minimizeMod: state.preferences.minimizeMod,
+        fileMod: state.preferences.fileMod,
     };
 };
 
-export default connect(mapStateToProps,null)(Home);
+export default connect(mapStateToProps,{toggleMinimizeMod})(Home);

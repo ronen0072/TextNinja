@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Icon from "@material-ui/core/Icon";
+import {connect} from "react-redux";
+import {toggleFileMod, toggleMinimizeMod} from "../../../store/actions/preferencesActions";
 
 const useStyles = makeStyles({
     root:{
@@ -16,7 +18,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function Clear(props) {
+function Clear(props) {
     const classes = useStyles();
     const [state, setState] = useState({
         iconName: 'clear_two_tone',
@@ -47,7 +49,10 @@ export default function Clear(props) {
             });
         }, 300);
         props.clearFun();
-        props.openInput(null,true);
+        if(props.minimizeMod)
+            props.toggleMinimizeMod();
+        if(props.fileMod)
+            props.toggleFileMod();
     };
     return (
         <Icon
@@ -62,3 +67,9 @@ export default function Clear(props) {
         </Icon>
     )
 }
+
+const mapStateToProps = (state) => ({
+    minimizeMod: state.preferences.minimizeMod,
+    fileMod: state.preferences.fileMod,
+});
+export default connect(mapStateToProps,{ toggleMinimizeMod, toggleFileMod })(Clear);

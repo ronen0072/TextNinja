@@ -4,7 +4,7 @@ import {Container, Grid} from "@material-ui/core";
 import Tools from '../textNinja tool/tools'
 
 
-function About(){
+function About( ){
     return (
         <Container maxWidth='xl'>
         <Grid container className={'content'}>

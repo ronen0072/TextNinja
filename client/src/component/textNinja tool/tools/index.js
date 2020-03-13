@@ -6,6 +6,8 @@ import Volume from './Volume';
 import Clear from './Clear';
 import AttachFile from './AttachFile';
 import Mininize from './Mininize';
+import {connect} from "react-redux";
+import {toggleFileMod, toggleMinimizeMod} from "../../../store/actions/preferencesActions";
 
 var useStyles = makeStyles({
     root: {
@@ -25,18 +27,23 @@ var useStyles = makeStyles({
 
 function Tools(props){
     let classes = useStyles();
+
+    const openInput = (e) =>{
+        console.log(e.target.id);
+        if((props.minimizeMod && e &&  e.target.id === 'textNinjaTools')){
+            props.toggleMinimizeMod();
+        }
+    };
+
     return(
-        <Grid className={classes.wrap}>
+        <Grid className={classes.wrap} onClick={openInput} id='textNinjaTools'>
             <Settings
                 {...props.settingsOptions}
                 changeOrder = {props.changeOrder}
                 displayInline = {props.displayInline}
             />
             {props.fileOption &&
-                <AttachFile
-                    readFromFileModToggle={props.readFromFileModToggle}
-                    openInput={props.openInput}
-                />
+                <AttachFile/>
             }
             {props.volumeOption &&
                <Volume
@@ -44,10 +51,10 @@ function Tools(props){
                />
             }
             {props.ClearOption &&
-                <Clear clearFun={() => props.setInput('')} openInput={props.openInput}/>
+                <Clear clearFun={() => props.setInput('')}/>
             }
             {props.MinimizeOption &&
-                <Mininize mod = {props.minimizeMod} toggle={props.toggleMinimizeMod}/>
+                <Mininize/>
             }
         </Grid>
 
@@ -55,4 +62,7 @@ function Tools(props){
 
 }
 
-export default Tools;
+const mapStateToProps = (state) => ({
+    minimizeMod: state.preferences.minimizeMod,
+});
+export default connect(mapStateToProps,{ toggleMinimizeMod, toggleFileMod })(Tools);

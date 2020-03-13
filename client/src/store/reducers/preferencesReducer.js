@@ -10,7 +10,11 @@ import {
     SET_FONT_SIZE,
     SET_LINE_COLOR,
     SET_WORDS_LIST_ORDER,
-    SET_DIVIDE_WORDS_ORDER
+    SET_DIVIDE_WORDS_ORDER,
+    MINIMIZE_MOD_ON,
+    MINIMIZE_MOD_OFF,
+    FILE_MOD_ON,
+    FILE_MOD_OFF
 } from '../actions/types';
 
 const initialState = {
@@ -21,7 +25,9 @@ const initialState = {
     lineColor: localStorage.getItem('lineColor')?localStorage.getItem('lineColor') : '#994288',
     fontSize: localStorage.getItem('fontSize')? localStorage.getItem('fontSize') : 16,
     wordsListOrder:  localStorage.getItem('wordsListOrderBy')? localStorage.getItem('wordsListOrderBy') : 'time',
-    divideWordsOrder:  localStorage.getItem('divideWordsOrderBy')? localStorage.getItem('divideWordsOrderBy') : 'time'
+    divideWordsOrder:  localStorage.getItem('divideWordsOrderBy')? localStorage.getItem('divideWordsOrderBy') : 'time',
+    minimizeMod: false,
+    fileMod: false,
 };
 
 export default function (state = initialState, action) {
@@ -78,8 +84,20 @@ export default function (state = initialState, action) {
                 ...state,
                 divideWordsOrder: action.orderBy
             };
+        case MINIMIZE_MOD_ON:
+        case MINIMIZE_MOD_OFF:
+            return{
+                ...state,
+                minimizeMod: !state.minimizeMod
+            };
+
+        case FILE_MOD_ON:
+        case FILE_MOD_OFF:
+            return{
+                ...state,
+                fileMod: !state.fileMod
+            };
         default:
             return state;
-
     }
 }

@@ -256,11 +256,11 @@ const mapStateToProps = (state) =>{
     return{
         words: state.word.words,
         userWords: state.userWords.userWords,
-        muted: state.preferences.muted,
+        fontSize: state.preferences.fontSize,        muted: state.preferences.muted,
         breakDownToSyllables: state.preferences.breakDownToSyllables,
         markWord: state.preferences.markWord,
         // markLine: state.preferences.markLine,
-        fontSize: state.preferences.fontSize,
+
     };
 };
 

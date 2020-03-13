@@ -29,3 +29,8 @@ export const SET_FONT_SIZE = 'SET_FONT_SIZE';
 export const SET_LINE_COLOR = 'SET_LINE_COLOR';
 export const SET_WORDS_LIST_ORDER = 'SET_WORDS_LIST_ORDER';
 export const SET_DIVIDE_WORDS_ORDER = 'SET_DIVIDE_WORDS_ORDER';
+export const MINIMIZE_MOD_ON = 'MINIMIZE_MOD_ON';
+export const MINIMIZE_MOD_OFF = 'MINIMIZE_MOD_OFF';
+export const FILE_MOD_ON = 'FILE_MOD_ON';
+export const FILE_MOD_OFF = 'FILE_MOD_OFF';
+

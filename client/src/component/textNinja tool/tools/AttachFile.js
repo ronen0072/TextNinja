@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Icon from "@material-ui/core/Icon";
+import {connect} from "react-redux";
+import {toggleMinimizeMod, toggleFileMod} from "../../../store/actions/preferencesActions";
 
 const useStyles = makeStyles({
     root:{
@@ -15,28 +17,27 @@ const useStyles = makeStyles({
     }
 });
 
-export default function AttachFile(props) {
+function AttachFile(props) {
     const classes = useStyles();
-    const [state, setState] = useState({
-        attachFileMod: false,
-        iconStyle: classes.iconOff
-    });
 
     const handleOnClick = () =>{
-        setState({
-            attachFileMod: !state.attachFileMod,
-        });
-        props.readFromFileModToggle();
-        props.openInput(null,true);
+        if(props.minimizeMod)
+            props.toggleMinimizeMod();
+        props.toggleFileMod();
     };
     return (
         <Icon
             title='attach file'
             fontSize="large"
-            className={"toolsIcon "+ (state.attachFileMod?  classes.iconOn : classes.iconOff)}
+            className={"toolsIcon "+ (props.fileMod?  classes.iconOn : classes.iconOff)}
             onClick={handleOnClick}
         >
             attach_file
         </Icon>
     )
 }
+const mapStateToProps = (state) => ({
+    minimizeMod: state.preferences.minimizeMod,
+    fileMod: state.preferences.fileMod,
+});
+export default connect(mapStateToProps,{ toggleMinimizeMod, toggleFileMod })(AttachFile);

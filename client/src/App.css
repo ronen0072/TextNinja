@@ -61,7 +61,7 @@ a:-webkit-any-link {
 .inner-content{
     display: inline-block;
     padding: 0 0 15px  calc(15px + 1%) ;
-    width: calc(100% - 45px);
+    width: calc(100% - 46px);
 }
 .wrap-settings{
     display: inline-block;

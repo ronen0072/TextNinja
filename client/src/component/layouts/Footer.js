@@ -28,7 +28,7 @@ export default function Footer() {
             >
                 <NavLink to='/' ><Button color={"inherit"} >Home</Button></NavLink>
                 <NavLink to='/About' ><Button color={"inherit"}>About</Button ></NavLink>
-                <NavLink to='/Contact' ><Button  color={"inherit"}>Contact Us</Button ></NavLink>
+                <NavLink to='/Contact us' ><Button  color={"inherit"}>Contact Us</Button ></NavLink>
             </BottomNavigation>
         </Hidden>
     );
