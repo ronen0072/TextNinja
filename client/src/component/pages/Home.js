@@ -57,7 +57,7 @@ function Home(props){
             setInput(inputSS);
         }
         },
-        []
+        [props.fileMod, props.minimizeMod]
     );
 
     useEffect(() => {

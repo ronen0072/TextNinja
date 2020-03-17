@@ -72,7 +72,7 @@ function Settings(props) {
     useEffect(()=>{
         setWordsListOrderDefaultValue(props.wordsListOrder);
         setDivideWordsOrderDefaultValue(props.divideWordsOrder);
-    }, []);
+    }, [props.wordsListOrder, props.divideWordsOrder]);
 
     const handleOnMouseOver = () =>{
         setState({

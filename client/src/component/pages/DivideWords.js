@@ -7,7 +7,6 @@ import Alert from "@material-ui/lab/Alert/Alert";
 import WordDivision from "../utilts/WordDivision";
 import Icon from "@material-ui/core/Icon";
 import Tools from "../textNinja tool/tools";
-import {MUTED_ON} from "../../store/actions/types";
 
 function compare( a, b ) {
     if ( a.difficulty < b.difficulty ){
@@ -53,38 +52,7 @@ function DivideWords(props){
         setWordsToDelete([...wordsToDelete, id]);
         setDeleteBtn(false);
     };
-    useEffect(()=>{
-            setWordsToPractice(props.userWords);
-            console.log('props.userWords: ',props.userWords);
-            props.getUserWords();
-        },
-        []
-    );
-
-    useEffect(()=>{
-        console.log(props.userWords)
-            if(props.userWords && (wordsToPractice.length !== props.userWords.length || props.divideWordsOrder !== order)){
-                let newWordsToPractice = [...props.userWords];
-                if(props.divideWordsOrder === 'difficulty' || props.divideWordsOrder === 'dynamic' ){
-                    newWordsToPractice.sort(compare);
-                    setWordsToPractice(newWordsToPractice);
-                    setResetIndex(true);
-                    setToNextIndex(true);
-                }
-                setWordsToPractice(newWordsToPractice);
-                setLastIndex(newWordsToPractice.length-1);
-            }
-            if(props.divideWordsOrder !== order) {
-                setOrder(props.divideWordsOrder);
-                setResetIndex(true);
-                console.log('setResetIndex: ',true);
-                setToNextIndex(true);
-            }
-        }
-        ,[props.userWords,props.divideWordsOrder]
-    );
-
-    const setToNextIndex = (reset) =>{
+    const setNextIndex = (reset) =>{
         switch(props.divideWordsOrder) {
             case 'time':
             case 'difficulty':
@@ -99,18 +67,14 @@ function DivideWords(props){
         }
     };
     const simplePolicy = (reset = false)=>{
-        console.log('simplePolicy: ', props.divideWordsOrder);
-        console.log('resetIndex || reset: ', resetIndex || reset);
         if(resetIndex || reset){
             setWordIndex(0);
             setResetIndex(false);
-            console.log('setResetIndex: ',false);
         }
         else
             setWordIndex(wordIndex+1);
     };
     const randomPolicy = (reset = false)=>{
-        console.log('randomPolicy: ', props.divideWordsOrder);
         if(resetIndex || reset){
             let newWordsToPractice = [...props.userWords];
             let tamp =  newWordsToPractice[wordIndex];
@@ -119,19 +83,16 @@ function DivideWords(props){
             setWordsToPractice(newWordsToPractice);
             setLastIndex(lastIndex-1);
             setResetIndex(false);
-            console.log('setResetIndex: ',false);
         }
         setWordIndex(Math.floor(Math.random() * lastIndex));
     };
     const dynamicPolicy = (reset = false)=>{
-        console.log('dynamicPolicy: ', props.divideWordsOrder);
         if(resetIndex || reset){
             const index = Math.floor(props.userWords.length/2);
             setWordIndex(index);
             setIndexUp(index+1);
             setIndexDown(index-1);
             setResetIndex(false);
-            console.log('setResetIndex: ',false);
         }else{
             if(successMsg){
                 setWordIndex(indexUp);
@@ -158,14 +119,12 @@ function DivideWords(props){
 
     const handleSubmit = () =>{
         let word = wordsToPractice[wordIndex];
-        console.log('wordDivision: ', wordDivision);
-        console.log('word.syllables: ', word.syllables);
         let ans = true;
         if(word.syllables.count !== wordDivision.count)
             ans = false;
 
         for(let i = 0; (ans && i<word.syllables.count); i++){
-                ans = (word.syllables.list[i] === wordDivision.list[i]);
+            ans = (word.syllables.list[i] === wordDivision.list[i]);
         }
         if(ans){
             setSuccessMsg(ans);
@@ -180,11 +139,38 @@ function DivideWords(props){
         }
         setTimeout(() => setWordIndex(wordIndex + 1), 3000);
     };
+    useEffect(()=>{
+            setWordsToPractice(props.userWords);
+            props.getUserWords();
+        },
+        [props.getUserWords]
+    );
+
+    useEffect(
+        ()=>{
+            if(props.userWords && (wordsToPractice.length !== props.userWords.length || props.divideWordsOrder !== order)){
+                let newWordsToPractice = [...props.userWords];
+                if(props.divideWordsOrder === 'difficulty' || props.divideWordsOrder === 'dynamic' ){
+                    newWordsToPractice.sort(compare);
+                    setWordsToPractice(newWordsToPractice);
+                    setResetIndex(true);
+                    setNextIndex(true);
+                }
+                setWordsToPractice(newWordsToPractice);
+                setLastIndex(newWordsToPractice.length-1);
+            }
+            if(props.divideWordsOrder !== order) {
+                setOrder(props.divideWordsOrder);
+                setResetIndex(true);
+                setNextIndex(true);
+            }
+        }
+        ,[props.userWords, props.divideWordsOrder, order, wordsToPractice.length]
+    );
+
+
     const displayWord = () => {
         let word = wordsToPractice[wordIndex] ;
-        console.log('wordsToPractice: ', wordsToPractice);
-        console.log(' word index: ', wordIndex);
-        console.log('word: ', word);
         if(word)
             return (
                 <WordDivision
@@ -269,7 +255,7 @@ function DivideWords(props){
                                 className='choose'
                                 id='next'
                                 title= 'next'
-                                onClick={setToNextIndex}>
+                                onClick={setNextIndex}>
                                 next
                                 <Icon>forward</Icon>
                             </Button>

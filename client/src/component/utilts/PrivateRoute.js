@@ -1,8 +1,8 @@
-import React, {Component} from "react";
+import React from "react";
 import { Route, Redirect} from 'react-router-dom';
 import {connect} from "react-redux";
 
-function PrivateRoute({auth: auth,  component: Component = null, render: Render = null, ...rest }) {
+function PrivateRoute({auth,  component: Component = null, render: Render = null, ...rest }) {
     return (
         <Route
             {...rest}

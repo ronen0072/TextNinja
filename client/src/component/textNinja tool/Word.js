@@ -162,21 +162,26 @@ class Word extends Component{
         this.setSoundURL(data.soundURL);
     }
 
+    clearTheWord(word){
+        let returnWord = word.replace(/\,|\.|\:|\'|\"|\!|\?|\%|\$|\(|\)/g, "");
+        return returnWord.toLowerCase();
+    }
     wordFactory(){
-        let word = this.props.words[this.props.words.findIndex( (element) => element.wordID === this.state.word)];
-        if(!word)
-            word = this.props.userWords[this.props.userWords.findIndex( (element) => element.wordID === this.state.word)];
+        let word = this.clearTheWord(this.state.word);
+        let wordObj = this.props.words[this.props.words.findIndex( (element) => element.wordID === word)];
+        if(!wordObj)
+            wordObj = this.props.userWords[this.props.userWords.findIndex( (element) => element.wordID === word)];
 
         //if the word already exists?
-        if(word){
+        if(wordObj){
             this.setState({
-                wordObj: word
+                wordObj: wordObj
             });
-            this.createSyllables(word);
-            this.createSoundURL(word);
+            this.createSyllables(wordObj);
+            this.createSoundURL(wordObj);
         }
         else{
-            this.props.getWord(this.state.word.toLowerCase())
+            this.props.getWord(word)
                 .then((wordObj)=>{
                     this.setState({
                        wordObj: wordObj

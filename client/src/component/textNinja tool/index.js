@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import Word from './Word';
-import {Grid} from '@material-ui/core';
 import {connect} from "react-redux";
 import {
     setFontSize, setLineColor,
@@ -24,7 +23,7 @@ function TextNinjaTool(props){
             fontSize: props.fontSize,
             words: props.children? props.children.split(" ") : []
         });
-    }, []);
+    }, [props.children, props.fontSize]);
 
     useEffect(()=>{
         if( state.input !== props.children){
@@ -38,7 +37,6 @@ function TextNinjaTool(props){
     });
     const markLineEvent = (event, outputBackground)=>{
         let background;
-        console.log('markLineEvent: ', props.markLine, outputBackground);
         if(props.markLine){
             let lineHeight = parseInt(props.fontSize)+4;
 
@@ -51,9 +49,6 @@ function TextNinjaTool(props){
                 shift = 170;
             }
             let y = event.clientY - ((event.clientY - (shift - props.fontSize)+8) % (lineHeight + 2));// - lineShift;
-
-
-            console.log('markLineEvent y: ', y);
             // if(outputBackground === '#wikiInfo') {
             //     shift = 184;
             // }

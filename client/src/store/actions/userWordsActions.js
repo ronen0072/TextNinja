@@ -15,7 +15,7 @@ export const getUserWords = () => (dispatch, getState) =>{
     //return new Promise(function(resolve, reject) {
         axios.get('/api/user/words',  tokenConfig(getState().auth.token))
         .then((res) => {
-            console.log('geUserWords: ',res);
+            //console.log('geUserWords: ',res);
             dispatch({
                 type: GET_USER_WORDS,
                 payload: res.data
@@ -29,7 +29,7 @@ export const getUserWords = () => (dispatch, getState) =>{
     //});
 };
 export const deleteUserWords = (wordsToDelete) => (dispatch, getState) =>{
-    console.log('wordsToDelete: ', `/api/user/words/[${wordsToDelete}]`);
+    //console.log('wordsToDelete: ', `/api/user/words/[${wordsToDelete}]`);
 
      axios.delete(`/api/user/words/${wordsToDelete}`, tokenConfig(getState().auth.token))
         .then((res) => {
@@ -67,7 +67,7 @@ export const decDifficultyUserWords = (wordObj) => (dispatch, getState) =>{
     setDifficultyUserWords(word_id, 'dec', dispatch, getState);
 };
 const setDifficultyUserWords = (word_id, method, dispatch, getState) =>{
-    console.log('setDifficultyUserWords: ', word_id, method);
+    //console.log('setDifficultyUserWords: ', word_id, method);
     axios.put(`/api/user/words/difficulty/${word_id}/${method}`, null, tokenConfig(getState().auth.token))
         .then((res) => {
             dispatch({

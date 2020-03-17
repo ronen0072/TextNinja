@@ -46,7 +46,7 @@ function WordsList(props){
     useEffect(()=>{
             props.getUserWords();
         },
-        []
+        [props.getUserWords]
     );
     useEffect(()=>{
             if(props.userWords && (wordsToPractice.length !== props.userWords.length || props.wordsListOrder !== order)){
@@ -61,7 +61,7 @@ function WordsList(props){
                 setOrder(props.wordsListOrder);
             }
         }
-    ,[props.userWords,props.wordsListOrder]
+    ,[props.userWords,props.wordsListOrder, order, wordsToPractice.length]
     );
 
 

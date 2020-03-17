@@ -236,3 +236,8 @@ button.social-login.google {
         margin-left: auto !important;
     }
 }
+.copyright{
+    display: block;
+    font-size: 14px;
+    color: #999999 !important;
+}

@@ -13,7 +13,7 @@ function About( ){
                 <TextNinjaTool
                     outputClassName={'inner-content'}
                 >
-                    TextNinja gool is to teach and improve children's reading abilities. Using features like such as automatic row highlighting,
+                    TextNinja gool is to teach and improve childrens reading abilities. Using features like such as automatic row highlighting,
                     word parsing by syllables and text-to-speech etc.
                     Registered users can practice words they have difficulty with
                 </TextNinjaTool>

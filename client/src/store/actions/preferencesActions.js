@@ -1,6 +1,3 @@
-import axios from 'axios';
-
-import { returnErrors } from './errorActions'
 import{
     MUTED_ON,
     MUTED_OFF,

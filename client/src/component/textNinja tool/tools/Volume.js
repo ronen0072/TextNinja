@@ -43,7 +43,7 @@ function Volume(props) {
                 iconName: 'volume_up'
             });
         }
-    }, [classes.iconOff, classes.iconOn]);
+    }, [props.muted, classes.iconOff, classes.iconOn]);
 
 
     const handleOnClick = () =>{
@@ -63,7 +63,6 @@ function Volume(props) {
         }
         props.toggleMuted()
     };
-    console.log('displayinline: ',props.displayInline);
     return (
         <Icon
             title={'volume '+ state.volumeState}

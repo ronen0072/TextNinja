@@ -1,0 +1,29 @@
+{
+    "mongoURI":"mongodb+srv://ronen:00720070072@textninja-s2dyh.mongodb.net/test?retryWrites=true&w=majority",
+    "session":{
+    "cookieKey":"30272596505423734661990"
+},
+    "google":{
+    "clientID":"457979000681-hsl5l0qoa593l4gmcn46v28v2t68oqcr.apps.googleusercontent.com",
+        "clientSecret":"IKB_7gWI4K__g8Ir_rDt2tYD"
+},
+    "facebook":{
+    "clientID":"2462375210536231",
+        "clientSecret":"44b07d60e49390713dea4a9d3e1af2b8"
+},
+    "Oxford":{
+    "app_id": "5cd4ffdd",
+        "app_key": "9bc0c41cf7772885df9f9084e720fc0a"
+},
+    "WordsAPI":{
+    "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
+        "x-rapidapi-key": "nx00f13nfWmshOLjQ67Z1NUKHKGup1YAgKZjsntcXspcZYWgQq"
+},
+    "DictionaryAPI":{
+    "apiKey": "bafe5fa3-9e6b-4e41-b296-04945d3f912d"
+},
+    "jwt": {
+    "jwtSecret": "TextNinjaJwtSecret"
+},
+    "clientURL": "http://localhost:3000"
+}

@@ -1,6 +1,5 @@
-
 import axios from 'axios';
-import {ADD_USER_WORD, GET_WORD, SET_WORD_SYLLABLES} from './types';
+import {GET_WORD, SET_WORD_SYLLABLES} from './types';
 
 export const getWord = word => (dispatch, getState) =>{
     return new Promise(function(resolve, reject) {

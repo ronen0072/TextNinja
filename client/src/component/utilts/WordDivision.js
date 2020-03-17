@@ -1,10 +1,7 @@
-
 import React, {Fragment, useState, useEffect, useRef} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Separator from './Separator';
 import {connect} from "react-redux";
-import {getWord} from "../../store/actions/wordActions";
-import {addUserWords} from "../../store/actions/userWordsActions";
 
 var useStyles = makeStyles({
     root: {
@@ -46,7 +43,6 @@ function WordDivision(props){
                 let newSeparators = separators;
                 newSeparators.fill(false);
                 setSeparators(newSeparators);
-                console.log(separators);
                 props.onChange({count: 1, list:[props.word]});
             }
 

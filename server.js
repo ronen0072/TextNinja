@@ -1,5 +1,6 @@
 const express = require('express');
 const fileUpload  = require('express-fileupload');
+const connectDB = require('./config/db');
 const mongoose = require('mongoose');
 const config = require('config');
 const cookieSession = require('cookie-session');
@@ -34,13 +35,7 @@ app.use(passport.session());
 mongoose.promise = global.Promise;
 
 //connect to mongodb
-mongoose.connect("mongodb://localhost/textNinja", {
-    useNewUrlParser: true,
-    useCreateIndex: true
-    })
-    .then( () => {
-    console.log('connected to mongodb');
-});
+connectDB();
 
 
 app.use(express.json());
@@ -63,5 +58,6 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 //listen to port
-app.listen(process.env.port || 5000);
-console.log('Text Ninja listen to port 5000');
+const PORT = process.env.port || 5000;
+app.listen(PORT, ()=>console.log('Text Ninja listen to port 5000'));
+

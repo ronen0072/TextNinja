@@ -37,9 +37,7 @@ class App extends Component{
         var token = queryString.parse(window.location.search).token;
 
         if(token){
-            console.log(token);
             store.dispatch(loginWith(token));
-            window.history.back();
         }
         else {
             store.dispatch(loadUser());
