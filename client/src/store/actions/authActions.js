@@ -94,7 +94,7 @@ export const loginWith =(token) => dispatch => {
                 type: LOGIN_SUCCESS,
                 payload: {user: res.data.user, token},
             });
-            window.history.back();
+            //window.history.back();
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status,));
