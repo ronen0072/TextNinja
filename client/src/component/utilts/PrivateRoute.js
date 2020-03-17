@@ -1,5 +1,5 @@
-import React, {Component, useState} from "react";
-import { Route, Redirect, Switch, BrowserRouter as Router } from 'react-router-dom';
+import React, {Component} from "react";
+import { Route, Redirect} from 'react-router-dom';
 import {connect} from "react-redux";
 
 function PrivateRoute({auth: auth,  component: Component = null, render: Render = null, ...rest }) {
@@ -21,5 +21,4 @@ function PrivateRoute({auth: auth,  component: Component = null, render: Render 
 const mapStateToProps = (state)=>({
     auth: state.auth
 });
-
 export default connect(mapStateToProps, null)(PrivateRoute);
