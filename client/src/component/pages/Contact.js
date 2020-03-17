@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Container, Grid, Fab, TextField} from "@material-ui/core";
+import {Container, Grid, Fab, TextField} from '@material-ui/core';
 import Send from '@material-ui/icons/Send';
-import {makeStyles} from "@material-ui/core/styles";
-import {connect} from "react-redux";
-import {sendMessage} from "../../store/actions/messagesActions";
-import Alert from "@material-ui/lab/Alert/Alert";
+import {makeStyles} from '@material-ui/core/styles';
+import {connect} from 'react-redux';
+import {sendMessage} from '../../store/actions/messagesActions';
+import Alert from'@material-ui/lab/Alert/Alert';
 const useStyles = makeStyles(theme => ({
     error: {
         height: '50px',
@@ -20,15 +20,19 @@ const useStyles = makeStyles(theme => ({
         marginBottom: '40px',
         width: '100%',
         height:'200px',
-        fontSize: 'inherit'
+        fontSize: 'inherit',
+        padding: '10px 15px'
     },
     input: {
         width: '100%',
         fontSize: 'inherit'
     },
     innerContent: {
-        margin: '30px',
-        width: 'auto'
+        margin: '30px 0 30px 30px ',
+        width: 'calc(100% - 100px)'
+    },
+    form:{
+        width: '100%',
     }
 }));
 
@@ -90,7 +94,7 @@ function Contact(props){
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("handleSubmit");
+        console.log('handleSubmit');
         const { name, email, userMessage } = state;
 
         const messageData = {
@@ -107,19 +111,19 @@ function Contact(props){
         //handleClose();
     };
     return (
-        <Container maxWidth="xl">
-            <div className={'content'}>
-                <h3 className="title">Contact Us</h3>
-                <form onSubmit={handleSubmit} style={{fontSize: props.fontSize+'px'}}>
+        <Container maxWidth='xl'>
+            <Grid container className={'content'}>
+                <h3 className='title'>Contact Us</h3>
+                <form onSubmit={handleSubmit} style={{fontSize: props.fontSize+'px'}} className={classes.form}>
                     <Grid container className={classes.innerContent}>
-                        <Grid item xs={12} className={classes.error}>
-                            {state.errorMsg? <Alert severity="error"> {state.errorMsg} </Alert> : null}
-                            {state.successMsg? <Alert severity="success"> {state.successMsg} </Alert> : null}
+                            <Grid item xs={12} className={classes.error}>
+                            {state.errorMsg? <Alert severity='error'> {state.errorMsg} </Alert> : null}
+                            {state.successMsg? <Alert severity='success'> {state.successMsg} </Alert> : null}
                         </Grid>
                         <Grid item xs={12} sm={5} className={classes.inputWrap}>
                             <TextField
-                                id="name"
-                                label="name"
+                                id='name'
+                                label='name'
                                 value={props.user? props.user.username : ''}
                                 InputProps={{
                                     className: classes.input
@@ -135,8 +139,8 @@ function Contact(props){
                         </Grid>
                         <Grid item xs={12} sm={5} className={classes.inputWrap}>
                             <TextField
-                                id="email"
-                                label="Email"
+                                id='email'
+                                label='Email'
                                 value={props.user? props.user.email : ''}
                                 InputProps={{
                                     className: classes.input
@@ -150,19 +154,19 @@ function Contact(props){
                         </Grid>
                         <Grid item xs={12}>
                             <textarea
-                                id="userMessage"
-                                className={classes.userMessage} name="message"
-                                placeholder="Write Us A Message"
+                                id='userMessage'
+                                className={classes.userMessage} name='message'
+                                placeholder='Write Us A Message'
                                 onChange={handleChange}
                             />
                         </Grid>
                         <Fab
-                            variant="contained"
-                            color={"primary"}
-                            type="button"
+                            variant='contained'
+                            color={'primary'}
+                            type='button'
                             className={classes.sendButton}
-                            id="submitContactUs"
-                            name="submit contact Us"
+                            id='submitContactUs'
+                            name='submit contact Us'
                             onClick={handleSubmit}
                         >
                             send  <Send className={classes.sendIcon}/>
@@ -170,7 +174,7 @@ function Contact(props){
                         <br/>
                     </Grid>
                 </form>
-            </div>
+            </Grid>
         </Container>
     );
 }

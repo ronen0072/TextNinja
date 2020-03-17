@@ -211,6 +211,7 @@ const mapStateToProps = (state) => ({
     muted: state.preferences.muted,
     breakDownToSyllables: state.preferences.breakDownToSyllables,
     markWord: state.preferences.markWord,
+    markLine: state.preferences.markLine,
     fontSize: state.preferences.fontSize,
     wordsListOrder: state.preferences.wordsListOrder,
     divideWordsOrder: state.preferences.divideWordsOrder,

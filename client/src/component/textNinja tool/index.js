@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Word from './Word';
+import {Grid} from '@material-ui/core';
 import {connect} from "react-redux";
 import {
     setFontSize, setLineColor,
@@ -37,20 +38,22 @@ function TextNinjaTool(props){
     });
     const markLineEvent = (event, outputBackground)=>{
         let background;
+        console.log('markLineEvent: ', props.markLine, outputBackground);
         if(props.markLine){
             let lineHeight = parseInt(props.fontSize)+4;
 
             //let  lineShift = window.innerWidth > 960 ? lineHeight + 2 : lineHeight + 2;
             let shift = 0;
-            if(!outputBackground) {
-                shift = window.innerWidth > 960 ? 120 - lineHeight : 440 - lineHeight;
+            if(outputBackground === 'textNinjaWrap') {
+                shift = window.innerWidth > 960 ? 120 - lineHeight : 360 - lineHeight;
+            }
+            if(outputBackground === 'inner-content') {
+                shift = 170;
             }
             let y = event.clientY - ((event.clientY - (shift - props.fontSize)+8) % (lineHeight + 2));// - lineShift;
 
 
-            // if(outputBackground === '.inner-content') {
-            //     shift = 176;
-            // }
+            console.log('markLineEvent y: ', y);
             // if(outputBackground === '#wikiInfo') {
             //     shift = 184;
             // }
@@ -68,7 +71,7 @@ function TextNinjaTool(props){
         return background;
     };
     const handleOnMouseMove= (e) => {
-        let background = markLineEvent(e);
+        let background = markLineEvent(e, props.outputClassName);
 
         setState({
             ...state,
@@ -83,7 +86,7 @@ function TextNinjaTool(props){
     };
     return (
 
-            <span
+            <div
                 style={state.backgroundColor}
                 onMouseMove={handleOnMouseMove}
                 onMouseOut={handleOnMouseOut}
@@ -101,7 +104,7 @@ function TextNinjaTool(props){
                         </Word>
                     )
                 })}
-            </span>
+            </div>
 
 
     );

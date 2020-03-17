@@ -45,7 +45,7 @@ a:-webkit-any-link {
 .inputWrap{
     height: 35%;
 }
-.textareaWrap{
+.textAreaWrap{
     height: calc(100% - 40px)
 }
 .wikiContent, .content, .textNinjaInput{

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter, Route} from "react-router-dom";
+import PrivateRoute from './component/utilts/PrivateRoute'
 import { Provider } from 'react-redux';
 import {createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import queryString from "query-string";
@@ -56,8 +57,8 @@ class App extends Component{
                             <Route path='/Home' component={Home}/>
                             <Route path='/about' component={About}/>
                             <Route path='/contact us' component={Contact} />
-                            <Route path='/words List' component={WordsList} />
-                            <Route path='/divide words' component={DivideWords} />
+                            <PrivateRoute path='/words List' component={WordsList} />
+                            <PrivateRoute path='/divide words'  component={DivideWords} />
                             <Footer />
                         </MuiThemeProvider>
                     </div>

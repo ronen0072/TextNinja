@@ -79,7 +79,7 @@ function Home(props){
                         <Grid container className={"textNinjaInput "+ ((props.fileMod || props.minimizeMod)? classes.readFileModOpen: '')} id='textNinjaInput' onClick={openInput}>
                             {props.minimizeMod?
                                 null :
-                                <Grid item xs={12} md={props.minimizeMod? 0 : 11} className={props.fileMod?  classes.readFileModOpen : 'textareaWrap'} >
+                                <Grid item xs={12} md={props.minimizeMod? 0 : 11} className={props.fileMod?  classes.readFileModOpen : 'textAreaWrap'} >
                                     {props.fileMod?
                                         <FileUpload setInput={setInput}/>
                                         :
