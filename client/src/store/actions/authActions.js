@@ -88,20 +88,22 @@ export const login =({ email, password }) => dispatch => {
 // Login User
 export const loginWith =(token) => dispatch => {
     console.log('loginWith');
-    axios.get('/auth/user', tokenConfig(token))
-        .then(res => {
-            dispatch({
-                type: LOGIN_SUCCESS,
-                payload: {user: res.data.user, token},
+    return new Promise(function() {
+        axios.get('/auth/user', tokenConfig(token))
+            .then(res => {
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    payload: {user: res.data.user, token},
+                });
+                //window.history.back();
+            })
+            .catch(err => {
+                dispatch(returnErrors(err.response.data, err.response.status,));
+                dispatch({
+                    type: AUTH_ERROR
+                });
             });
-            //window.history.back();
-        })
-        .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status,));
-            dispatch({
-                type: AUTH_ERROR
-            });
-        });
+    });
 
 };
 

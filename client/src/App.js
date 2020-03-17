@@ -36,11 +36,14 @@ class App extends Component{
         var token = queryString.parse(window.location.search).token;
         if ((!props.auth.isAuthenticated) && (props.auth.isAuthenticated !== (state.auth && state.auth.isAuthenticated))){
             if (token) {
-                console.log('getDerivedStateFromProps: ', props.auth);
                 props.loginWith(token);
             } else {
                 console.log('loadUser: ', props.auth);
                 props.loadUser();
+            }
+        } else {
+            if (token){
+                window.history.back();
             }
         }
         return {auth: props.auth};
