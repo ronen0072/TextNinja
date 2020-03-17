@@ -87,6 +87,7 @@ export const login =({ email, password }) => dispatch => {
 };
 // Login User
 export const loginWith =(token) => dispatch => {
+    console.log('loginWith');
     axios.get('/auth/user', tokenConfig(token))
         .then(res => {
             dispatch({

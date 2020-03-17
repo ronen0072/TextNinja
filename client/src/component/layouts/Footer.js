@@ -24,15 +24,15 @@ export default function Footer() {
     return (
 
         <Grid container>
-            <Hidden smDown>
-                <Grid xs={12} >
+            <Grid xs={12} >
+                <Hidden smDown>
                     <BottomNavigation className={classes.footer}>
                         <NavLink to='/' ><Button color={"inherit"} >Home</Button></NavLink>
                         <NavLink to='/About' ><Button color={"inherit"}>About</Button ></NavLink>
                         <NavLink to='/Contact us' ><Button  color={"inherit"}>Contact Us</Button ></NavLink>
                     </BottomNavigation>
-                </Grid>
-            </Hidden>
+                </Hidden>
+            </Grid>
             <Grid xs={12} className={classes.footer+" copyright"}><a href={'https://ronen-finish-personal-web.firebaseapp.com/'}>© 2020 Copyright Ronen Finish. All rights reserved</a></Grid>
         </Grid>
 
