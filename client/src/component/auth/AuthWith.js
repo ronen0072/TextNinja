@@ -21,6 +21,8 @@ const useStyles = makeStyles(theme => ({
 }));
  function AuthWith(props){
     const classes = useStyles();
+
+
     return(
         <div className={classes.socialNetwork}>
             <h2 className="loginwith">Log in with<br/> social network</h2>

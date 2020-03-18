@@ -42,7 +42,7 @@ export const signUp = ({ username, email, password }) => dispatch => {
 
     // Request body
     const body = JSON.stringify({ username, email, password });
-    axios.post('auth/signup', body, config)
+    axios.post('/auth/signup', body, config)
         .then(res=>dispatch({
             type: SIGNUP_SUCCESS,
             payload: res.data
@@ -73,7 +73,7 @@ export const login =({ email, password }) => dispatch => {
     // Request body
     const body = JSON.stringify({ email, password });
 
-    axios.post('auth/login', body, config)
+    axios.post('/auth/login', body, config)
         .then(res=>dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
