@@ -38,7 +38,7 @@ class App extends Component{
             if (token) {
                 props.loginWith(token);
             } else {
-                console.log('loadUser: ', props.auth);
+                // console.log('loadUser: ', props.auth);
                 props.loadUser();
             }
         } else {

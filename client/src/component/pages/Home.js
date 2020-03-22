@@ -65,7 +65,6 @@ function Home(props){
             sessionStorage.setItem('textNinjaInput', input);
             document.getElementById("input").value = input;
         }
-        console.log('window.history: ',window.history);
     });
 
     const handleChange = () => {
