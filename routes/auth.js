@@ -14,7 +14,7 @@ router.get('/logOut', (req, res) => {
 });
 
 // @desc return user & token
-function returnUserAndToken(user, res){
+function returnUserAndToken(user, res, server){
     jwt.sign(
         {id: user.id},
         config.get('jwt.jwtSecret'),

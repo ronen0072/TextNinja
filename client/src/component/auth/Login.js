@@ -82,7 +82,6 @@ function Login(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("handleSubmit");
         const { username, email, password } = state;
 
         const newUser = {
@@ -91,7 +90,6 @@ function Login(props) {
             password
         };
 
-        console.log('new user: ', newUser);
         // Attempt to sign up
         props.login(newUser);
     };
