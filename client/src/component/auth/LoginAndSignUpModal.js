@@ -63,7 +63,11 @@ function LoginAndSignUpModal(props) {
         setState({
             loginMod: true
         });
+        if(!open){
+            localStorage.setItem('return-location', window.location.href);
+        }
         setOpen(!open);
+
     };
 
     const toggleMod = ()=>{

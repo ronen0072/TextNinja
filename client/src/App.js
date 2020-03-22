@@ -43,10 +43,11 @@ class App extends Component{
             }
         } else {
             if (token){
-                window.history.back();
+                window.location =  localStorage.getItem('return-location');
             }
         }
         return {auth: props.auth};
+
     }
 
     render(){

@@ -27,9 +27,9 @@ const useStyles = makeStyles(theme => ({
         <div className={classes.socialNetwork}>
             <h2 className="loginwith">Log in with<br/> social network</h2>
 
-            <a  href="https://text-ninja.herokuapp.com/auth/facebook" ><button className="social-login facebook">Log in with facebook  <Facebook/></button></a>
+            <a  href="http://localhost:5000/auth/facebook" ><button className="social-login facebook">Log in with facebook  <Facebook/></button></a>
             {/*<button className="social-social-login twitter">Log in with Twitter</button>*/}
-            <a  href="https://text-ninja.herokuapp.com/auth/google" ><button className="social-login google">Log in with Google+</button></a>
+            <a  href="http://localhost:5000/auth/google" ><button className="social-login google">Log in with Google+</button></a>
 
         </div>
     );
