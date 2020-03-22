@@ -28,7 +28,8 @@ function returnUserAndToken(user, res){
                     id: user.id,
                     name: user.username,
                     email: user.email
-                }
+                },
+                server: server
             });
         }
     );
@@ -123,7 +124,7 @@ router.post('/login', (req, res, next) => {
             console.log(error);
             return res.status(400).json(error);
         }
-        return returnUserAndToken(user, res);
+        return returnUserAndToken(user, res, req.headers.origin);
     })(req, res, next);
 });
 
