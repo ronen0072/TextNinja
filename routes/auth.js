@@ -14,7 +14,7 @@ router.get('/logOut', (req, res) => {
 });
 
 // @desc return user & token
-function returnUserAndToken(user, res, server){
+function returnUserAndToken(user, res){
     jwt.sign(
         {id: user.id},
         config.get('jwt.jwtSecret'),
@@ -29,7 +29,6 @@ function returnUserAndToken(user, res, server){
                     name: user.username,
                     email: user.email
                 },
-                server: server
             });
         }
     );
@@ -124,7 +123,7 @@ router.post('/login', (req, res, next) => {
             console.log(error);
             return res.status(400).json(error);
         }
-        return returnUserAndToken(user, res, req.headers.origin);
+        return returnUserAndToken(user, res);
     })(req, res, next);
 });
 
@@ -139,6 +138,7 @@ router.get('/facebook',  passport.authenticate('facebook', {scope: ['email']}));
 
 // callback route for facebook to redirect to
 router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
+    console.log('----------------------------/facebook/redirect-----------------------------');
     return redirectWithToken(req.user, res);
 });
 module.exports = router;
