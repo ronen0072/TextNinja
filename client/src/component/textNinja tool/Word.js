@@ -218,6 +218,7 @@ class Word extends Component{
             audio.play();
         }
         this.props.addUserWords(this.state.wordObj);
+        console.log(this.state.soundURL);
     };
 
     handleOnContextMenu = (e) => {
