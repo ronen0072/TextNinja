@@ -1,5 +1,5 @@
 # TextNinja
-The TextNinja app was built in order to help children’s to Improv their reading abilities in an efficient and convenient way. The main features are:
+The TextNinja app was built in order to help children’s to improve their reading abilities in an efficient and convenient way. The main features are:
 * Automatic row and word highlighting, this feature help Prevents skipping lines and words, making it easier to read.
 * Automatic word parsing by
 * text-to-speech - On a click of a button, you can hear a recording of the word
