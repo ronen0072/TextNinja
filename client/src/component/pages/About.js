@@ -3,7 +3,6 @@ import TextNinjaTool from '../textNinja tool';
 import {Container, Grid} from "@material-ui/core";
 import Tools from '../textNinja tool/tools'
 
-
 function About( ){
     return (
         <Container maxWidth='xl'>
@@ -13,9 +12,14 @@ function About( ){
                 <TextNinjaTool
                     outputClassName={'inner-content'}
                 >
-                    TextNinja gool is to teach and improve childrens reading abilities. Using features like such as automatic row highlighting,
-                    word parsing by syllables and text-to-speech etc.
-                    Registered users can practice words they have difficulty with
+                    The TextNinja app was built in order to help children’s to Improv their reading abilities in an efficient and convenient way. The main features are:
+                        *ul
+                        *li Automatic row and word highlighting, this feature help Prevents skipping lines and words, making it easier to read. */li
+                        *li Automatic word parsing by. */li
+                        *li text-to-speech - On a click of a button, you can hear a recording of the word. */li
+                        *li The users can login locally or via Facebook / Google authentication, track their own progress and practice the words they have difficulty with. */li
+                        *li Simple & easy to use - the app is simple and easy to use, the UI is built with Material design for a better UX. */li
+                        */ul
                 </TextNinjaTool>
 
             </Grid>
