@@ -1,9 +1,9 @@
 # TextNinja
 The TextNinja app was built in order to help children’s to improve their reading abilities in an efficient and convenient way. The main features are:
 * Automatic row and word highlighting, this feature help Prevents skipping lines and words, making it easier to read.
-* Automatic word parsing by
-* text-to-speech - On a click of a button, you can hear a recording of the word
-* The users can login locally or via Facebook / Google authentication, track their own progress and practice the words they have difficulty with
+* Automatic word parsing by syllables.
+* text-to-speech - On a click of a button, you can hear a recording of the word.
+* The users can login locally or via Facebook / Google authentication, track their own progress and practice the words they have difficulty with.
 * Simple & easy to use - the app is simple and easy to use, the UI is built with Material design for a better UX.
 
 ## Getting Started
