@@ -21,14 +21,11 @@ import {
     Paper,
     Popper,
     MenuItem,
-    MenuList,
-
-
+    MenuList
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import LoginAndSignUpModal from '../auth/LoginAndSignUpModal';
 import Logout from "../auth/Logout";
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -179,9 +176,9 @@ function Header(props) {
     const mdBar = () => {
         return(
             <Hidden xsDown>
-                <NavLink to='/' ><Button className={classes.nuvLink} color="inherit">Home</Button></NavLink>
-                <NavLink to='/About' ><Button className={classes.nuvLink} color="inherit">About</Button></NavLink>
-                <NavLink to='/Contact Us' ><Button className={classes.nuvLink} color="inherit">Contact Us</Button></NavLink>
+                <NavLink to='/' ><Button className={classes.nuvLink + ' nuv-link'} color="inherit">Home</Button></NavLink>
+                <NavLink to='/About' ><Button className={classes.nuvLink + ' nuv-link'} color="inherit">About</Button></NavLink>
+                <NavLink to='/Contact Us' ><Button className={classes.nuvLink + ' nuv-link'} color="inherit">Contact Us</Button></NavLink>
                 {props.auth.isAuthenticated &&
                 (<Fragment>
                     <Button

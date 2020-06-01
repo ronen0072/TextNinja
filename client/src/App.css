@@ -42,6 +42,11 @@ a:-webkit-any-link {
     cursor: pointer;
     text-decoration: none;
 }
+
+.nuv-link:hover{
+    background-color: rgba(108, 117, 125, 0.13) !important;
+}
+
 .inputWrap{
     height: 35%;
 }

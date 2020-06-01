@@ -42,7 +42,7 @@ var useStyles = makeStyles({
 
 function Home(props){
     let classes = useStyles();
-    const initialInput = 'Hello and welcome to TextNinja! *br/' +
+    const initialInput = 'Hello and welcome to TextNinja! *br/ ' +
         ' TextNinja is a web application that helps children improve their reading ability in an effective and convenient way. *br/ *br/' +
         ' So how to get started? *br/' +
         ' You can give to TextNinja the input via a text field or by uploading a Word file *icon attach_file */icon .' +

@@ -26,7 +26,7 @@ function Logout(props) {
                    :
                <Button
                    onClick={props.logout}
-                   className={classes.nuvLink}
+                   className={classes.nuvLink + ' nuv-link'}
                    color="inherit">
                    Logout
                </Button>

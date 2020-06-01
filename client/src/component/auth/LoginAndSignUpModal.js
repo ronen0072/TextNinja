@@ -84,7 +84,7 @@ function LoginAndSignUpModal(props) {
                 :
                 <Button
                     onClick={toggleModal}
-                    className={classes.nuvLink}
+                    className={classes.nuvLink + ' nuv-link'}
                     color="inherit">
                     Login
                 </Button>
