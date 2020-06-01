@@ -45,7 +45,8 @@ function Home(props){
     const initialInput = 'Hello and welcome to TextNinja! *br/' +
         ' TextNinja is a web application that helps children improve their reading ability in a effective and convenient way. *br/' +
         ' So how to get started? *br/' +
-        ' You can give to TextNinja the input via a text field or by uploading a Word file *icon attach_file */icon . then the interactive text will appear immediately and you can start reading in comfortably way using the features of TextNinja like: ' +
+        ' You can give to TextNinja the input via a text field or by uploading a Word file *icon attach_file */icon .' +
+        ' then the interactive text will appear immediately and you can start reading in comfortably way using the features of TextNinja like: ' +
         '*ul '+
             '*li Split words into syllables automatically. */li ' +
             '*li Highlight the word you read when you over the word. */li ' +
