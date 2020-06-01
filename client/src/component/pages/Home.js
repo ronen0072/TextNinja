@@ -42,6 +42,18 @@ var useStyles = makeStyles({
 
 function Home(props){
     let classes = useStyles();
+    const initialInput = 'Hello and welcome to TextNinja! *br/' +
+        ' TextNinja is a web application that helps children improve their reading ability in a effective and convenient way. *br/' +
+        ' So how to get started? *br/' +
+        ' You can give to TextNinja the input via a text field or by uploading a Word file *icon attach_file */icon . then the interactive text will appear immediately and you can start reading in comfortably way using the features of TextNinja like: ' +
+        '*ul '+
+            '*li Split words into syllables automatically. */li ' +
+            '*li Highlight the word you read when you over the word. */li ' +
+            '*li Highlight the word you read when you over the word. */li ' +
+            '*li text to speech - On a click of a button you can hear a recording of the word. */li ' +
+            '*li You can create a user or login through Google Authentication and practice the words in which difficulty was found during reading. */li ' +
+        '*/ul '+
+        'All features are switchable and customized with a click on the settings *icon settings */icon  and don\'t worry TextNinja will remember your setup until your next use.';
     const [input, setInput] = useState('');
 
     const openInput = (e) =>{
@@ -53,7 +65,6 @@ function Home(props){
     useEffect(()=>{
         if(!props.fileMod && !props.minimizeMod){
             let inputSS =  sessionStorage.textNinjaInput?  sessionStorage.textNinjaInput : '';
-            document.getElementById("input").value = inputSS;
             setInput(inputSS);
         }
         },
@@ -63,12 +74,12 @@ function Home(props){
     useEffect(() => {
         if(!props.fileMod && !props.minimizeMod){
             sessionStorage.setItem('textNinjaInput', input);
-            document.getElementById("input").value = input;
+            setInput(input);
         }
     });
 
-    const handleChange = () => {
-        setInput(document.getElementById("input").value)
+    const handleChange = (e) => {
+        setInput(e.target.value)
     };
 
     return (
@@ -83,7 +94,7 @@ function Home(props){
                                     {props.fileMod?
                                         <FileUpload setInput={setInput}/>
                                         :
-                                        <textarea id="input" placeholder="Insert text" onChange={handleChange} style={{fontSize: props.fontSize+'px'}}/>
+                                        <textarea id="input" defaultValue={input} placeholder="Insert text" onChange={handleChange} style={{fontSize: props.fontSize+'px'}}/>
                                     }
                                 </Grid>
                             }
@@ -109,7 +120,7 @@ function Home(props){
                         <TextNinjaTool
                             outputClassName={'textNinjaWrap'}
                         >
-                            {input}
+                            {input === ''? initialInput : input}
                         </TextNinjaTool>
                     </Grid>
                 </Grid>
