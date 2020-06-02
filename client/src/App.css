@@ -252,3 +252,7 @@ button.social-login.google {
 .textNinjaUl{
     margin: 18px 0;
 }
+.text-icon{
+    position: relative;
+    top: 3px;
+}

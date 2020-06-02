@@ -51,7 +51,7 @@ function TextNinjaTool(props) {
             <Icon
             title={content}
             fontSize='small'
-            className=''
+            className='text-icon'
         >{content}</Icon>]]);
         if(htmlTag === 'img'){
             console.log('img content: ', content);
