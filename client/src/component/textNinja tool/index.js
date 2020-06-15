@@ -2,15 +2,12 @@ import React, {useEffect, useState} from 'react';
 import Word from './Word';
 import {connect} from "react-redux";
 import {Icon} from '@material-ui/core';
-import stringToHTML from '../utilts/ConvertingStringToHTML'
 import {
     setFontSize, setLineColor,
     toggleBreakDownToSyllables,
     toggleMarkLine,
     toggleMarkWord
 } from "../../store/actions/preferencesActions";
-import PopModal from "../utilts/PopModal";
-
 const htmlSimpleTags = new Map([['*br', 'br'], ['*br!', 'br!'], ['*img', 'img'], ['*icon', 'icon']]);
 const htmlOpenTags = new Set(['*ul', '*li', '*br/', '*img', '*icon']);
 
@@ -56,9 +53,6 @@ function TextNinjaTool(props) {
                 fontSize='small'
                 className='text-icon'
             >{content}</Icon>]]);
-        if (htmlTag === 'img') {
-            console.log('img content: ', content);
-        }
         return tags.get(htmlTag);
     }
 
@@ -177,7 +171,7 @@ function TextNinjaTool(props) {
                     }
                     if (htmlcloseTags.has(word)) {
                         const tag = htmlcloseTags.get(word);
-                        console.log('stack: ', stack);
+                        // console.log('stack: ', stack);
                         content = htmlTag(tag, tagContent(tag));
                     }
                 } else {

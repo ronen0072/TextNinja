@@ -80,7 +80,7 @@ function Home(props){
             sessionStorage.setItem('textNinjaInput', input);
             setInput(input);
         }
-    });
+    },[props.fileMod, props.minimizeMod]);
 
     const handleChange = (e) => {
         setInput(e.target.value)
