@@ -272,8 +272,8 @@ button.social-login.google {
 }
 
 .text-ninja-word:hover{
-    -webkit-transform: scale(1.06);
-    -moz-transform: scale(1.06);
-    -o-transform: scale(1.06);
-    transform: scale(1.06);
+    -webkit-transform: scale(1.08);
+    -moz-transform: scale(1.08);
+    -o-transform: scale(1.08);
+    transform: scale(1.08);
 }

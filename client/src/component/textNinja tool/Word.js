@@ -103,7 +103,7 @@ class Word extends Component{
             fontSize: fontSize+ 'px',
             letterSpacing: this.calcLetterSpacing(fontSize),
             lineHeight: (parseInt(fontSize) + 6) + 'px',
-            marginRight: fontSize/3+ 'px'
+            marginRight: fontSize/2+ 'px'
         }
     };
 
