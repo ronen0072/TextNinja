@@ -8,30 +8,25 @@ class Word {
         this.wordID = word;
     }
     initialization() {
-        var PromiseSyllables =  getSyllablesFormWordsAPI(this.wordID).then((syllables)=> {
-            return new Promise(resolve => {
-                if(syllables === {}){
+        var PromiseSyllables =   new Promise(resolve => {
+            getSyllablesFormWordsAPI(this.wordID).then((syllables)=> {
+                if (syllables === {}) {
                     this.syllables = wordID;
-                }
-                else {
+                } else {
                     this.syllables = syllables;
                 }
                 //console.log('getSyllablesFormWordsAPI: '+ syllables);
                 resolve();
             });
         });
-        var PromiseURL = getSoundURLformOxford(this.wordID).then((URL)=> {
-            return new Promise(resolve => {
+        var PromiseURL = new Promise(resolve => {
+            getSoundURLformOxford(this.wordID).then((URL)=> {
                 this.soundURL = URL;
                 //console.log('getSoundURLformOxford: '+ URL);
                 resolve();
             });
         });
-        return Promise.all([PromiseSyllables,PromiseURL]).then(() =>{
-            return new Promise(resolve => {
-                resolve();
-            });
-        });
+        return Promise.all([PromiseSyllables,PromiseURL])
     }
     setSyllables(_syllables){
         this.syllables = _syllables;

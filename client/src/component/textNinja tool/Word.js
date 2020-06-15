@@ -17,7 +17,7 @@ class Word extends Component{
         syllables:"",
         numOfSyllables: 0,
         soundURL:"",
-        display: "",
+        displaySyllables: false,
         styles: this.wordStyle(this.props.fontSize),
         wordPadding: {},
         wordObj: {},
@@ -29,7 +29,6 @@ class Word extends Component{
         this.setState({
             ...this.state,
             word: this.props.children,
-            display: this.props.children,
             fontSize: this.props.fontSize,
         });
         let word = this.props.words[this.props.words.findIndex( (element) => element.wordID === this.state.word)];
@@ -44,7 +43,6 @@ class Word extends Component{
             this.setState({
                 ...this.state,
                 word: this.props.children,
-                display: this.props.children,
                 fontSize: this.props.fontSize,
                 styles: this.wordStyle(this.props.fontSize)
             });
@@ -63,7 +61,7 @@ class Word extends Component{
     }
 
     wordPadding(){
-        let amountOfSpace =  (this.state.numOfSyllables-1)*(this.props.fontSize)*0.1738;
+        let amountOfSpace =  (this.state.numOfSyllables-1)*(this.props.fontSize)/5;
         return {paddingLeft: amountOfSpace+'px',paddingRight:amountOfSpace+'px'};
     }
     setSyllables(syllables, numOfSyllables) {
@@ -72,7 +70,6 @@ class Word extends Component{
             syllables: syllables,
             numOfSyllables: numOfSyllables,
         });
-        this.setDisplay(true);
     }
     setSoundURL(soundURL) {
         this.setState({
@@ -84,29 +81,14 @@ class Word extends Component{
         if(this.props.breakDownToSyllables){
             if(isOver) {
                 this.setState({
-                    display: this.state.syllables,
-                    wordPadding: {}
+                    wordPadding: {},
+                    displaySyllables: true
                 });
             }
             else{
                 this.setState({
-                    display: this.state.word,
-                    wordPadding: this.wordPadding()
-                });
-            }
-        }
-    }
-    setStyles(isOver) {
-        //console.log(this.state.styles);
-        if(this.props.markWord){
-            if(isOver) {
-                this.setState({
-                    styles: this.syllablesStyle(this.props.fontSize),
-                });
-            }
-            else{
-                this.setState({
-                    styles: this.wordStyle(this.props.fontSize),
+                    wordPadding: this.wordPadding(),
+                    displaySyllables: false
                 });
             }
         }
@@ -121,15 +103,7 @@ class Word extends Component{
             fontSize: fontSize+ 'px',
             letterSpacing: this.calcLetterSpacing(fontSize),
             lineHeight: (parseInt(fontSize) + 6) + 'px',
-            margin: 0
-        }
-    };
-
-    syllablesStyle(fontSize){
-        return{
-            fontSize: (parseInt(fontSize) + 4)+'px',
-            lineHeight: fontSize+'px',
-            margin: 0
+            marginRight: fontSize/3+ 'px'
         }
     };
 
@@ -197,15 +171,11 @@ class Word extends Component{
         if(!this.state.syllables || this.state.syllables === ""){
             this.wordFactory();
         }
-        else{
-            this.setDisplay(true)
-        }
-        this.setStyles(true);
+        this.setDisplay(true);
     };
 
     handleOnBlur = () => {
         this.setDisplay(false);
-        this.setStyles(false);
         this.setState({
             menuOpen: false
         });
@@ -242,9 +212,10 @@ class Word extends Component{
                     onTouchEnd={this.handleOnBlur}
                     onClick={this.handleOnClick}
                     onContextMenu={this.handleOnContextMenu}
-                    style={{...this.state.wordPadding ,...this.state.styles}}
+                    style={{...this.state.wordPadding ,...this.wordStyle(this.props.fontSize)}}
+                    className={this.props.markWord && 'text-ninja-word'}
                 >
-                    {this.state.display + " "}
+                    {(this.state.displaySyllables && (this.state.syllables !== "")? this.state.syllables : this.state.word) + " "}
                 </b>
                 <WordMenu
                     open={this.state.menuOpen}

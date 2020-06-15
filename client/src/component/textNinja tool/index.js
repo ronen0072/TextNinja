@@ -11,10 +11,10 @@ import {
 } from "../../store/actions/preferencesActions";
 import PopModal from "../utilts/PopModal";
 
-const htmlSimpleTags = new Map([['*br', 'br'], ['*img', 'img'], ['*icon', 'icon']]);
+const htmlSimpleTags = new Map([['*br', 'br'], ['*br!', 'br!'], ['*img', 'img'], ['*icon', 'icon']]);
 const htmlOpenTags = new Set(['*ul', '*li', '*br/', '*img', '*icon']);
 
-const htmlcloseTags = new Map([['*/ul', 'ul'], ['*/li', 'li'], ['*/HtmlScope!', 'HtmlScope'], ['*br/', 'br'], ['*/img', 'img'], ['*/icon', 'icon']]);
+const htmlcloseTags = new Map([['*/ul', 'ul'], ['*/li', 'li'], ['*/HtmlScope!', 'HtmlScope'], ['*br/', 'br'], ['*br!/', 'br!'], ['*/img', 'img'], ['*/icon', 'icon']]);
 
 
 function TextNinjaTool(props) {
@@ -47,13 +47,16 @@ function TextNinjaTool(props) {
     function htmlTag(htmlTag, content) {
         const tags = new Map([['ul',
             <ul style={{marginTop: parseInt(props.fontSize) + 4}} className={'textNinjaUl'}>{content}</ul>], ['li',
-            <li>{content}</li>], ['br', <br/>], ['img',<img src={content} />], ['icon',
+            <li>{content}</li>], ['br', <br className={'textNinjaBR'}/>], ['img', <img src={content}/>],
+            ['br!', <br className={'textNinjaBR'} style={{ marginBottom: (parseInt(state.fontSize) + 3)+ 'px'}}/>],
+            ['img', <img src={content}/>],
+            ['icon',
             <Icon
-            title={content}
-            fontSize='small'
-            className='text-icon'
-        >{content}</Icon>]]);
-        if(htmlTag === 'img'){
+                title={content}
+                fontSize='small'
+                className='text-icon'
+            >{content}</Icon>]]);
+        if (htmlTag === 'img') {
             console.log('img content: ', content);
         }
         return tags.get(htmlTag);
@@ -175,17 +178,12 @@ function TextNinjaTool(props) {
                     if (htmlcloseTags.has(word)) {
                         const tag = htmlcloseTags.get(word);
                         console.log('stack: ', stack);
-                        // if (word === '*/HtmlScope!') {
-                        //     content = stringToHTML(tagContent(tag).join(' '));
-                        // } else {
-                            content = htmlTag(tag, tagContent(tag));
-                        // }
+                        content = htmlTag(tag, tagContent(tag));
                     }
                 } else {
-                    if(isHtmlSimpleTag){
+                    if (isHtmlSimpleTag) {
                         content = word;
-                    }
-                    else{
+                    } else {
                         content = <Word
                             breakDownToSyllables={props.breakDownToSyllables}
                             markWord={props.markWord}

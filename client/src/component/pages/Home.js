@@ -43,10 +43,12 @@ var useStyles = makeStyles({
 function Home(props){
     let classes = useStyles();
     const initialInput = 'Hello and welcome to TextNinja! *br/ ' +
-        ' TextNinja is a web application that helps children improve their reading ability in an effective and convenient way. *br/ *br/' +
+        ' TextNinja is a web application that helps children improve their reading ability in an effective and convenient way. ' +
+        '*br!/ '+
         ' So how to get started? *br/' +
-        ' You can give to TextNinja the input via a text field or by uploading a Word file *icon attach_file */icon .' +
+        ' You can give to TextNinja the input via a text field or by uploading a Word file by clicking on *icon attach_file */icon icon .' +
         ' then the interactive text will appear immediately and you can start reading in comfortably way using the features of TextNinja like: ' +
+
         '*ul '+
             '*li Split words into syllables automatically. */li ' +
             '*li Highlight the word you read when you hover the word. */li ' +
@@ -54,7 +56,8 @@ function Home(props){
             '*li text to speech - On a click of a button you can hear a recording of the word. */li ' +
             '*li You can create a user or login through Google Authentication and practice the words in which difficulty was found during reading. */li ' +
         '*/ul '+
-        'All features are switchable and customized with a click on the settings *icon settings */icon  and don\'t worry TextNinja will remember your setup until your next use.';
+        '*br!/ '+
+        'All features are switchable and customized with a click on the settings *icon settings */icon icon and don\'t worry TextNinja will remember your setup until your next use.';
     const [input, setInput] = useState('');
 
     const openInput = (e) =>{
